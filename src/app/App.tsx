@@ -9,6 +9,8 @@ import { SettingsPanel } from '../ui/SettingsPanel'
 import { StartScreen } from '../ui/StartScreen'
 import { WebGLFallback } from '../ui/WebGLFallback'
 import { ExplorationHud, SceneTelemetry } from '../ui/ExplorationHud'
+import { ExhibitExperience } from '../exhibits/ExhibitExperience'
+import { HintPanel } from '../ui/HintPanel'
 
 type AppProps = { webGLAvailable?: boolean }
 
@@ -34,6 +36,7 @@ export function App({ webGLAvailable = isWebGL2Available() }: AppProps) {
         </Suspense>
         {stage === 'title' && <StartScreen />}
         {stage === 'exploring' && overlay === 'none' && <ExplorationHud />}
+        {stage === 'exhibit' && <ExhibitExperience />}
         {stage !== 'title' && (
           <button
             className="museum-menu-button"
@@ -44,6 +47,7 @@ export function App({ webGLAvailable = isWebGL2Available() }: AppProps) {
           </button>
         )}
         {overlay === 'settings' && <SettingsPanel />}
+        {overlay === 'hint' && <HintPanel />}
       </main>
     </ErrorBoundary>
   )
