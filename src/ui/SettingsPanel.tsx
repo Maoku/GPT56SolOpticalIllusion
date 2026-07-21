@@ -8,6 +8,7 @@ export function SettingsPanel() {
   const closeOverlay = useMuseumStore((state) => state.closeOverlay)
   const returnToTitle = useMuseumStore((state) => state.returnToTitle)
   const stage = useMuseumStore((state) => state.stage)
+  const replayTutorial = useMuseumStore((state) => state.replayTutorial)
 
   useEffect(() => {
     const firstControl = dialog.current?.querySelector<HTMLElement>('button, input, select')
@@ -82,6 +83,7 @@ export function SettingsPanel() {
         </label>
         <div className="panel-actions">
           <button className="button button--quiet" onClick={() => updateSettings(defaultSettings)}>初期値に戻す</button>
+          <button className="button button--quiet" onClick={replayTutorial}>操作説明を再表示</button>
           {stage !== 'title' && <button className="button button--quiet" onClick={returnToTitle}>タイトルへ</button>}
           <button className="button button--primary" onClick={closeOverlay}>完了</button>
         </div>

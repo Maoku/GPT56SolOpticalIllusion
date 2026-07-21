@@ -7,6 +7,7 @@ import { useMuseumStore } from '../state/useMuseumStore'
 import { Crosshair } from './Crosshair'
 import { ExhibitPrompt } from './ExhibitPrompt'
 import { MobileControls } from './MobileControls'
+import { CompletionMessage, MuseumStatus } from './MuseumStatus'
 
 export function SceneTelemetry() {
   const camera = useThree((state) => state.camera)
@@ -25,6 +26,8 @@ export function ExplorationHud() {
     <>
       <Crosshair active={focused} />
       <ExhibitPrompt />
+      <MuseumStatus />
+      <CompletionMessage />
       <MobileControls />
     </>
   )

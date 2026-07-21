@@ -11,6 +11,8 @@ import { WebGLFallback } from '../ui/WebGLFallback'
 import { ExplorationHud, SceneTelemetry } from '../ui/ExplorationHud'
 import { ExhibitExperience } from '../exhibits/ExhibitExperience'
 import { HintPanel } from '../ui/HintPanel'
+import { MuseumMap } from '../ui/MuseumMap'
+import { TutorialOverlay } from '../ui/TutorialOverlay'
 
 type AppProps = { webGLAvailable?: boolean }
 
@@ -48,6 +50,8 @@ export function App({ webGLAvailable = isWebGL2Available() }: AppProps) {
         )}
         {overlay === 'settings' && <SettingsPanel />}
         {overlay === 'hint' && <HintPanel />}
+        {overlay === 'map' && <MuseumMap />}
+        {overlay === 'tutorial' && <TutorialOverlay />}
       </main>
     </ErrorBoundary>
   )

@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import type { ExhibitType } from '../exhibits/exhibitCatalog'
 
 export type AppStage = 'title' | 'exploring' | 'exhibit'
-export type Overlay = 'none' | 'settings' | 'hint' | 'map'
+export type Overlay = 'none' | 'settings' | 'hint' | 'map' | 'tutorial'
 export type ExhibitProgress = 'unvisited' | 'interacted' | 'revealed'
 export type QualityPreset = 'low' | 'high'
 
@@ -71,7 +71,8 @@ export const useMuseumStore = create<MuseumState>()(
       progress: {},
       settings: defaultSettings,
       tutorialSeen: false,
-      enterMuseum: () => set({ stage: 'exploring', overlay: 'none' }),
+      enterMuseum: () =>
+        set((state) => ({ stage: 'exploring', overlay: state.tutorialSeen ? 'none' : 'tutorial' })),
       returnToTitle: () =>
         set({
           stage: 'title',
@@ -94,7 +95,8 @@ export const useMuseumStore = create<MuseumState>()(
       updateSettings: (partial) =>
         set((state) => ({ settings: { ...state.settings, ...partial } })),
       finishTutorial: () => set({ tutorialSeen: true }),
-      replayTutorial: () => set({ tutorialSeen: false }),
+      replayTutorial: () =>
+        set((state) => ({ tutorialSeen: false, overlay: state.stage === 'exploring' ? 'tutorial' : state.overlay })),
     }),
     {
       name: 'parallax-museum-session',

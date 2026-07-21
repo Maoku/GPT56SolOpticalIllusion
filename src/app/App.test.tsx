@@ -17,7 +17,17 @@ vi.mock('../scene/MuseumScene', () => ({ MuseumScene: () => <div /> }))
 
 describe('App', () => {
   beforeEach(() => {
-    useMuseumStore.setState({ stage: 'title', overlay: 'none' })
+    useMuseumStore.setState({ stage: 'title', overlay: 'none', tutorialSeen: true })
+  })
+
+  it('shows the tutorial only on the first visit', () => {
+    useMuseumStore.setState({ tutorialSeen: false })
+    render(<App webGLAvailable />)
+    fireEvent.click(screen.getByRole('button', { name: /入館する/ }))
+    expect(screen.getByRole('dialog', { name: '歩いて、見つける' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'スキップ' }))
+    expect(useMuseumStore.getState().tutorialSeen).toBe(true)
+    expect(useMuseumStore.getState().overlay).toBe('none')
   })
 
   it('enters from the title without automatically showing a hint', () => {
