@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { vi } from 'vitest'
 import { App } from './App'
+import { useMuseumStore } from '../state/useMuseumStore'
 
 vi.mock('@react-three/fiber', () => ({
   Canvas: ({ children }: { children: React.ReactNode }) => <div data-testid="canvas">{children}</div>,
@@ -9,9 +11,22 @@ vi.mock('@react-three/fiber', () => ({
 vi.mock('../scene/MuseumScene', () => ({ MuseumScene: () => <div /> }))
 
 describe('App', () => {
-  it('renders the 3D canvas and HTML interface together', () => {
-    render(<App />)
+  beforeEach(() => {
+    useMuseumStore.setState({ stage: 'title', overlay: 'none' })
+  })
+
+  it('enters from the title without automatically showing a hint', () => {
+    render(<App webGLAvailable />)
     expect(screen.getByTestId('canvas')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'PARALLAX' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /入館する/ }))
+    expect(screen.queryByRole('heading', { name: 'PARALLAX' })).not.toBeInTheDocument()
+    expect(useMuseumStore.getState().stage).toBe('exploring')
+    expect(useMuseumStore.getState().overlay).toBe('none')
+  })
+
+  it('shows the WebGL fallback when WebGL 2 is unavailable', () => {
+    render(<App webGLAvailable={false} />)
+    expect(screen.getByRole('alert')).toHaveTextContent('3D 展示を表示できません')
   })
 })
