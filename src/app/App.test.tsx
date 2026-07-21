@@ -6,7 +6,12 @@ import { useMuseumStore } from '../state/useMuseumStore'
 
 vi.mock('@react-three/fiber', () => ({
   Canvas: ({ children }: { children: React.ReactNode }) => <div data-testid="canvas">{children}</div>,
+  useFrame: vi.fn(),
+  useThree: (selector: (state: { camera: { position: { x: number; z: number } } }) => unknown) =>
+    selector({ camera: { position: { x: 0, z: 12 } } }),
 }))
+
+vi.mock('@react-three/drei', () => ({ Html: ({ children }: { children: React.ReactNode }) => children }))
 
 vi.mock('../scene/MuseumScene', () => ({ MuseumScene: () => <div /> }))
 

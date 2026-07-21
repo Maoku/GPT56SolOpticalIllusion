@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import type { ExhibitType } from '../exhibits/exhibitCatalog'
 
 export type AppStage = 'title' | 'exploring' | 'exhibit'
 export type Overlay = 'none' | 'settings' | 'hint' | 'map'
@@ -17,8 +18,8 @@ type MuseumState = {
   stage: AppStage
   overlay: Overlay
   previousOverlay: Overlay
-  focusedExhibitId: string | null
-  activeExhibitId: string | null
+  focusedExhibitId: ExhibitType | null
+  activeExhibitId: ExhibitType | null
   progress: Record<string, ExhibitProgress>
   settings: MuseumSettings
   tutorialSeen: boolean
@@ -26,8 +27,8 @@ type MuseumState = {
   returnToTitle: () => void
   openOverlay: (overlay: Exclude<Overlay, 'none'>) => void
   closeOverlay: () => void
-  focusExhibit: (id: string | null) => void
-  enterExhibit: (id: string) => void
+  focusExhibit: (id: ExhibitType | null) => void
+  enterExhibit: (id: ExhibitType) => void
   leaveExhibit: () => void
   markInteracted: (id: string) => void
   markRevealed: (id: string) => void
