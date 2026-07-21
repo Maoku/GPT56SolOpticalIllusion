@@ -10,6 +10,8 @@ import { CheckerShadowExhibit } from './checkerShadow/CheckerShadowExhibit'
 import { NeckerCubeExhibit } from './neckerCube/NeckerCubeExhibit'
 import { MotionInducedBlindnessExhibit } from './motionInducedBlindness/MotionInducedBlindnessExhibit'
 import { AmesRoomExhibit } from './amesRoom/AmesRoomExhibit'
+import { ParallaxBloomExhibit } from './parallaxBloom/ParallaxBloomExhibit'
+import { ChromaticEchoCorridorExhibit } from './chromaticEchoCorridor/ChromaticEchoCorridorExhibit'
 
 const modules: Partial<Record<ExhibitType, ComponentType<ExhibitModuleProps>>> = {
   'muller-lyer': MullerLyerExhibit,
@@ -20,6 +22,8 @@ const modules: Partial<Record<ExhibitType, ComponentType<ExhibitModuleProps>>> =
   'necker-cube': NeckerCubeExhibit,
   'motion-induced-blindness': MotionInducedBlindnessExhibit,
   'ames-room': AmesRoomExhibit,
+  'parallax-bloom': ParallaxBloomExhibit,
+  'chromatic-echo-corridor': ChromaticEchoCorridorExhibit,
 }
 
 export function ExhibitExperience() {

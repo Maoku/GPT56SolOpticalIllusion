@@ -38,9 +38,20 @@ describe('ExhibitExperience', () => {
     ['necker-cube', '回転'],
     ['motion-induced-blindness', '背景速度'],
     ['ames-room', '人物のレール位置'],
+    ['parallax-bloom', '花弁数'],
+    ['chromatic-echo-corridor', '注視時間'],
   ] as const)('provides a distinct control for %s', (id, control) => {
     useMuseumStore.setState({ activeExhibitId: id })
     render(<ExhibitExperience />)
     expect(screen.getByRole('slider', { name: control })).toBeInTheDocument()
+  })
+
+  it('lets the chromatic echo sequence be skipped without waiting', () => {
+    useMuseumStore.setState({ activeExhibitId: 'chromatic-echo-corridor' })
+    render(<ExhibitExperience />)
+    fireEvent.click(screen.getByRole('button', { name: '注視を始める' }))
+    expect(screen.getByText('中央を見つめる')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '待たずに無彩色へ' }))
+    expect(screen.getByText('白い回廊に何色が見えますか？')).toBeInTheDocument()
   })
 })

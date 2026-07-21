@@ -46,6 +46,7 @@ button { min-height: 44px; }
 .button--primary { color: #07110e; border-color: var(--color-accent); background: var(--color-accent); font-weight: 750; }
 .button--primary:hover { background: #a4ffe5; border-color: #a4ffe5; }
 .button--quiet { background: transparent; }
+.button:active, .icon-button:active { transform: scale(.97); transition: transform 100ms ease-out; }
 
 .start-screen {
   position: absolute; inset: 0; z-index: var(--z-hud); display: flex; align-items: flex-end;
@@ -160,6 +161,32 @@ kbd { margin-left: .35rem; padding: .12rem .38rem; border: 1px solid currentColo
 .ames-person text { fill: #111; font-size: 12px; font-weight: 900; text-anchor: middle; }
 .ames-measure line { stroke: var(--exhibit-accent); stroke-width: 2; }
 .ames-measure text { fill: var(--exhibit-accent); font-size: 12px; text-anchor: middle; }
+.bloom-stage { overflow: visible; }
+.bloom-core { fill: #f9e582; filter: drop-shadow(0 0 12px #f9e582); }
+.bloom-labels text { fill: var(--color-muted); font-size: 10px; text-anchor: middle; letter-spacing: 1px; }
+.chromatic-echo { gap: .8rem; }
+.echo-chamber { width: min(46rem, 100%); height: min(38vh, 19rem); min-height: 12rem; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--color-line); border-radius: var(--radius-lg); background: #d7d9d7; transition: background-color 240ms ease, color 240ms ease; }
+.echo-chamber--fixate { color: #071013; background: var(--adapt-color); }
+.echo-chamber--observe { color: #202326; background: #d7d9d7; }
+.echo-message, .echo-fixation { display: grid; justify-items: center; gap: .7rem; text-align: center; }
+.echo-message span { color: #3d4750; font-size: .7rem; letter-spacing: .15em; }
+.echo-message strong { color: #151a1e; font-size: clamp(1.2rem, 4vw, 2rem); }
+.echo-message small { color: #4c5358; }
+.echo-fixation i { width: 15px; height: 15px; border: 2px solid currentColor; border-radius: 50%; box-shadow: 0 0 0 6px rgba(255,255,255,.22); }
+.echo-fixation strong { font-size: 3rem; font-variant-numeric: tabular-nums; }
+.echo-comparison { width: 100%; height: 100%; display: grid; grid-template-columns: repeat(3, 1fr); }
+.echo-swatch { display: grid; place-content: center; gap: .6rem; padding: 1rem; text-align: center; }
+.echo-swatch span { font-size: .68rem; letter-spacing: .12em; }
+.echo-swatch strong { font-size: clamp(.8rem, 2vw, 1.15rem); }
+.echo-swatch--adapt { color: #071013; background: var(--adapt-color); }
+.echo-swatch--neutral { color: #202326; background: #d7d9d7; }
+.echo-swatch--complement { color: #fff; background: var(--echo-color); }
+.color-choices { display: flex; gap: .6rem; padding: 0; border: 0; }
+.color-choices legend { position: absolute; clip: rect(0 0 0 0); }
+.color-choices label { display: block; cursor: pointer; }
+.color-choices input { position: absolute; opacity: 0; pointer-events: none; }
+.color-choices span { display: block; min-width: 6rem; padding: .65rem 1rem; border: 2px solid transparent; border-radius: 999px; color: #0b1016; background: var(--choice-color); text-align: center; font-weight: 750; }
+.color-choices input:focus-visible + span, .color-choices input:checked + span { border-color: #fff; box-shadow: 0 0 0 3px #111; }
 .exhibit-range { width: min(32rem, 100%); display: grid; gap: .65rem; }
 .exhibit-range > span { display: flex; justify-content: space-between; gap: 1rem; color: var(--color-muted); font-size: .78rem; }
 .exhibit-range output { color: var(--exhibit-accent); font-variant-numeric: tabular-nums; }
@@ -195,6 +222,9 @@ kbd { margin-left: .35rem; padding: .12rem .38rem; border: 1px solid currentColo
 }
 
 @media (prefers-reduced-motion: reduce) { .mib-rotor { animation-play-state: paused; } }
+@media (prefers-reduced-motion: reduce) { .echo-chamber { transition: opacity 160ms ease; } }
+@media (prefers-reduced-transparency: reduce) { .modal-backdrop, .settings-panel, .exhibit-prompt { backdrop-filter: none; background: #0d1522; } }
+@media (prefers-contrast: more) { .settings-panel, .hint-panel, .exhibit-prompt { border-color: #fff; background: #05070b; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; }
