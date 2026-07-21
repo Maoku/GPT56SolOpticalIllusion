@@ -32,4 +32,15 @@ describe('ExhibitExperience', () => {
     expect(screen.getByRole('slider', { name: '下の線の実長' })).toHaveValue('138')
     expect(screen.getByRole('button', { name: '答え合わせ' })).toBeInTheDocument()
   })
+
+  it.each([
+    ['checker-shadow', '影の位置'],
+    ['necker-cube', '回転'],
+    ['motion-induced-blindness', '背景速度'],
+    ['ames-room', '人物のレール位置'],
+  ] as const)('provides a distinct control for %s', (id, control) => {
+    useMuseumStore.setState({ activeExhibitId: id })
+    render(<ExhibitExperience />)
+    expect(screen.getByRole('slider', { name: control })).toBeInTheDocument()
+  })
 })

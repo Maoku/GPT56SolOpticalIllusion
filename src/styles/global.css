@@ -135,6 +135,31 @@ kbd { margin-left: .35rem; padding: .12rem .38rem; border: 1px solid currentColo
 .cafe-dark { fill: #08090a; }
 .cafe-light { fill: #f0eee6; }
 .cafe-guide { stroke: #ff5570; stroke-width: 2; }
+.checker-light { fill: #c9ced0; }
+.checker-dark { fill: #40464d; }
+.checker-target { fill: #747985; }
+.checker-cast-shadow { fill: rgba(17,25,38,.54); }
+.checker-bridge { fill: none; stroke: #747985; stroke-width: 18; }
+.checker-shadow text { fill: #fff; font-size: 13px; font-weight: 800; text-anchor: middle; }
+.checker-cylinder { fill: #9ba4ad; stroke: #d6dde0; stroke-width: 1; }
+.necker-cube rect, .necker-cube line { fill: none; stroke: #e9f0ef; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.necker-cube .necker-face { fill: color-mix(in srgb, var(--exhibit-accent), transparent 60%); stroke: var(--exhibit-accent); }
+.necker-depth-dot { fill: var(--exhibit-accent); }
+.mib { background: #101724; border-radius: 50%; }
+.mib-rotor { transform-origin: 180px 125px; animation: spin var(--spin-duration) linear infinite; }
+.mib-rotor circle, .mib > g:first-child circle { fill: #7199b3; }
+.mib-target { fill: #f4ef52; filter: drop-shadow(0 0 5px #f4ef52); }
+.mib-answer { fill: none; stroke: #ff7890; stroke-width: 2; }
+.mib-fixation { fill: #fff; }
+.mib line { stroke: #fff; stroke-width: 1; }
+.range-grid--three { grid-template-columns: repeat(3, 1fr); }
+.ames-room { overflow: visible; }
+.ames-back { fill: #243043; stroke: #a9b3be; stroke-width: 3; }
+.ames-room > line { stroke: #a9b3be; stroke-width: 3; }
+.ames-person { fill: #ff9eb1; }
+.ames-person text { fill: #111; font-size: 12px; font-weight: 900; text-anchor: middle; }
+.ames-measure line { stroke: var(--exhibit-accent); stroke-width: 2; }
+.ames-measure text { fill: var(--exhibit-accent); font-size: 12px; text-anchor: middle; }
 .exhibit-range { width: min(32rem, 100%); display: grid; gap: .65rem; }
 .exhibit-range > span { display: flex; justify-content: space-between; gap: 1rem; color: var(--color-muted); font-size: .78rem; }
 .exhibit-range output { color: var(--exhibit-accent); font-variant-numeric: tabular-nums; }
@@ -166,7 +191,10 @@ kbd { margin-left: .35rem; padding: .12rem .38rem; border: 1px solid currentColo
   .experience-controls .button:last-child { grid-column: span 2; }
   .experience-stage { padding: .5rem; }
   .range-grid { grid-template-columns: 1fr; gap: .65rem; }
+  .range-grid--three { grid-template-columns: 1fr 1fr; }
 }
+
+@media (prefers-reduced-motion: reduce) { .mib-rotor { animation-play-state: paused; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; }

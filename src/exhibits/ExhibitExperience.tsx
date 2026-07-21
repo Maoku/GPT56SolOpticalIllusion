@@ -6,12 +6,20 @@ import { MullerLyerExhibit } from './mullerLyer/MullerLyerExhibit'
 import { PonzoExhibit } from './ponzo/PonzoExhibit'
 import { EbbinghausExhibit } from './ebbinghaus/EbbinghausExhibit'
 import { CafeWallExhibit } from './cafeWall/CafeWallExhibit'
+import { CheckerShadowExhibit } from './checkerShadow/CheckerShadowExhibit'
+import { NeckerCubeExhibit } from './neckerCube/NeckerCubeExhibit'
+import { MotionInducedBlindnessExhibit } from './motionInducedBlindness/MotionInducedBlindnessExhibit'
+import { AmesRoomExhibit } from './amesRoom/AmesRoomExhibit'
 
 const modules: Partial<Record<ExhibitType, ComponentType<ExhibitModuleProps>>> = {
   'muller-lyer': MullerLyerExhibit,
   ponzo: PonzoExhibit,
   ebbinghaus: EbbinghausExhibit,
   'cafe-wall': CafeWallExhibit,
+  'checker-shadow': CheckerShadowExhibit,
+  'necker-cube': NeckerCubeExhibit,
+  'motion-induced-blindness': MotionInducedBlindnessExhibit,
+  'ames-room': AmesRoomExhibit,
 }
 
 export function ExhibitExperience() {
