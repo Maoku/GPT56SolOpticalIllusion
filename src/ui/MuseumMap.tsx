@@ -1,5 +1,6 @@
 import { exhibitCatalog } from '../exhibits/exhibitCatalog'
 import { useMuseumStore, type ExhibitProgress } from '../state/useMuseumStore'
+import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap'
 
 const progressLabel: Record<ExhibitProgress, string> = {
   unvisited: '未体験', interacted: '操作済み', revealed: '答え合わせ済み',
@@ -8,10 +9,11 @@ const progressLabel: Record<ExhibitProgress, string> = {
 export function MuseumMap() {
   const progress = useMuseumStore((state) => state.progress)
   const closeOverlay = useMuseumStore((state) => state.closeOverlay)
+  const dialog = useDialogFocusTrap<HTMLElement>(closeOverlay)
   const experienced = exhibitCatalog.filter((item) => (progress[item.id] ?? 'unvisited') !== 'unvisited').length
   return (
     <div className="modal-backdrop">
-      <section className="museum-map" role="dialog" aria-modal="true" aria-labelledby="map-title">
+      <section className="museum-map" role="dialog" aria-modal="true" aria-labelledby="map-title" ref={dialog}>
         <header className="panel-heading"><div><p className="eyebrow">YOUR VISIT — {experienced} / 10</p><h2 id="map-title">館内マップと展示一覧</h2></div><button className="icon-button" aria-label="マップを閉じる" onClick={closeOverlay}>×</button></header>
         <div className="museum-map__body">
           <div className="floor-map" aria-label="3つの展示ゾーンの概略図">

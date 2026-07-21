@@ -7,25 +7,26 @@ describe('ExhibitExperience', () => {
     useMuseumStore.setState({ stage: 'exhibit', activeExhibitId: 'muller-lyer', overlay: 'none', progress: {} })
   })
 
-  it('keeps the hint hidden until explicitly requested', () => {
+  it('keeps the hint hidden until explicitly requested', async () => {
     render(<ExhibitExperience />)
+    await screen.findByRole('slider', { name: '下の線の実長' })
     expect(screen.queryByText('見え方のヒント', { selector: 'h2' })).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: /ヒントを見る/ }))
     expect(useMuseumStore.getState().overlay).toBe('hint')
   })
 
-  it('records interaction and answer-check progress', () => {
+  it('records interaction and answer-check progress', async () => {
     render(<ExhibitExperience />)
-    fireEvent.change(screen.getByRole('slider', { name: '下の線の実長' }), { target: { value: 150 } })
+    fireEvent.change(await screen.findByRole('slider', { name: '下の線の実長' }), { target: { value: 150 } })
     expect(useMuseumStore.getState().progress['muller-lyer']).toBe('interacted')
     fireEvent.click(screen.getByRole('button', { name: '答え合わせ' }))
     expect(useMuseumStore.getState().progress['muller-lyer']).toBe('revealed')
     expect(screen.getByText(/誤差 10 px/)).toBeInTheDocument()
   })
 
-  it('resets local values and returns to illusion mode', () => {
+  it('resets local values and returns to illusion mode', async () => {
     render(<ExhibitExperience />)
-    const slider = screen.getByRole('slider', { name: '下の線の実長' })
+    const slider = await screen.findByRole('slider', { name: '下の線の実長' })
     fireEvent.change(slider, { target: { value: 180 } })
     fireEvent.click(screen.getByRole('button', { name: '答え合わせ' }))
     fireEvent.click(screen.getByRole('button', { name: /リセット/ }))
@@ -40,16 +41,16 @@ describe('ExhibitExperience', () => {
     ['ames-room', '人物のレール位置'],
     ['parallax-bloom', '花弁数'],
     ['chromatic-echo-corridor', '注視時間'],
-  ] as const)('provides a distinct control for %s', (id, control) => {
+  ] as const)('provides a distinct control for %s', async (id, control) => {
     useMuseumStore.setState({ activeExhibitId: id })
     render(<ExhibitExperience />)
-    expect(screen.getByRole('slider', { name: control })).toBeInTheDocument()
+    expect(await screen.findByRole('slider', { name: control })).toBeInTheDocument()
   })
 
-  it('lets the chromatic echo sequence be skipped without waiting', () => {
+  it('lets the chromatic echo sequence be skipped without waiting', async () => {
     useMuseumStore.setState({ activeExhibitId: 'chromatic-echo-corridor' })
     render(<ExhibitExperience />)
-    fireEvent.click(screen.getByRole('button', { name: '注視を始める' }))
+    fireEvent.click(await screen.findByRole('button', { name: '注視を始める' }))
     expect(screen.getByText('中央を見つめる')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: '待たずに無彩色へ' }))
     expect(screen.getByText('白い回廊に何色が見えますか？')).toBeInTheDocument()

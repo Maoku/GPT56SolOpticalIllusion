@@ -9,6 +9,7 @@ function Structure({ position, scale, color = '#172131' }: { position: [number, 
 
 function ExhibitMarker({ exhibit }: { exhibit: (typeof exhibitCatalog)[number] }) {
   const progress = useMuseumStore((state) => state.progress[exhibit.id] ?? 'unvisited')
+  const stage = useMuseumStore((state) => state.stage)
   return (
     <group position={exhibit.position} rotation={exhibit.rotation}>
       <mesh castShadow>
@@ -23,12 +24,14 @@ function ExhibitMarker({ exhibit }: { exhibit: (typeof exhibitCatalog)[number] }
         <circleGeometry args={[0.12, 16]} />
         <meshBasicMaterial color={progress === 'unvisited' ? '#52606c' : exhibit.accent} />
       </mesh>
-      <Html position={[0, -1.58, 0.1]} center transform distanceFactor={7.2} occlude="blending">
-        <div className="exhibit-label" style={{ '--exhibit-accent': exhibit.accent } as CSSProperties}>
-          <span>{String(exhibit.number).padStart(2, '0')}</span>
-          <strong>{exhibit.title}</strong>
-        </div>
-      </Html>
+      {stage === 'exploring' && (
+        <Html position={[0, -1.58, 0.1]} center transform distanceFactor={7.2}>
+          <div className="exhibit-label" style={{ '--exhibit-accent': exhibit.accent } as CSSProperties}>
+            <span>{String(exhibit.number).padStart(2, '0')}</span>
+            <strong>{exhibit.title}</strong>
+          </div>
+        </Html>
+      )}
     </group>
   )
 }

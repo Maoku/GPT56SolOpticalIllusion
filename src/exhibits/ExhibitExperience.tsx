@@ -1,29 +1,19 @@
-import { useEffect, useState, type ComponentType, type CSSProperties } from 'react'
+import { lazy, Suspense, useEffect, useState, type ComponentType, type CSSProperties, type LazyExoticComponent } from 'react'
 import { exhibitById, type ExhibitType } from './exhibitCatalog'
 import { useMuseumStore } from '../state/useMuseumStore'
 import type { ExhibitModuleProps } from './interaction/types'
-import { MullerLyerExhibit } from './mullerLyer/MullerLyerExhibit'
-import { PonzoExhibit } from './ponzo/PonzoExhibit'
-import { EbbinghausExhibit } from './ebbinghaus/EbbinghausExhibit'
-import { CafeWallExhibit } from './cafeWall/CafeWallExhibit'
-import { CheckerShadowExhibit } from './checkerShadow/CheckerShadowExhibit'
-import { NeckerCubeExhibit } from './neckerCube/NeckerCubeExhibit'
-import { MotionInducedBlindnessExhibit } from './motionInducedBlindness/MotionInducedBlindnessExhibit'
-import { AmesRoomExhibit } from './amesRoom/AmesRoomExhibit'
-import { ParallaxBloomExhibit } from './parallaxBloom/ParallaxBloomExhibit'
-import { ChromaticEchoCorridorExhibit } from './chromaticEchoCorridor/ChromaticEchoCorridorExhibit'
-
-const modules: Partial<Record<ExhibitType, ComponentType<ExhibitModuleProps>>> = {
-  'muller-lyer': MullerLyerExhibit,
-  ponzo: PonzoExhibit,
-  ebbinghaus: EbbinghausExhibit,
-  'cafe-wall': CafeWallExhibit,
-  'checker-shadow': CheckerShadowExhibit,
-  'necker-cube': NeckerCubeExhibit,
-  'motion-induced-blindness': MotionInducedBlindnessExhibit,
-  'ames-room': AmesRoomExhibit,
-  'parallax-bloom': ParallaxBloomExhibit,
-  'chromatic-echo-corridor': ChromaticEchoCorridorExhibit,
+type LazyModule = LazyExoticComponent<ComponentType<ExhibitModuleProps>>
+const modules: Record<ExhibitType, LazyModule> = {
+  'muller-lyer': lazy(() => import('./mullerLyer/MullerLyerExhibit').then((module) => ({ default: module.MullerLyerExhibit }))),
+  ponzo: lazy(() => import('./ponzo/PonzoExhibit').then((module) => ({ default: module.PonzoExhibit }))),
+  ebbinghaus: lazy(() => import('./ebbinghaus/EbbinghausExhibit').then((module) => ({ default: module.EbbinghausExhibit }))),
+  'cafe-wall': lazy(() => import('./cafeWall/CafeWallExhibit').then((module) => ({ default: module.CafeWallExhibit }))),
+  'checker-shadow': lazy(() => import('./checkerShadow/CheckerShadowExhibit').then((module) => ({ default: module.CheckerShadowExhibit }))),
+  'necker-cube': lazy(() => import('./neckerCube/NeckerCubeExhibit').then((module) => ({ default: module.NeckerCubeExhibit }))),
+  'motion-induced-blindness': lazy(() => import('./motionInducedBlindness/MotionInducedBlindnessExhibit').then((module) => ({ default: module.MotionInducedBlindnessExhibit }))),
+  'ames-room': lazy(() => import('./amesRoom/AmesRoomExhibit').then((module) => ({ default: module.AmesRoomExhibit }))),
+  'parallax-bloom': lazy(() => import('./parallaxBloom/ParallaxBloomExhibit').then((module) => ({ default: module.ParallaxBloomExhibit }))),
+  'chromatic-echo-corridor': lazy(() => import('./chromaticEchoCorridor/ChromaticEchoCorridorExhibit').then((module) => ({ default: module.ChromaticEchoCorridorExhibit }))),
 }
 
 export function ExhibitExperience() {
@@ -65,7 +55,9 @@ export function ExhibitExperience() {
         <button className="icon-button" aria-label="展示モードを終了" onClick={leaveExhibit}>×</button>
       </header>
       <div className="experience-stage">
-        {Module ? <Module key={resetKey} revealed={revealed} onInteract={() => markInteracted(activeId)} /> : <p>この展示は次のフェーズで開室します。</p>}
+        <Suspense fallback={<div className="exhibit-loading" role="status">作品を照明しています…</div>}>
+          <Module key={resetKey} revealed={revealed} onInteract={() => markInteracted(activeId)} />
+        </Suspense>
       </div>
       <footer className="experience-controls">
         <p><span>HOW TO</span>{exhibit.interaction.instructions}</p>

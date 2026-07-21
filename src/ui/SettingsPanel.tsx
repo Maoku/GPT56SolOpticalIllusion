@@ -1,35 +1,14 @@
-import { useEffect, useRef } from 'react'
 import { defaultSettings, useMuseumStore } from '../state/useMuseumStore'
+import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap'
 
 export function SettingsPanel() {
-  const dialog = useRef<HTMLDivElement>(null)
   const settings = useMuseumStore((state) => state.settings)
   const updateSettings = useMuseumStore((state) => state.updateSettings)
   const closeOverlay = useMuseumStore((state) => state.closeOverlay)
   const returnToTitle = useMuseumStore((state) => state.returnToTitle)
   const stage = useMuseumStore((state) => state.stage)
   const replayTutorial = useMuseumStore((state) => state.replayTutorial)
-
-  useEffect(() => {
-    const firstControl = dialog.current?.querySelector<HTMLElement>('button, input, select')
-    firstControl?.focus()
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') closeOverlay()
-      if (event.key !== 'Tab' || !dialog.current) return
-      const focusable = [...dialog.current.querySelectorAll<HTMLElement>('button, input, select')]
-      const first = focusable[0]
-      const last = focusable.at(-1)
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last?.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first?.focus()
-      }
-    }
-    document.addEventListener('keydown', handleKey)
-    return () => document.removeEventListener('keydown', handleKey)
-  }, [closeOverlay])
+  const dialog = useDialogFocusTrap<HTMLDivElement>(closeOverlay)
 
   return (
     <div className="modal-backdrop">

@@ -14,28 +14,32 @@ import { HintPanel } from '../ui/HintPanel'
 import { MuseumMap } from '../ui/MuseumMap'
 import { TutorialOverlay } from '../ui/TutorialOverlay'
 
-type AppProps = { webGLAvailable?: boolean }
+type AppProps = { webGLAvailable?: boolean; sceneEnabled?: boolean }
 
-export function App({ webGLAvailable = isWebGL2Available() }: AppProps) {
+export function App({ sceneEnabled = true, webGLAvailable = sceneEnabled ? isWebGL2Available() : true }: AppProps) {
   const stage = useMuseumStore((state) => state.stage)
   const overlay = useMuseumStore((state) => state.overlay)
+  const quality = useMuseumStore((state) => state.settings.quality)
 
   if (!webGLAvailable) return <WebGLFallback />
 
   return (
     <ErrorBoundary>
       <main className="app-shell">
-        <Suspense fallback={<LoadingScreen />}>
-          <Canvas
-            aria-label="錯視ミュージアム 3D ビュー"
-            camera={{ position: [0, 1.7, 8], fov: 58, near: 0.1, far: 90 }}
-            dpr={[1, 1.75]}
-            shadows
-          >
-            <MuseumScene />
-            {stage === 'exploring' && <SceneTelemetry />}
-          </Canvas>
-        </Suspense>
+        {sceneEnabled ? (
+          <Suspense fallback={<LoadingScreen />}>
+            <Canvas
+              aria-label="錯視ミュージアム 3D ビュー"
+              camera={{ position: [0, 1.7, 8], fov: 58, near: 0.1, far: 90 }}
+              dpr={quality === 'low' ? [1, 1.2] : [1, 1.75]}
+              shadows={quality === 'high'}
+              gl={{ antialias: quality === 'high', powerPreference: 'high-performance' }}
+            >
+              <MuseumScene />
+              {stage === 'exploring' && <SceneTelemetry />}
+            </Canvas>
+          </Suspense>
+        ) : <div className="scene-placeholder" aria-hidden="true" />}
         {stage === 'title' && <StartScreen />}
         {stage === 'exploring' && overlay === 'none' && <ExplorationHud />}
         {stage === 'exhibit' && <ExhibitExperience />}

@@ -6,11 +6,20 @@ export default defineConfig({
   build: {
     target: 'es2022',
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom', 'zustand'],
+          three: ['three', '@react-three/fiber', '@react-three/drei'],
+        },
+      },
+    },
   },
   test: {
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
     css: true,
     globals: true,
+    exclude: ['e2e/**', 'node_modules/**', 'dist/**'],
   },
 })

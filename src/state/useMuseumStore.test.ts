@@ -20,4 +20,9 @@ describe('museum store', () => {
     useMuseumStore.getState().closeOverlay()
     expect(useMuseumStore.getState().overlay).toBe('none')
   })
+
+  it('persists visit progress in the current tab session', () => {
+    useMuseumStore.getState().markInteracted('ponzo')
+    expect(sessionStorage.getItem('parallax-museum-session')).toContain('ponzo')
+  })
 })

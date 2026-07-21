@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useMuseumStore } from '../state/useMuseumStore'
+import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap'
 
 const steps = [
   { number: '01', title: '歩いて、見つける', body: 'WASD・矢印キー、または左下のコントローラーで館内を移動します。画面中央を展示へ向けてください。', keys: ['W', 'A', 'S', 'D'] },
@@ -11,12 +12,13 @@ export function TutorialOverlay() {
   const [step, setStep] = useState(0)
   const finishTutorial = useMuseumStore((state) => state.finishTutorial)
   const closeOverlay = useMuseumStore((state) => state.closeOverlay)
+  const finish = useCallback(() => { finishTutorial(); closeOverlay() }, [closeOverlay, finishTutorial])
+  const dialog = useDialogFocusTrap<HTMLDivElement>(finish)
   const current = steps[step]
   if (!current) return null
-  const finish = () => { finishTutorial(); closeOverlay() }
   return (
     <div className="tutorial-backdrop" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
-      <div className="tutorial-card">
+      <div className="tutorial-card" ref={dialog}>
         <div className="tutorial-progress" aria-label={`チュートリアル ${step + 1} / ${steps.length}`}>
           {steps.map((item, index) => <span key={item.number} className={index <= step ? 'is-active' : ''} />)}
         </div>
