@@ -5,6 +5,8 @@ test('enters the museum, completes onboarding, and opens the map', async ({ page
   await expect(page.getByRole('heading', { name: 'PARALLAX' })).toBeVisible()
   await page.getByRole('button', { name: /入館する/ }).click()
   await expect(page.getByRole('dialog', { name: '歩いて、見つける' })).toBeVisible()
+  await page.getByRole('button', { name: '次へ' }).click()
+  await expect(page.getByRole('dialog', { name: '近づいて、操作する' })).toBeVisible()
   await page.getByRole('button', { name: 'スキップ' }).click()
   await page.getByRole('button', { name: /館内マップを開く/ }).click()
   await expect(page.getByRole('dialog', { name: '館内マップと展示一覧' })).toBeVisible()

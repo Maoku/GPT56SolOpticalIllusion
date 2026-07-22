@@ -17,7 +17,11 @@ export function SceneTelemetry() {
     const next = zoneForPosition(camera.position.x, camera.position.z)
     if (next !== current.current) { current.current = next; setZone(next) }
   })
-  return <Html fullscreen><span className="zone-readout">ZONE — {zone}</span></Html>
+  return (
+    <Html fullscreen zIndexRange={[10, 10]} style={{ pointerEvents: 'none' }}>
+      <span className="zone-readout">ZONE — {zone}</span>
+    </Html>
+  )
 }
 
 export function ExplorationHud() {
