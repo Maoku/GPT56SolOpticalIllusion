@@ -27,7 +27,11 @@ export function SpatialExhibitHud() {
     markInteracted(activeId)
     if (next > 0) markRevealed(activeId)
   }
-  const operationLabel = activeId === 'checker-shadow' ? '照明を切り替える' : undefined
+  const operationLabel = activeId === 'checker-shadow'
+    ? '照明を切り替える'
+    : activeId === 'counterparallax-window'
+      ? '通常視差と逆視差を切り替える'
+      : undefined
 
   return (
     <>

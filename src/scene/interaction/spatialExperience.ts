@@ -2,6 +2,7 @@ import type { ExhibitType } from '../../exhibits/exhibitCatalog'
 
 const spatialStepCounts: Partial<Record<ExhibitType, number>> = {
   'checker-shadow': 3,
+  'counterparallax-window': 2,
 }
 
 export function nextSpatialStep(id: ExhibitType, current: number) {

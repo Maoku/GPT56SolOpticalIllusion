@@ -10,4 +10,9 @@ describe('spatial exhibit operation', () => {
   it('does not invent a button-driven state for walking exhibits', () => {
     expect(nextSpatialStep('parallax-bloom', 0)).toBeNull()
   })
+
+  it('switches the counterparallax scene between normal and reverse modes', () => {
+    expect(nextSpatialStep('counterparallax-window', 0)).toBe(1)
+    expect(nextSpatialStep('counterparallax-window', 1)).toBe(0)
+  })
 })
