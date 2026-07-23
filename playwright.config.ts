@@ -11,11 +11,11 @@ export default defineConfig({
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'mobile', use: { ...devices['iPhone 13'] } },
+    { name: 'mobile', use: { ...devices['iPhone 13'], browserName: 'chromium' } },
   ],
   webServer: {
     command: 'npm run preview -- --host 127.0.0.1',
     port: 4173,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
   },
 })
