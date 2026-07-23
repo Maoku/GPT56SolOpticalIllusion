@@ -1,6 +1,23 @@
 # PARALLAX — Optical Illusion Museum
 
-ブラウザで歩き回り、10種類の錯視を操作して確かめる一人称視点の3Dミュージアムです。展示のヒントは来場者が明示的に開くまで表示されません。
+GPT-5.6 Sol xhigh　製のブラウザで歩き回れる 3D 錯視ミュージアム。
+
+## Ver.2
+
+仮想の競合美術館 : Fable Optical Illusion Museum 
+    体験ページ：https://maoku.github.io/FableOpticalIllusion/ 
+    リポジトリ：https://github.com/Maoku/FableOpticalIllusion
+を歩き回って行なった調査(Computer Useで実際に展示を撮影、評価)を基にリニューアル
+
+その後、いくつかの展示のわかりにくさを指摘
+実在の美術館の展示意図などを調査させて改善を行なったもの
+
+※いくつかの表示不具合や、意図がわからない展示も残っている状態
+
+## Ver.1
+
+Docs/PLAN.md に基づいて作成したいわゆるポン出し状態
+
 
 ## 開発
 
