@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { exhibitById } from '../../exhibits/exhibitCatalog'
 import { useMuseumStore } from '../../state/useMuseumStore'
+import { amesViewState } from './amesRoom'
 import {
   projectedAlignmentError,
   spatialAlignmentAnchors,
@@ -23,6 +24,19 @@ export function SpatialExhibitController() {
     const exhibit = exhibitById.get(state.activeExhibitId)
     const spot = exhibit?.viewSpots?.[0]
     if (!exhibit || !spot) return
+
+    if (exhibit.id === 'ames-room') {
+      const nextStep = amesViewState([
+        camera.position.x,
+        camera.position.y,
+        camera.position.z,
+      ]) === 'reveal' ? 1 : 0
+      if (nextStep !== state.spatialStep) state.setSpatialStep(nextStep)
+      if (nextStep === 1) {
+        state.markInteracted(exhibit.id)
+        state.markRevealed(exhibit.id)
+      }
+    }
 
     const anchors = spatialAlignmentAnchors[exhibit.id]
     const error = anchors
