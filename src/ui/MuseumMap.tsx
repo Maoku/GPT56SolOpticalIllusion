@@ -11,18 +11,30 @@ export function MuseumMap() {
   const progress = useMuseumStore((state) => state.progress)
   const closeOverlay = useMuseumStore((state) => state.closeOverlay)
   const dialog = useDialogFocusTrap<HTMLElement>(closeOverlay)
-  const catalog = getExhibitCatalog(getMuseumMode())
+  const mode = getMuseumMode()
+  const catalog = getExhibitCatalog(mode)
   const experienced = catalog.filter((item) => (progress[item.id] ?? 'unvisited') !== 'unvisited').length
   return (
     <div className="modal-backdrop">
       <section className="museum-map" role="dialog" aria-modal="true" aria-labelledby="map-title" ref={dialog}>
         <header className="panel-heading"><div><p className="eyebrow">YOUR VISIT — {experienced} / {catalog.length}</p><h2 id="map-title">館内マップと展示一覧</h2></div><button className="icon-button" aria-label="マップを閉じる" onClick={closeOverlay}>×</button></header>
         <div className="museum-map__body">
-          <div className="floor-map" aria-label="3つの展示ゾーンの概略図">
-            <div className="floor-zone floor-zone--lobby"><span>ENTRANCE</span><strong>ロビー</strong></div>
-            <div className="floor-zone floor-zone--geometry"><span>01—04</span><strong>形と大きさ</strong></div>
-            <div className="floor-zone floor-zone--light"><span>05—07</span><strong>光と運動</strong></div>
-            <div className="floor-zone floor-zone--space"><span>08—10</span><strong>空間と残像</strong></div>
+          <div className={`floor-map ${mode === 'v2' ? 'floor-map--v2' : ''}`} aria-label={`${mode === 'v2' ? 4 : 3}つの展示ゾーンの概略図`}>
+            {mode === 'v2' ? (
+              <>
+                <div className="floor-zone floor-zone--classics"><span>01—04 · 06—07</span><strong>CLASSICS LAB</strong></div>
+                <div className="floor-zone floor-zone--arrival"><span>ENTRANCE · 09</span><strong>ARRIVAL ATRIUM</strong></div>
+                <div className="floor-zone floor-zone--scale-light"><span>05 · 08</span><strong>SCALE + LIGHT</strong></div>
+                <div className="floor-zone floor-zone--signature"><span>09—12</span><strong>SIGNATURE HALL</strong></div>
+              </>
+            ) : (
+              <>
+                <div className="floor-zone floor-zone--lobby"><span>ENTRANCE</span><strong>ロビー</strong></div>
+                <div className="floor-zone floor-zone--geometry"><span>01—04</span><strong>形と大きさ</strong></div>
+                <div className="floor-zone floor-zone--light"><span>05—07</span><strong>光と運動</strong></div>
+                <div className="floor-zone floor-zone--space"><span>08—10</span><strong>空間と残像</strong></div>
+              </>
+            )}
           </div>
           <ol className="exhibit-list">
             {catalog.map((exhibit) => {

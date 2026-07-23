@@ -15,6 +15,12 @@ export type MuseumSettings = {
   quality: QualityPreset
 }
 
+export type CameraRequest = {
+  nonce: number
+  position: [number, number, number]
+  target: [number, number, number]
+}
+
 type MuseumState = {
   stage: AppStage
   overlay: Overlay
@@ -24,6 +30,9 @@ type MuseumState = {
   progress: Record<string, ExhibitProgress>
   settings: MuseumSettings
   tutorialSeen: boolean
+  spatialStep: number
+  alignmentError: number | null
+  cameraRequest: CameraRequest | null
   enterMuseum: () => void
   returnToTitle: () => void
   openOverlay: (overlay: Exclude<Overlay, 'none'>) => void
@@ -31,6 +40,9 @@ type MuseumState = {
   focusExhibit: (id: ExhibitType | null) => void
   enterExhibit: (id: ExhibitType) => void
   leaveExhibit: () => void
+  setSpatialStep: (step: number) => void
+  setAlignmentError: (error: number | null) => void
+  requestViewSpot: (id: ExhibitType) => void
   markInteracted: (id: string) => void
   markRevealed: (id: string) => void
   updateSettings: (settings: Partial<MuseumSettings>) => void
@@ -102,6 +114,9 @@ export const useMuseumStore = create<MuseumState>()(
       progress: {},
       settings: defaultSettings,
       tutorialSeen: false,
+      spatialStep: 0,
+      alignmentError: null,
+      cameraRequest: null,
       enterMuseum: () =>
         set((state) => ({ stage: 'exploring', overlay: state.tutorialSeen ? 'none' : 'tutorial' })),
       returnToTitle: () =>
@@ -110,6 +125,8 @@ export const useMuseumStore = create<MuseumState>()(
           overlay: 'none',
           activeExhibitId: null,
           focusedExhibitId: null,
+          spatialStep: 0,
+          alignmentError: null,
         }),
       openOverlay: (overlay) =>
         set((state) => ({ overlay, previousOverlay: state.overlay })),
@@ -118,10 +135,35 @@ export const useMuseumStore = create<MuseumState>()(
       enterExhibit: (activeExhibitId) => {
         const exhibit = exhibitById.get(activeExhibitId)
         const spatial = isV2Museum() && exhibit?.presentation !== 'lab'
-        set({ stage: spatial ? 'spatial-exhibit' : 'exhibit', activeExhibitId, overlay: 'none' })
+        set({
+          stage: spatial ? 'spatial-exhibit' : 'exhibit',
+          activeExhibitId,
+          overlay: 'none',
+          spatialStep: 0,
+          alignmentError: null,
+        })
       },
       leaveExhibit: () =>
-        set({ stage: 'exploring', activeExhibitId: null, overlay: 'none' }),
+        set({
+          stage: 'exploring',
+          activeExhibitId: null,
+          overlay: 'none',
+          spatialStep: 0,
+          alignmentError: null,
+        }),
+      setSpatialStep: (spatialStep) => set({ spatialStep }),
+      setAlignmentError: (alignmentError) => set({ alignmentError }),
+      requestViewSpot: (id) => {
+        const viewSpot = exhibitById.get(id)?.viewSpots?.[0]
+        if (!viewSpot) return
+        set((state) => ({
+          cameraRequest: {
+            nonce: (state.cameraRequest?.nonce ?? 0) + 1,
+            position: viewSpot.position,
+            target: viewSpot.target,
+          },
+        }))
+      },
       markInteracted: (id) =>
         set((state) => ({ progress: nextProgress(state.progress, id, 'interacted') })),
       markRevealed: (id) =>

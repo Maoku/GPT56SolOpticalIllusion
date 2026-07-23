@@ -27,7 +27,13 @@ export function selectFocusedExhibit(
   return result
 }
 
-export function zoneForPosition(x: number, z: number) {
+export function zoneForPosition(x: number, z: number, mode: 'v1' | 'v2' = 'v1') {
+  if (mode === 'v2') {
+    if (z > 10) return 'CLASSICS LAB'
+    if (z < -10) return 'SIGNATURE HALL'
+    if (x > 10) return 'SCALE + LIGHT'
+    return 'ARRIVAL ATRIUM'
+  }
   if (z > 8) return 'ロビー'
   if (z < -5) return '空間と残像'
   return x < 0 ? '形と大きさ' : '光と運動'

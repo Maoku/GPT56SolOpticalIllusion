@@ -13,6 +13,7 @@ import { ExhibitExperience } from '../exhibits/ExhibitExperience'
 import { HintPanel } from '../ui/HintPanel'
 import { MuseumMap } from '../ui/MuseumMap'
 import { TutorialOverlay } from '../ui/TutorialOverlay'
+import { SpatialExhibitHud } from '../ui/SpatialExhibitHud'
 
 type AppProps = { webGLAvailable?: boolean; sceneEnabled?: boolean }
 
@@ -36,13 +37,14 @@ export function App({ sceneEnabled = true, webGLAvailable = sceneEnabled ? isWeb
               gl={{ antialias: quality === 'high', powerPreference: 'high-performance' }}
             >
               <MuseumScene />
-              {stage === 'exploring' && <SceneTelemetry />}
+              {(stage === 'exploring' || stage === 'spatial-exhibit') && <SceneTelemetry />}
             </Canvas>
           </Suspense>
         ) : <div className="scene-placeholder" aria-hidden="true" />}
         {stage === 'title' && <StartScreen />}
         {stage === 'exploring' && overlay === 'none' && <ExplorationHud />}
         {stage === 'exhibit' && <ExhibitExperience />}
+        {stage === 'spatial-exhibit' && overlay === 'none' && <SpatialExhibitHud />}
         {stage !== 'title' && (
           <button
             className="museum-menu-button"

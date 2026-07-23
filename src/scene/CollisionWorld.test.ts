@@ -8,4 +8,9 @@ describe('museum collision world', () => {
   it('rejects movement into a gallery divider', () => {
     expect(resolvePlayerPosition([0, 5], [0, 5.8])).toEqual([0, 5])
   })
+
+  it('keeps V2 portals open while colliding with their uprights', () => {
+    expect(resolvePlayerPosition([0, 8], [0, 7.4], 0.38, 'v2')).toEqual([0, 7.4])
+    expect(resolvePlayerPosition([-3, 7.4], [-2.1, 7.4], 0.38, 'v2')).toEqual([-3, 7.4])
+  })
 })

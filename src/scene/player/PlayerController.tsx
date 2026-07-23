@@ -22,6 +22,7 @@ export function PlayerController() {
   const yaw = useRef(0)
   const pitch = useRef(0)
   const focusedId = useRef<ExhibitType | null>(null)
+  const handledCameraRequest = useRef(0)
   const lastTouch = useRef<[number, number] | null>(null)
   const euler = useRef(new Euler(0, 0, 0, 'YXZ'))
   const move = useRef(new Vector3())
@@ -100,6 +101,16 @@ export function PlayerController() {
 
   useFrame((_, delta) => {
     const museum = useMuseumStore.getState()
+    const request = museum.cameraRequest
+    if (request && request.nonce !== handledCameraRequest.current) {
+      handledCameraRequest.current = request.nonce
+      camera.position.set(...request.position)
+      const deltaX = request.target[0] - request.position[0]
+      const deltaY = request.target[1] - request.position[1]
+      const deltaZ = request.target[2] - request.position[2]
+      yaw.current = Math.atan2(-deltaX, -deltaZ)
+      pitch.current = -Math.atan2(deltaY, Math.hypot(deltaX, deltaZ))
+    }
     euler.current.set(pitch.current, yaw.current, 0)
     camera.quaternion.setFromEuler(euler.current)
     if ((museum.stage !== 'exploring' && museum.stage !== 'spatial-exhibit') || museum.overlay !== 'none') return
@@ -111,8 +122,9 @@ export function PlayerController() {
       move.current.set(x, 0, z).normalize().applyAxisAngle(new Vector3(0, 1, 0), yaw.current)
       const speed = 4.2 * Math.min(delta, 0.05)
       const current: [number, number] = [camera.position.x, camera.position.z]
-      const xResolved = resolvePlayerPosition(current, [current[0] + move.current.x * speed, current[1]])
-      const zResolved = resolvePlayerPosition(xResolved, [xResolved[0], xResolved[1] + move.current.z * speed])
+      const mode = getMuseumMode()
+      const xResolved = resolvePlayerPosition(current, [current[0] + move.current.x * speed, current[1]], 0.38, mode)
+      const zResolved = resolvePlayerPosition(xResolved, [xResolved[0], xResolved[1] + move.current.z * speed], 0.38, mode)
       camera.position.set(zResolved[0], 1.65, zResolved[1])
     }
 
