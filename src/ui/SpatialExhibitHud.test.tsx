@@ -11,6 +11,7 @@ describe('spatial exhibit HUD', () => {
       alignmentError: 0,
       cameraRequest: null,
       progress: {},
+      outcomes: {},
     })
   })
 
@@ -29,6 +30,16 @@ describe('spatial exhibit HUD', () => {
     expect(useMuseumStore.getState()).toMatchObject({
       spatialStep: 1,
       progress: { 'parallax-bloom': 'revealed' },
+    })
+  })
+
+  it('stores a reusable alignment outcome', () => {
+    render(<SpatialExhibitHud />)
+    fireEvent.click(screen.getByRole('button', { name: '結果を記録' }))
+    expect(useMuseumStore.getState().outcomes['parallax-bloom']).toMatchObject({
+      kind: 'alignment',
+      axis: 'perspective',
+      metric: { value: 0, unit: 'px' },
     })
   })
 })

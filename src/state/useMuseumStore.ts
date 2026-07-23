@@ -2,9 +2,15 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { isV2Museum } from '../app/museumMode'
 import { exhibitById, type ExhibitType } from '../exhibits/exhibitCatalog'
+import {
+  createExhibitOutcome,
+  isExhibitOutcome,
+  type ExhibitOutcome,
+  type OutcomeDraft,
+} from './outcomes'
 
 export type AppStage = 'title' | 'exploring' | 'exhibit' | 'spatial-exhibit'
-export type Overlay = 'none' | 'settings' | 'hint' | 'map' | 'tutorial'
+export type Overlay = 'none' | 'settings' | 'hint' | 'map' | 'passport' | 'tutorial'
 export type ExhibitProgress = 'unvisited' | 'interacted' | 'revealed'
 export type QualityPreset = 'low' | 'high'
 
@@ -30,6 +36,8 @@ type MuseumState = {
   progress: Record<string, ExhibitProgress>
   settings: MuseumSettings
   tutorialSeen: boolean
+  outcomes: Partial<Record<ExhibitType, ExhibitOutcome>>
+  lastVisitedExhibitId: ExhibitType | null
   spatialStep: number
   alignmentError: number | null
   cameraRequest: CameraRequest | null
@@ -45,6 +53,7 @@ type MuseumState = {
   requestViewSpot: (id: ExhibitType) => void
   markInteracted: (id: string) => void
   markRevealed: (id: string) => void
+  recordOutcome: (id: ExhibitType, draft?: OutcomeDraft) => void
   updateSettings: (settings: Partial<MuseumSettings>) => void
   finishTutorial: () => void
   replayTutorial: () => void
@@ -59,7 +68,7 @@ export const defaultSettings: MuseumSettings = {
 
 export const MUSEUM_STORAGE_KEY = 'parallax-museum-v2'
 export const LEGACY_STORAGE_KEY = 'parallax-museum-session'
-export const MUSEUM_STORAGE_VERSION = 2
+export const MUSEUM_STORAGE_VERSION = 3
 
 const progressRank: Record<ExhibitProgress, number> = {
   unvisited: 0,
@@ -77,7 +86,10 @@ function nextProgress(
   return { ...progress, [id]: requested }
 }
 
-type PersistedMuseumState = Pick<MuseumState, 'progress' | 'settings' | 'tutorialSeen'>
+type PersistedMuseumState = Pick<
+  MuseumState,
+  'progress' | 'settings' | 'tutorialSeen' | 'outcomes' | 'lastVisitedExhibitId'
+>
 
 export function migrateMuseumState(persisted: unknown): PersistedMuseumState {
   const source = (persisted && typeof persisted === 'object' ? persisted : {}) as Partial<PersistedMuseumState>
@@ -88,10 +100,21 @@ export function migrateMuseumState(persisted: unknown): PersistedMuseumState {
         (value === 'unvisited' || value === 'interacted' || value === 'revealed'),
     ),
   )
+  const outcomes = Object.fromEntries(
+    Object.entries(source.outcomes ?? {}).filter(
+      ([id, outcome]) => exhibitById.has(id as ExhibitType) && isExhibitOutcome(outcome),
+    ),
+  ) as Partial<Record<ExhibitType, ExhibitOutcome>>
+  const lastVisitedExhibitId =
+    source.lastVisitedExhibitId && exhibitById.has(source.lastVisitedExhibitId)
+      ? source.lastVisitedExhibitId
+      : null
   return {
     progress,
     settings: { ...defaultSettings, ...(source.settings ?? {}) },
     tutorialSeen: Boolean(source.tutorialSeen),
+    outcomes,
+    lastVisitedExhibitId,
   }
 }
 
@@ -114,6 +137,8 @@ export const useMuseumStore = create<MuseumState>()(
       progress: {},
       settings: defaultSettings,
       tutorialSeen: false,
+      outcomes: {},
+      lastVisitedExhibitId: null,
       spatialStep: 0,
       alignmentError: null,
       cameraRequest: null,
@@ -141,6 +166,7 @@ export const useMuseumStore = create<MuseumState>()(
           overlay: 'none',
           spatialStep: 0,
           alignmentError: null,
+          lastVisitedExhibitId: activeExhibitId,
         })
       },
       leaveExhibit: () =>
@@ -168,6 +194,19 @@ export const useMuseumStore = create<MuseumState>()(
         set((state) => ({ progress: nextProgress(state.progress, id, 'interacted') })),
       markRevealed: (id) =>
         set((state) => ({ progress: nextProgress(state.progress, id, 'revealed') })),
+      recordOutcome: (id, draft = {}) =>
+        set((state) => {
+          const exhibit = exhibitById.get(id)
+          if (!exhibit) return state
+          return {
+            outcomes: {
+              ...state.outcomes,
+              [id]: createExhibitOutcome(exhibit, draft, state.outcomes[id]),
+            },
+            lastVisitedExhibitId: id,
+            progress: nextProgress(state.progress, id, 'interacted'),
+          }
+        }),
       updateSettings: (partial) =>
         set((state) => ({ settings: { ...state.settings, ...partial } })),
       finishTutorial: () => set({ tutorialSeen: true }),
@@ -183,6 +222,8 @@ export const useMuseumStore = create<MuseumState>()(
         progress: state.progress,
         settings: state.settings,
         tutorialSeen: state.tutorialSeen,
+        outcomes: state.outcomes,
+        lastVisitedExhibitId: state.lastVisitedExhibitId,
       }),
     },
   ),

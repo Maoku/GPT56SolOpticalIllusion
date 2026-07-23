@@ -23,6 +23,7 @@ export function ExhibitExperience() {
   const openOverlay = useMuseumStore((state) => state.openOverlay)
   const markInteracted = useMuseumStore((state) => state.markInteracted)
   const markRevealed = useMuseumStore((state) => state.markRevealed)
+  const recordOutcome = useMuseumStore((state) => state.recordOutcome)
   const [revealed, setRevealed] = useState(false)
   const [resetKey, setResetKey] = useState(0)
 
@@ -45,7 +46,13 @@ export function ExhibitExperience() {
 
   const toggleAnswer = () => {
     setRevealed((current) => {
-      if (!current) markRevealed(activeId)
+      if (!current) {
+        markRevealed(activeId)
+        recordOutcome(activeId, {
+          headline: exhibit.shareHook,
+          detail: exhibit.oneSentence,
+        })
+      }
       return !current
     })
   }
@@ -59,7 +66,12 @@ export function ExhibitExperience() {
       </header>
       <div className="experience-stage">
         <Suspense fallback={<div className="exhibit-loading" role="status">作品を照明しています…</div>}>
-          <Module key={resetKey} revealed={revealed} onInteract={() => markInteracted(activeId)} />
+          <Module
+            key={resetKey}
+            revealed={revealed}
+            onInteract={() => markInteracted(activeId)}
+            onOutcome={(outcome) => recordOutcome(activeId, outcome)}
+          />
         </Suspense>
       </div>
       <footer className="experience-controls">

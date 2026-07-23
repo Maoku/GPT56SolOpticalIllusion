@@ -8,7 +8,13 @@ describe('museum store', () => {
   beforeEach(() => {
     window.sessionStorage.clear()
     window.localStorage.clear()
-    useMuseumStore.setState({ progress: {}, stage: 'title', overlay: 'none' })
+    useMuseumStore.setState({
+      progress: {},
+      outcomes: {},
+      lastVisitedExhibitId: null,
+      stage: 'title',
+      overlay: 'none',
+    })
   })
 
   it('never lowers exhibit progress', () => {
@@ -40,6 +46,26 @@ describe('museum store', () => {
       progress: { ponzo: 'revealed' },
       settings: { reducedMotion: true, quality: 'high' },
       tutorialSeen: true,
+      outcomes: {},
+      lastVisitedExhibitId: null,
+    })
+  })
+
+  it('records reusable outcomes without lowering existing progress', () => {
+    const store = useMuseumStore.getState()
+    store.markRevealed('muller-lyer')
+    store.recordOutcome('muller-lyer', {
+      metric: { label: '知覚した長さの差', value: -8, unit: '%' },
+    })
+    expect(useMuseumStore.getState()).toMatchObject({
+      progress: { 'muller-lyer': 'revealed' },
+      lastVisitedExhibitId: 'muller-lyer',
+      outcomes: {
+        'muller-lyer': {
+          kind: 'measurement',
+          metric: { value: -8, unit: '%' },
+        },
+      },
     })
   })
 })

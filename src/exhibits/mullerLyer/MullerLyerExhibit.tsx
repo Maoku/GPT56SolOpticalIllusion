@@ -19,9 +19,17 @@ function ArrowLine({ y, length, outward, answer }: { y: number; length: number; 
   )
 }
 
-export function MullerLyerExhibit({ revealed, onInteract }: ExhibitModuleProps) {
+export function MullerLyerExhibit({ revealed, onInteract, onOutcome }: ExhibitModuleProps) {
   const [length, setLength] = useState(138)
-  const update = (value: number) => { setLength(value); onInteract() }
+  const update = (value: number) => {
+    setLength(value)
+    onInteract()
+    onOutcome?.({
+      headline: `同じ長さを ${Math.round(((value - actualLength) / actualLength) * 100)}% ずらして調整した`,
+      detail: `上の線 160 px に対し、下の線を ${value} px で同じ長さに見えると判断しました。`,
+      metric: { label: '知覚した長さの差', value: Math.round(((value - actualLength) / actualLength) * 100), unit: '%' },
+    })
+  }
   return (
     <div className="illusion-module">
       <svg className="illusion-svg illusion-svg--ink" viewBox="0 0 320 210" role="img" aria-label="矢羽の向きが異なる2本の線">

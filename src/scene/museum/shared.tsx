@@ -64,7 +64,7 @@ export function ExhibitLabel({
   const stage = useMuseumStore((state) => state.stage)
   if (stage !== 'exploring' && stage !== 'spatial-exhibit') return null
   return (
-    <Html position={position} center transform distanceFactor={7.5}>
+    <Html position={position} center transform distanceFactor={7.5} zIndexRange={[5, 5]}>
       <div
         className="v2-exhibit-label"
         style={{ '--exhibit-accent': exhibit.accent } as CSSProperties}
@@ -93,7 +93,7 @@ export function Portal({
       <Structure position={[-2.15, 1.8, 0]} scale={[0.14, 3.6, 0.3]} color="#172132" emissive={color} />
       <Structure position={[2.15, 1.8, 0]} scale={[0.14, 3.6, 0.3]} color="#172132" emissive={color} />
       <Structure position={[0, 3.55, 0]} scale={[4.45, 0.14, 0.3]} color="#172132" emissive={color} />
-      <Html position={[0, 3.15, 0.12]} center transform distanceFactor={8}>
+      <Html position={[0, 3.15, 0.12]} center transform distanceFactor={8} zIndexRange={[5, 5]}>
         <span className="v2-portal-label" style={{ color }}>{label}</span>
       </Html>
     </group>

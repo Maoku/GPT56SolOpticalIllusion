@@ -29,6 +29,8 @@ export function SpatialExhibitHud() {
   const openOverlay = useMuseumStore((state) => state.openOverlay)
   const markInteracted = useMuseumStore((state) => state.markInteracted)
   const markRevealed = useMuseumStore((state) => state.markRevealed)
+  const recordOutcome = useMuseumStore((state) => state.recordOutcome)
+  const recorded = useMuseumStore((state) => activeId ? Boolean(state.outcomes[activeId]) : false)
 
   if (!activeId) return null
   const exhibit = exhibitById.get(activeId)
@@ -42,6 +44,23 @@ export function SpatialExhibitHud() {
     setStep(next)
     markInteracted(activeId)
     if (next === exhibitStates.length - 1) markRevealed(activeId)
+  }
+
+  const record = () => {
+    recordOutcome(activeId, {
+      headline: exhibit.shareHook,
+      detail: aligned
+        ? `${currentState}で成立。基準視点からの投影誤差は ${Math.round(error ?? 0)} px でした。`
+        : `${currentState}を観察。基準視点からの投影誤差は ${Math.round(error ?? 0)} px でした。`,
+      metric: exhibit.outcomeKind === 'alignment'
+        ? { label: '基準視点からの投影誤差', value: Math.round(error ?? 0), unit: 'px' }
+        : undefined,
+      sequence: exhibit.outcomeKind === 'sequence' ? exhibitStates : undefined,
+      comparison: exhibit.outcomeKind === 'comparison'
+        ? [exhibitStates[0]!, exhibitStates[exhibitStates.length - 1]!]
+        : undefined,
+    })
+    if (step === exhibitStates.length - 1) markRevealed(activeId)
   }
 
   return (
@@ -80,6 +99,7 @@ export function SpatialExhibitHud() {
         <div className="spatial-exhibit-hud__actions">
           <button className="button button--primary" onClick={() => requestViewSpot(activeId)}>鑑賞点へ移動</button>
           <button className="button button--quiet" onClick={advance}>状態を切り替える</button>
+          <button className="button button--quiet" onClick={record}>{recorded ? '結果を更新' : '結果を記録'}</button>
           <button className="button button--quiet" onClick={() => openOverlay('hint')}>原理を見る</button>
         </div>
       </section>

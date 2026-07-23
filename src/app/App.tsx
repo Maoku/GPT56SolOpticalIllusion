@@ -14,6 +14,7 @@ import { HintPanel } from '../ui/HintPanel'
 import { MuseumMap } from '../ui/MuseumMap'
 import { TutorialOverlay } from '../ui/TutorialOverlay'
 import { SpatialExhibitHud } from '../ui/SpatialExhibitHud'
+import { PerceptionPassport } from '../ui/PerceptionPassport'
 
 type AppProps = { webGLAvailable?: boolean; sceneEnabled?: boolean }
 
@@ -57,6 +58,7 @@ export function App({ sceneEnabled = true, webGLAvailable = sceneEnabled ? isWeb
         {overlay === 'settings' && <SettingsPanel />}
         {overlay === 'hint' && <HintPanel />}
         {overlay === 'map' && <MuseumMap />}
+        {overlay === 'passport' && <PerceptionPassport />}
         {overlay === 'tutorial' && <TutorialOverlay />}
       </main>
     </ErrorBoundary>
