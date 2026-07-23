@@ -32,7 +32,7 @@ export function MuseumMap() {
             {mode === 'v2' ? (
               <>
                 <div className="floor-zone floor-zone--classics"><span>01—04 · 06—07</span><strong>CLASSICS LAB</strong></div>
-                <div className="floor-zone floor-zone--arrival"><span>ENTRANCE · 09</span><strong>ARRIVAL ATRIUM</strong></div>
+                <div className="floor-zone floor-zone--arrival"><span>ENTRANCE</span><strong>ARRIVAL ATRIUM</strong></div>
                 <div className="floor-zone floor-zone--scale-light"><span>05 · 08</span><strong>SCALE + LIGHT</strong></div>
                 <div className="floor-zone floor-zone--signature"><span>09—12</span><strong>SIGNATURE HALL</strong></div>
               </>

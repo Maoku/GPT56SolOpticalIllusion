@@ -10,6 +10,7 @@ import { useMuseumStore } from '../../state/useMuseumStore'
 import {
   AMES_FIGURE_SCALE,
   AMES_REVEAL_POINT,
+  AMES_VIEW_POINT,
   amesFigures,
   amesRoomSurfaces,
   type Point3,
@@ -75,31 +76,31 @@ export function SpatialAmesRoom() {
       {amesFigures.map((figure) => <Figure key={figure.id} position={figure.position} />)}
 
       <group name="ames-aperture-mask">
-        <mesh position={[14.5, 0.08, -9.1]} rotation={[0, -Math.PI / 2, 0]}>
-          <boxGeometry args={[5.5, 0.16, 0.22]} />
+        <mesh position={[13.5, 0.08, -9]} rotation={[0, -Math.PI / 2, 0]}>
+          <boxGeometry args={[7.6, 0.16, 0.22]} />
           <meshStandardMaterial color="#0b1018" />
         </mesh>
-        <mesh position={[14.5, 3.18, -9.1]} rotation={[0, -Math.PI / 2, 0]}>
-          <boxGeometry args={[5.5, 0.32, 0.22]} />
+        <mesh position={[13.5, 3.18, -9]} rotation={[0, -Math.PI / 2, 0]}>
+          <boxGeometry args={[7.6, 0.32, 0.22]} />
           <meshStandardMaterial color="#0b1018" />
         </mesh>
-        <mesh position={[14.5, 1.62, -11.58]} rotation={[0, -Math.PI / 2, 0]}>
+        <mesh position={[13.5, 1.62, -12.58]} rotation={[0, -Math.PI / 2, 0]}>
           <boxGeometry args={[0.32, 3.25, 0.22]} />
           <meshStandardMaterial color="#0b1018" />
         </mesh>
-        <mesh position={[14.5, 1.62, -6.62]} rotation={[0, -Math.PI / 2, 0]}>
+        <mesh position={[13.5, 1.62, -5.42]} rotation={[0, -Math.PI / 2, 0]}>
           <boxGeometry args={[0.32, 3.25, 0.22]} />
           <meshStandardMaterial color="#0b1018" />
         </mesh>
       </group>
 
-      <FloorMarker position={[12.7, 0.03, -9]} color={exhibit.accent} />
+      <FloorMarker position={[AMES_VIEW_POINT[0], 0.03, AMES_VIEW_POINT[2]]} color={exhibit.accent} />
       <FloorMarker position={[AMES_REVEAL_POINT[0], 0.035, AMES_REVEAL_POINT[2]]} color="#7ef4d2" />
       <ExhibitLabel exhibit={exhibit} position={[17.7, 3.85, -9]} />
       <pointLight position={[15.2, 2.6, -9]} color="#ffd9d9" intensity={16} distance={7} />
-      <pointLight position={[17.6, 2.2, -7.2]} color="#c6f2ff" intensity={8} distance={5} />
+      <pointLight position={[17.6, 2.2, -6.6]} color="#c6f2ff" intensity={8} distance={5} />
       {reveal && (
-        <Html position={[15.2, 2.9, -6.45]} center transform distanceFactor={6}>
+        <Html position={[14.3, 2.9, -5.05]} center transform distanceFactor={6}>
           <span className="ames-reveal-label">SIDE VIEW · SAME SIZE</span>
         </Html>
       )}

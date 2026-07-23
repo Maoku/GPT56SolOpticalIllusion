@@ -3,14 +3,14 @@ import type { ExhibitType, ViewSpot } from '../../exhibits/exhibitCatalog'
 
 export const spatialAlignmentAnchors: Partial<Record<ExhibitType, [number, number, number][]>> = {
   'parallax-bloom': [
-    [-6, 2.13, -15.8],
-    [-6, 2.21, -16.6],
-    [-6, 2.29, -17.4],
+    [-10, 2.13, -15.8],
+    [-10, 2.21, -16.6],
+    [-10, 2.29, -17.4],
   ],
   'folded-corridor': [
-    [6, 1.54, -15.2],
-    [6, 1.52, -16],
-    [6, 1.5, -16.8],
+    [4.5, 1.54, -14.7],
+    [4.5, 1.52, -15.8],
+    [4.5, 1.5, -16.75],
   ],
 }
 

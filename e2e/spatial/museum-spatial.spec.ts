@@ -50,11 +50,11 @@ async function setCamera(
 }
 
 const spatialAnchors = [
-  ['checker-shadow', [12.8, 1.65, 8], [18, 1, 8]],
-  ['ames-room', [12.7, 1.65, -9], [18, 1.4, -9]],
-  ['parallax-bloom', [-6, 1.65, -10.8], [-6, 2.25, -17]],
-  ['chromatic-echo-corridor', [0, 1.65, -11.5], [0, 1.65, -17]],
-  ['folded-corridor', [6, 1.65, -11], [6, 1.5, -17]],
+  ['checker-shadow', [12.8, 1.65, 0], [16.28, 0.12, 0]],
+  ['ames-room', [11.7, 1.65, -9], [17.2, 1.4, -9]],
+  ['parallax-bloom', [-10, 1.65, -10.8], [-10, 2.25, -17]],
+  ['chromatic-echo-corridor', [-2.5, 1.65, -11.5], [-2.5, 1.65, -17]],
+  ['folded-corridor', [4.5, 1.65, -10.4], [4.5, 1.5, -17]],
   ['counterparallax-window', [12, 1.65, -11.4], [12, 1.5, -17]],
 ] as const
 
@@ -83,7 +83,7 @@ for (const [id, position, target] of spatialAnchors) {
 test('checker scene changes real lighting context and survives low quality', async ({ page }) => {
   await page.goto('/?museum=v2&e2e=1&exhibit=checker-shadow')
   await waitForBridge(page)
-  await setCamera(page, [12.8, 1.65, 8], [18, 1, 8])
+  await setCamera(page, [12.8, 1.65, 0], [16.28, 0.12, 0])
   await page.evaluate(() =>
     (globalThis as BrowserGlobal).__PARALLAX_E2E__!.activate('checker-shadow'),
   )
@@ -104,16 +104,16 @@ test('checker scene changes real lighting context and survives low quality', asy
 test('Ames and folded reveals are driven by physical side viewpoints', async ({ page }) => {
   await page.goto('/?museum=v2&e2e=1&exhibit=ames-room')
   await waitForBridge(page)
-  await setCamera(page, [12.7, 1.65, -9], [18, 1.4, -9])
+  await setCamera(page, [11.7, 1.65, -9], [17.2, 1.4, -9])
   await page.evaluate(() => (globalThis as BrowserGlobal).__PARALLAX_E2E__!.activate('ames-room'))
   expect((await snapshot(page)).sceneParameters).toMatchObject({
     viewState: 'aperture',
     equalFigureScale: true,
   })
-  await setCamera(page, [15.1, 1.65, -5.8], [17, 1.4, -9])
+  await setCamera(page, [14.2, 1.65, -4.7], [16.7, 1.4, -9])
   await expect.poll(async () => (await snapshot(page)).sceneParameters.viewState).toBe('reveal')
 
-  await setCamera(page, [6, 1.65, -11], [6, 1.5, -17])
+  await setCamera(page, [4.5, 1.65, -10.4], [4.5, 1.5, -17])
   await page.evaluate(() =>
     (globalThis as BrowserGlobal).__PARALLAX_E2E__!.activate('folded-corridor'),
   )
@@ -121,28 +121,33 @@ test('Ames and folded reveals are driven by physical side viewpoints', async ({ 
     viewState: 'aligned',
     fixedFragments: true,
   })
-  await setCamera(page, [8.4, 1.65, -14.2], [6, 1.5, -17])
+  await setCamera(page, [7.7, 1.65, -14.1], [4.5, 1.5, -17])
   await expect.poll(async () => (await snapshot(page)).sceneParameters.viewState).toBe('reveal')
 })
 
 test('signature walking changes bloom alignment and chromatic depth phase', async ({ page }) => {
   await page.goto('/?museum=v2&e2e=1&exhibit=parallax-bloom')
   await waitForBridge(page)
-  await setCamera(page, [-6, 1.65, -10.8], [-6, 2.25, -17])
+  await setCamera(page, [-10, 1.65, -10.8], [-10, 2.25, -17])
   await page.evaluate(() =>
     (globalThis as BrowserGlobal).__PARALLAX_E2E__!.activate('parallax-bloom'),
   )
   await expect.poll(async () => (await snapshot(page)).alignmentError).toBeLessThan(12)
-  await setCamera(page, [-4.5, 1.65, -10.8], [-6, 2.25, -17])
+  await setCamera(page, [-8.5, 1.65, -10.8], [-10, 2.25, -17])
   await expect.poll(async () => (await snapshot(page)).alignmentError).toBeGreaterThan(12)
 
-  await setCamera(page, [0, 1.65, -12.5], [0, 1.65, -17])
+  await setCamera(page, [-2.5, 1.65, -12.5], [-2.5, 1.65, -17])
   await page.evaluate(() =>
     (globalThis as BrowserGlobal).__PARALLAX_E2E__!.activate('chromatic-echo-corridor'),
   )
   expect((await snapshot(page)).sceneParameters.phase).toBe(0)
-  await setCamera(page, [0, 1.65, -16.4], [0, 1.65, -17])
+  await setCamera(page, [-2.5, 1.65, -16.4], [-2.5, 1.65, -17])
   await expect.poll(async () => (await snapshot(page)).sceneParameters.phase).toBe(2)
+  await expect.poll(async () => (await snapshot(page)).sceneParameters.lighting).toMatchObject({
+    adaptIntensity: 0,
+    resultColor: '#ffffff',
+    echoSurfaceColor: '#e9e6df',
+  })
 })
 
 test('counterparallax reverses layer motion and provides reduced-motion static views', async ({
@@ -181,7 +186,7 @@ test('spatial HUD stays at the edge and leaves the central artwork unobstructed'
 }) => {
   await page.goto('/?museum=v2&e2e=1&exhibit=parallax-bloom')
   await waitForBridge(page)
-  await setCamera(page, [-6, 1.65, -10.8], [-6, 2.25, -17])
+  await setCamera(page, [-10, 1.65, -10.8], [-10, 2.25, -17])
   await page.evaluate(() =>
     (globalThis as BrowserGlobal).__PARALLAX_E2E__!.activate('parallax-bloom'),
   )

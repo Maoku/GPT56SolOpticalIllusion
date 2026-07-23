@@ -1,45 +1,45 @@
 export type Point3 = readonly [number, number, number]
 
-export const AMES_VIEW_POINT: Point3 = [12.7, 1.65, -9]
-export const AMES_REVEAL_POINT: Point3 = [15.1, 1.65, -5.8]
+export const AMES_VIEW_POINT: Point3 = [11.7, 1.65, -9]
+export const AMES_REVEAL_POINT: Point3 = [14.2, 1.65, -4.7]
 export const AMES_FIGURE_HEIGHT = 1.78
 export const AMES_FIGURE_SCALE = 1
 
 export const amesFigures = [
-  { id: 'near', position: [15.25, 0.18, -10.55] as Point3, scale: AMES_FIGURE_SCALE },
-  { id: 'far', position: [17.25, 0.72, -7.55] as Point3, scale: AMES_FIGURE_SCALE },
+  { id: 'near', position: [14.6, 0.18, -11.1] as Point3, scale: AMES_FIGURE_SCALE },
+  { id: 'far', position: [17.15, 0.72, -7] as Point3, scale: AMES_FIGURE_SCALE },
 ] as const
 
 export const amesRoomSurfaces = {
   floor: [
-    [14.65, 0.16, -11.45],
-    [14.65, 0.42, -6.75],
-    [18, 0.86, -7.35],
-    [18, 0.16, -10.75],
+    [13.65, 0.16, -12.6],
+    [13.65, 0.42, -5.4],
+    [18, 0.86, -6.3],
+    [18, 0.16, -11.7],
   ],
   ceiling: [
-    [14.65, 3.08, -11.45],
-    [18, 3.25, -10.75],
-    [18, 3.32, -7.35],
-    [14.65, 2.82, -6.75],
+    [13.65, 3.08, -12.6],
+    [18, 3.25, -11.7],
+    [18, 3.32, -6.3],
+    [13.65, 2.82, -5.4],
   ],
   back: [
-    [18, 0.16, -10.75],
-    [18, 0.86, -7.35],
-    [18, 3.32, -7.35],
-    [18, 3.25, -10.75],
+    [18, 0.16, -11.7],
+    [18, 0.86, -6.3],
+    [18, 3.32, -6.3],
+    [18, 3.25, -11.7],
   ],
   southWall: [
-    [14.65, 0.16, -11.45],
-    [18, 0.16, -10.75],
-    [18, 3.25, -10.75],
-    [14.65, 3.08, -11.45],
+    [13.65, 0.16, -12.6],
+    [18, 0.16, -11.7],
+    [18, 3.25, -11.7],
+    [13.65, 3.08, -12.6],
   ],
   northWall: [
-    [14.65, 0.42, -6.75],
-    [14.65, 2.82, -6.75],
-    [18, 3.32, -7.35],
-    [18, 0.86, -7.35],
+    [13.65, 0.42, -5.4],
+    [13.65, 2.82, -5.4],
+    [18, 3.32, -6.3],
+    [18, 0.86, -6.3],
   ],
 } satisfies Record<string, Point3[]>
 

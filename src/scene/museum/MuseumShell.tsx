@@ -10,7 +10,9 @@ export function MuseumShell() {
   return (
     <group>
       <Structure position={[0, -0.15, 0]} scale={[38, 0.3, 36]} color="#0f1724" />
-      <Structure position={[0, 3.15, -18]} scale={[38, 6.3, 0.35]} color="#101826" />
+      <Structure position={[-4.93, 3.15, -18]} scale={[28.15, 6.3, 0.35]} color="#101826" />
+      <Structure position={[16.93, 3.15, -18]} scale={[4.15, 6.3, 0.35]} color="#101826" />
+      <Structure position={[12, 4.95, -18]} scale={[5.7, 2.7, 0.35]} color="#101826" />
       <Structure position={[0, 3.15, 18]} scale={[38, 6.3, 0.35]} color="#101826" />
       <Structure position={[-19, 3.15, 0]} scale={[0.35, 6.3, 36]} color="#101826" />
       <Structure position={[19, 3.15, 0]} scale={[0.35, 6.3, 36]} color="#101826" />

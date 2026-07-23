@@ -14,12 +14,12 @@ export function SignatureHall() {
       <SpatialChromaticCorridor />
       <FoldedCorridor />
       <CounterparallaxWindow />
-      <mesh position={[3, 0.026, -11.72]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[17.5, 0.035]} />
+      <mesh position={[1, 0.026, -11.72]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[25, 0.035]} />
         <meshBasicMaterial color="#875b8d" toneMapped={false} />
       </mesh>
-      <pointLight position={[-6, 3.6, -13.2]} color="#ff78c8" intensity={5} distance={7} />
-      <pointLight position={[6, 3.6, -13.2]} color="#72f0d0" intensity={5} distance={7} />
+      <pointLight position={[-10, 3.6, -13.2]} color="#ff78c8" intensity={5} distance={7} />
+      <pointLight position={[4.5, 3.6, -13.2]} color="#72f0d0" intensity={5} distance={7} />
     </group>
   )
 }

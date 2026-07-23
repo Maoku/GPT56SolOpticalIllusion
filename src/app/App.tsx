@@ -8,7 +8,7 @@ import { LoadingScreen } from '../ui/LoadingScreen'
 import { SettingsPanel } from '../ui/SettingsPanel'
 import { StartScreen } from '../ui/StartScreen'
 import { WebGLFallback } from '../ui/WebGLFallback'
-import { ExplorationHud, SceneTelemetry } from '../ui/ExplorationHud'
+import { ExplorationHud } from '../ui/ExplorationHud'
 import { ExhibitExperience } from '../exhibits/ExhibitExperience'
 import { HintPanel } from '../ui/HintPanel'
 import { MuseumMap } from '../ui/MuseumMap'
@@ -39,7 +39,6 @@ export function App({ sceneEnabled = true, webGLAvailable = sceneEnabled ? isWeb
               gl={{ antialias: quality === 'high', powerPreference: 'high-performance' }}
             >
               <MuseumScene />
-              {(stage === 'exploring' || stage === 'spatial-exhibit') && <SceneTelemetry />}
             </Canvas>
           </Suspense>
         ) : <div className="scene-placeholder" aria-hidden="true" />}

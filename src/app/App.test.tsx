@@ -58,12 +58,12 @@ describe('App', () => {
     expect(useMuseumStore.getState().overlay).toBe('none')
   })
 
-  it('keeps scene telemetry from blocking interactive overlays', () => {
+  it('removes the always-on zone telemetry from interactive overlays', () => {
     useMuseumStore.setState({ stage: 'exploring', overlay: 'tutorial', tutorialSeen: false })
     render(<App webGLAvailable />)
 
-    expect(screen.getByTestId('three-html')).toHaveStyle({ pointerEvents: 'none' })
-    expect(screen.getByTestId('three-html')).toHaveAttribute('data-z-index-range', '10,10')
+    expect(screen.queryByText(/ZONE —/)).not.toBeInTheDocument()
+    expect(screen.queryByTestId('three-html')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: '次へ' })).toBeEnabled()
   })
 

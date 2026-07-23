@@ -14,6 +14,7 @@ import {
   selectFocusedExhibit,
 } from '../focus'
 import { nextSpatialStep } from '../interaction/spatialExperience'
+import { cameraAnglesForTarget } from './cameraPose'
 
 const directionForAction = {
   'move-forward': 'forward',
@@ -124,11 +125,9 @@ export function PlayerController() {
     if (request && request.nonce !== handledCameraRequest.current) {
       handledCameraRequest.current = request.nonce
       camera.position.set(...request.position)
-      const deltaX = request.target[0] - request.position[0]
-      const deltaY = request.target[1] - request.position[1]
-      const deltaZ = request.target[2] - request.position[2]
-      yaw.current = Math.atan2(-deltaX, -deltaZ)
-      pitch.current = -Math.atan2(deltaY, Math.hypot(deltaX, deltaZ))
+      const angles = cameraAnglesForTarget(request)
+      yaw.current = angles.yaw
+      pitch.current = angles.pitch
     }
     euler.current.set(pitch.current, yaw.current, 0)
     camera.quaternion.setFromEuler(euler.current)

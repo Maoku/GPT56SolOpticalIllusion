@@ -7,8 +7,17 @@ export const signaturePrimaryActions = {
   'counterparallax-window': 'compare-lateral-motion',
 } as const
 
-export const FOLDED_VIEW_POINT: Point3 = [6, 1.65, -11]
-export const FOLDED_REVEAL_POINT: Point3 = [8.4, 1.65, -14.2]
+export const FOLDED_VIEW_POINT: Point3 = [4.5, 1.65, -10.4]
+export const FOLDED_REVEAL_POINT: Point3 = [7.7, 1.65, -14.1]
+
+export function chromaticLightingForPhase(active: boolean, phase: number) {
+  return {
+    adaptIntensity: 0,
+    resultIntensity: active && phase >= 2 ? 7 : 2,
+    resultColor: '#ffffff',
+    echoSurfaceColor: '#e9e6df',
+  } as const
+}
 
 function distanceXZ(a: Point3, b: Point3) {
   return Math.hypot(a[0] - b[0], a[2] - b[2])

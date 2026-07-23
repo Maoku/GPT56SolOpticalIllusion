@@ -9,7 +9,11 @@ import {
   counterparallaxMode,
   counterparallaxStaticViews,
 } from './counterparallax'
-import { chromaticPhaseForPosition, foldedViewState } from './signatureExperience'
+import {
+  chromaticLightingForPhase,
+  chromaticPhaseForPosition,
+  foldedViewState,
+} from './signatureExperience'
 
 type CameraPose = {
   position: [number, number, number]
@@ -63,7 +67,10 @@ export function SceneTestBridge() {
         case 'parallax-bloom':
           return { alignmentError: state.alignmentError }
         case 'chromatic-echo-corridor':
-          return { phase: chromaticPhaseForPosition(position) }
+          return {
+            phase: chromaticPhaseForPosition(position),
+            lighting: chromaticLightingForPhase(true, state.spatialStep),
+          }
         case 'folded-corridor':
           return { viewState: foldedViewState(position), fixedFragments: true }
         case 'counterparallax-window': {

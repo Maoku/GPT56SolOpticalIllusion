@@ -17,11 +17,11 @@ describe('exhibit focus', () => {
   })
 
   it.each([
-    ['checker-shadow', [12.8, 8]],
-    ['ames-room', [12.7, -9]],
-    ['parallax-bloom', [-6, -10.8]],
-    ['chromatic-echo-corridor', [0, -11.5]],
-    ['folded-corridor', [6, -11]],
+    ['checker-shadow', [12.8, 0]],
+    ['ames-room', [11.7, -9]],
+    ['parallax-bloom', [-10, -10.8]],
+    ['chromatic-echo-corridor', [-2.5, -11.5]],
+    ['folded-corridor', [4.5, -10.4]],
     ['counterparallax-window', [12, -11.4]],
   ] as const)('focuses %s from its viewing point', (id, player) => {
     expect(selectFocusedExhibit(player, [0, -1], exhibitCatalog)?.id).toBe(id)
@@ -29,8 +29,8 @@ describe('exhibit focus', () => {
 
   it('uses exit padding to prevent boundary flicker', () => {
     const exhibit = exhibitCatalog.find(({ id }) => id === 'parallax-bloom')!
-    expect(isInsideInteractionRegion([-4.5, -10.8], exhibit)).toBe(false)
-    expect(isInsideInteractionRegion([-4.5, -10.8], exhibit, INTERACTION_EXIT_PADDING)).toBe(true)
+    expect(isInsideInteractionRegion([-8.5, -10.8], exhibit)).toBe(false)
+    expect(isInsideInteractionRegion([-8.5, -10.8], exhibit, INTERACTION_EXIT_PADDING)).toBe(true)
   })
 
   it('labels the three museum zones', () => {
