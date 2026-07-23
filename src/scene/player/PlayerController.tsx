@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Euler, Vector3 } from 'three'
-import { exhibitCatalog } from '../../exhibits/exhibitCatalog'
+import { getMuseumMode } from '../../app/museumMode'
+import { getExhibitCatalog } from '../../exhibits/exhibitCatalog'
 import type { ExhibitType } from '../../exhibits/exhibitCatalog'
 import { useUnifiedInput, type InputAction } from '../../hooks/useUnifiedInput'
 import { useMuseumStore } from '../../state/useMuseumStore'
@@ -39,7 +40,7 @@ export function PlayerController() {
       state.openOverlay('hint')
     } else if (action === 'escape') {
       if (state.overlay !== 'none') state.closeOverlay()
-      else if (state.stage === 'exhibit') state.leaveExhibit()
+      else if (state.stage === 'exhibit' || state.stage === 'spatial-exhibit') state.leaveExhibit()
       document.exitPointerLock?.()
     }
   })
@@ -48,14 +49,14 @@ export function PlayerController() {
     const canvas = gl.domElement
     const rotate = (deltaX: number, deltaY: number) => {
       const state = useMuseumStore.getState()
-      if (state.stage !== 'exploring' || state.overlay !== 'none') return
+      if ((state.stage !== 'exploring' && state.stage !== 'spatial-exhibit') || state.overlay !== 'none') return
       const sensitivity = state.settings.lookSensitivity * 0.0022
       yaw.current -= deltaX * sensitivity
       pitch.current = Math.max(-1.25, Math.min(1.25, pitch.current - deltaY * sensitivity))
     }
     const onPointerDown = () => {
       const state = useMuseumStore.getState()
-      if (state.stage === 'exploring' && state.overlay === 'none' && !matchMedia('(pointer: coarse)').matches) {
+      if ((state.stage === 'exploring' || state.stage === 'spatial-exhibit') && state.overlay === 'none' && !matchMedia('(pointer: coarse)').matches) {
         void canvas.requestPointerLock()
       }
     }
@@ -89,7 +90,7 @@ export function PlayerController() {
 
   useEffect(() => {
     const unsubscribe = useMuseumStore.subscribe((state) => {
-      if (state.stage !== 'exploring' || state.overlay !== 'none') {
+      if ((state.stage !== 'exploring' && state.stage !== 'spatial-exhibit') || state.overlay !== 'none') {
         usePlayerInputStore.getState().clear()
         if (document.pointerLockElement) document.exitPointerLock?.()
       }
@@ -101,7 +102,7 @@ export function PlayerController() {
     const museum = useMuseumStore.getState()
     euler.current.set(pitch.current, yaw.current, 0)
     camera.quaternion.setFromEuler(euler.current)
-    if (museum.stage !== 'exploring' || museum.overlay !== 'none') return
+    if ((museum.stage !== 'exploring' && museum.stage !== 'spatial-exhibit') || museum.overlay !== 'none') return
 
     const input = usePlayerInputStore.getState()
     const x = Number(input.right) - Number(input.left)
@@ -116,7 +117,9 @@ export function PlayerController() {
     }
 
     const forward: [number, number] = [-Math.sin(yaw.current), -Math.cos(yaw.current)]
-    const focused = selectFocusedExhibit([camera.position.x, camera.position.z], forward, exhibitCatalog)
+    const focused = museum.stage === 'exploring'
+      ? selectFocusedExhibit([camera.position.x, camera.position.z], forward, getExhibitCatalog(getMuseumMode()))
+      : null
     const nextId = focused?.id ?? null
     if (nextId !== focusedId.current) {
       focusedId.current = nextId

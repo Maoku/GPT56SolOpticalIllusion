@@ -1,8 +1,13 @@
-import { useMuseumStore } from './useMuseumStore'
+import {
+  MUSEUM_STORAGE_KEY,
+  migrateMuseumState,
+  useMuseumStore,
+} from './useMuseumStore'
 
 describe('museum store', () => {
   beforeEach(() => {
-    sessionStorage.clear()
+    window.sessionStorage.clear()
+    window.localStorage.clear()
     useMuseumStore.setState({ progress: {}, stage: 'title', overlay: 'none' })
   })
 
@@ -21,8 +26,20 @@ describe('museum store', () => {
     expect(useMuseumStore.getState().overlay).toBe('none')
   })
 
-  it('persists visit progress in the current tab session', () => {
+  it('persists visit progress across visits', () => {
     useMuseumStore.getState().markInteracted('ponzo')
-    expect(sessionStorage.getItem('parallax-museum-session')).toContain('ponzo')
+    expect(window.localStorage.getItem(MUSEUM_STORAGE_KEY)).toContain('ponzo')
+  })
+
+  it('migrates valid V1 progress and rejects unknown exhibits', () => {
+    expect(migrateMuseumState({
+      progress: { ponzo: 'revealed', 'not-real': 'interacted' },
+      settings: { reducedMotion: true },
+      tutorialSeen: true,
+    })).toMatchObject({
+      progress: { ponzo: 'revealed' },
+      settings: { reducedMotion: true, quality: 'high' },
+      tutorialSeen: true,
+    })
   })
 })

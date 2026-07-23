@@ -1,9 +1,10 @@
 import { lazy, Suspense, useEffect, useState, type ComponentType, type CSSProperties, type LazyExoticComponent } from 'react'
-import { exhibitById, type ExhibitType } from './exhibitCatalog'
+import { getMuseumMode } from '../app/museumMode'
+import { exhibitById, getExhibitCatalog, type ExhibitType } from './exhibitCatalog'
 import { useMuseumStore } from '../state/useMuseumStore'
 import type { ExhibitModuleProps } from './interaction/types'
 type LazyModule = LazyExoticComponent<ComponentType<ExhibitModuleProps>>
-const modules: Record<ExhibitType, LazyModule> = {
+const modules: Partial<Record<ExhibitType, LazyModule>> = {
   'muller-lyer': lazy(() => import('./mullerLyer/MullerLyerExhibit').then((module) => ({ default: module.MullerLyerExhibit }))),
   ponzo: lazy(() => import('./ponzo/PonzoExhibit').then((module) => ({ default: module.PonzoExhibit }))),
   ebbinghaus: lazy(() => import('./ebbinghaus/EbbinghausExhibit').then((module) => ({ default: module.EbbinghausExhibit }))),
@@ -39,6 +40,8 @@ export function ExhibitExperience() {
   const exhibit = exhibitById.get(activeId)
   if (!exhibit) return null
   const Module = modules[activeId]
+  if (!Module) return null
+  const total = getExhibitCatalog(getMuseumMode()).length
 
   const toggleAnswer = () => {
     setRevealed((current) => {
@@ -50,7 +53,7 @@ export function ExhibitExperience() {
   return (
     <section className="exhibit-experience" aria-labelledby="active-exhibit-title" style={{ '--exhibit-accent': exhibit.accent } as CSSProperties}>
       <header className="experience-header">
-        <div className="experience-index"><span>{String(exhibit.number).padStart(2, '0')}</span><small>/ 10</small></div>
+        <div className="experience-index"><span>{String(exhibit.number).padStart(2, '0')}</span><small>/ {total}</small></div>
         <div><p className="eyebrow">{exhibit.subtitle}{exhibit.isOriginal ? ' — ORIGINAL' : ''}</p><h1 id="active-exhibit-title">{exhibit.title}</h1><p>{exhibit.prompt}</p></div>
         <button className="icon-button" aria-label="展示モードを終了" onClick={leaveExhibit}>×</button>
       </header>

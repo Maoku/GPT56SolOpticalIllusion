@@ -1,4 +1,5 @@
-import { exhibitById } from '../exhibits/exhibitCatalog'
+import { getMuseumMode } from '../app/museumMode'
+import { exhibitById, getExhibitCatalog } from '../exhibits/exhibitCatalog'
 import { useMuseumStore } from '../state/useMuseumStore'
 
 export function ExhibitPrompt() {
@@ -7,10 +8,11 @@ export function ExhibitPrompt() {
   const openOverlay = useMuseumStore((state) => state.openOverlay)
   const exhibit = focusedId ? exhibitById.get(focusedId) : undefined
   if (!exhibit) return null
+  const total = getExhibitCatalog(getMuseumMode()).length
 
   return (
     <section className="exhibit-prompt" aria-live="polite">
-      <div><span>{String(exhibit.number).padStart(2, '0')} / 10</span><h2>{exhibit.title}</h2><p>{exhibit.prompt}</p></div>
+      <div><span>{String(exhibit.number).padStart(2, '0')} / {total}</span><h2>{exhibit.title}</h2><p>{exhibit.prompt}</p></div>
       <div className="exhibit-prompt__actions">
         <button className="button button--primary" onClick={() => enterExhibit(exhibit.id)}>操作する <kbd>E</kbd></button>
         <button className="button button--quiet" onClick={() => openOverlay('hint')}>見え方のヒント <kbd>H</kbd></button>

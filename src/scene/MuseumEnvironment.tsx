@@ -1,13 +1,13 @@
 import type { CSSProperties } from 'react'
 import { Html } from '@react-three/drei'
-import { exhibitCatalog } from '../exhibits/exhibitCatalog'
+import { legacyExhibitCatalog } from '../exhibits/exhibitCatalog'
 import { useMuseumStore } from '../state/useMuseumStore'
 
 function Structure({ position, scale, color = '#172131' }: { position: [number, number, number]; scale: [number, number, number]; color?: string }) {
   return <mesh position={position} receiveShadow castShadow><boxGeometry args={scale} /><meshStandardMaterial color={color} roughness={0.82} /></mesh>
 }
 
-function ExhibitMarker({ exhibit }: { exhibit: (typeof exhibitCatalog)[number] }) {
+function ExhibitMarker({ exhibit }: { exhibit: (typeof legacyExhibitCatalog)[number] }) {
   const progress = useMuseumStore((state) => state.progress[exhibit.id] ?? 'unvisited')
   const stage = useMuseumStore((state) => state.stage)
   return (
@@ -58,7 +58,7 @@ export function MuseumEnvironment() {
         <planeGeometry args={[37, 12.5]} /><meshStandardMaterial color="#17182a" roughness={1} />
       </mesh>
 
-      {exhibitCatalog.map((exhibit) => <ExhibitMarker key={exhibit.id} exhibit={exhibit} />)}
+      {legacyExhibitCatalog.map((exhibit) => <ExhibitMarker key={exhibit.id} exhibit={exhibit} />)}
     </group>
   )
 }
