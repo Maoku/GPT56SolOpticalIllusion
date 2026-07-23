@@ -19,11 +19,12 @@ npm run typecheck
 npm test
 npm run build
 npm run verify:size
-npm run test:e2e
+npm run test:e2e:ui
+npm run test:e2e:spatial
 ```
 
 各展示には `/?exhibit=muller-lyer` のような直接リンクでも入れます。展示IDは `src/exhibits/exhibitCatalog.ts` を参照してください。
-WebGL を使えない自動テスト環境では `?scene=off` を指定すると HTML インターフェースだけを検証できます。
+`test:e2e:ui` は `?scene=off` で HTML インターフェースを高速検証し、`test:e2e:spatial` は WebGL を有効にして鑑賞点、歩行、シーン状態、代表描画を検証します。片方の成功をもう片方の代替にはしません。
 
 ## 配信
 

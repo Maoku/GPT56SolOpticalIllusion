@@ -44,25 +44,31 @@ for (const [id, title, control] of exhibits) {
   })
 }
 
-test('V2 enters without a blocking tutorial and lists all twelve exhibits', async ({ page }) => {
+test('V2 uses contextual onboarding and lists all twelve exhibits', async ({ page }) => {
   await page.goto('/?scene=off&museum=v2')
   await expect(page.getByRole('heading', { name: 'PARALLAX 2.0' })).toBeVisible()
-  await expect(page.getByText('12の錯視。6つの部屋。あなたの目だけが作る結果。')).toBeVisible()
   await page.getByRole('button', { name: /入館する/ }).click()
   await expect(page.getByRole('complementary')).toContainText('歩くと、像が変わる。')
   await expect(page.getByRole('dialog')).toHaveCount(0)
   await page.getByRole('button', { name: '閉じる' }).click()
   await page.getByRole('button', { name: /館内マップを開く/ }).click()
-  await expect(page.getByRole('dialog', { name: '館内マップと展示一覧' })).toBeVisible()
   await expect(page.getByText('未体験')).toHaveCount(12)
+  await expect(page.getByRole('button', { name: 'パスポート' })).toBeVisible()
 })
 
 const v2LabExhibits = exhibits.filter(([id]) =>
-  ['muller-lyer', 'ponzo', 'ebbinghaus', 'cafe-wall', 'necker-cube', 'motion-induced-blindness'].includes(id),
+  [
+    'muller-lyer',
+    'ponzo',
+    'ebbinghaus',
+    'cafe-wall',
+    'necker-cube',
+    'motion-induced-blindness',
+  ].includes(id),
 )
 
 for (const [id, title, control] of v2LabExhibits) {
-  test(`V2 lab ${title}: remains deeply interactive`, async ({ page }) => {
+  test(`V2 lab ${title}: keeps the detailed experiment optional`, async ({ page }) => {
     await page.goto(`/?scene=off&museum=v2&exhibit=${id}`)
     await expect(page.getByRole('heading', { name: title })).toBeVisible()
     await expect(page.getByRole('slider', { name: control })).toBeVisible()
@@ -71,31 +77,10 @@ for (const [id, title, control] of v2LabExhibits) {
   })
 }
 
-const v2SpatialExhibits = [
-  ['checker-shadow', 'チェッカーシャドウ'],
-  ['ames-room', 'エイムズの部屋'],
-  ['parallax-bloom', '視差の花'],
-  ['chromatic-echo-corridor', '色彩残響回廊'],
-  ['folded-corridor', '折り畳まれた回廊'],
-  ['counterparallax-window', '逆視差の窓'],
-] as const
-
-for (const [id, title] of v2SpatialExhibits) {
-  test(`V2 spatial ${title}: compares states and records a result`, async ({ page }) => {
-    await page.goto(`/?scene=off&museum=v2&exhibit=${id}`)
-    await expect(page.getByRole('heading', { name: title })).toBeVisible()
-    await expect(page.getByRole('button', { name: '鑑賞点へ移動' })).toBeVisible()
-    await page.getByRole('button', { name: '状態を切り替える' }).click()
-    await page.getByRole('button', { name: '結果を記録' }).click()
-    await expect(page.getByRole('button', { name: '結果を更新' })).toBeVisible()
-  })
-}
-
-test('V2 reduced-motion setting keeps a static spatial comparison available', async ({ page }) => {
+test('V2 spatial HTML shell has no fake state or record controls', async ({ page }) => {
   await page.goto('/?scene=off&museum=v2&exhibit=counterparallax-window')
-  await page.getByRole('button', { name: '設定を開く' }).click()
-  await page.getByRole('checkbox', { name: 'モーション軽減' }).check()
-  await page.getByRole('button', { name: '完了' }).click()
-  await expect(page.getByText(/モーション軽減: 自動移動を止め/)).toHaveCount(1)
-  await expect(page.getByRole('button', { name: '状態を切り替える' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: '逆視差の窓' })).toBeVisible()
+  await expect(page.getByRole('button', { name: '状態を切り替える' })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: /結果を記録/ })).toHaveCount(0)
+  await expect(page.getByText(/窓の前を左右に歩き/)).toHaveCount(1)
 })
