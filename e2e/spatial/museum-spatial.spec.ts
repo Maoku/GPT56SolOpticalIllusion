@@ -60,7 +60,7 @@ const spatialAnchors = [
 
 for (const [id, position, target] of spatialAnchors) {
   test(`${id}: viewing point automatically activates the scene exhibit`, async ({ page }) => {
-    await page.goto('/?museum=v2&e2e=1')
+    await page.goto('/?e2e=1')
     await waitForBridge(page)
     await setCamera(page, [...position], [...target])
     await page.evaluate(() => (globalThis as BrowserGlobal).__PARALLAX_E2E__!.enterMuseum())
@@ -81,7 +81,7 @@ for (const [id, position, target] of spatialAnchors) {
 }
 
 test('checker scene changes real lighting context and survives low quality', async ({ page }) => {
-  await page.goto('/?museum=v2&e2e=1&exhibit=checker-shadow')
+  await page.goto('/?e2e=1&exhibit=checker-shadow')
   await waitForBridge(page)
   await setCamera(page, [12.8, 1.65, 0], [16.28, 0.12, 0])
   await page.evaluate(() =>
@@ -102,7 +102,7 @@ test('checker scene changes real lighting context and survives low quality', asy
 })
 
 test('Ames and folded reveals are driven by physical side viewpoints', async ({ page }) => {
-  await page.goto('/?museum=v2&e2e=1&exhibit=ames-room')
+  await page.goto('/?e2e=1&exhibit=ames-room')
   await waitForBridge(page)
   await setCamera(page, [11.7, 1.65, -9], [17.2, 1.4, -9])
   await page.evaluate(() => (globalThis as BrowserGlobal).__PARALLAX_E2E__!.activate('ames-room'))
@@ -126,7 +126,7 @@ test('Ames and folded reveals are driven by physical side viewpoints', async ({ 
 })
 
 test('signature walking changes bloom alignment and chromatic depth phase', async ({ page }) => {
-  await page.goto('/?museum=v2&e2e=1&exhibit=parallax-bloom')
+  await page.goto('/?e2e=1&exhibit=parallax-bloom')
   await waitForBridge(page)
   await setCamera(page, [-10, 1.65, -10.8], [-10, 2.25, -17])
   await page.evaluate(() =>
@@ -153,7 +153,7 @@ test('signature walking changes bloom alignment and chromatic depth phase', asyn
 test('counterparallax reverses layer motion and provides reduced-motion static views', async ({
   page,
 }) => {
-  await page.goto('/?museum=v2&e2e=1&exhibit=counterparallax-window')
+  await page.goto('/?e2e=1&exhibit=counterparallax-window')
   await waitForBridge(page)
   await setCamera(page, [10.9, 1.65, -11.4], [12, 1.5, -17])
   await page.evaluate(() =>
@@ -184,7 +184,7 @@ test('counterparallax reverses layer motion and provides reduced-motion static v
 test('spatial HUD stays at the edge and leaves the central artwork unobstructed', async ({
   page,
 }) => {
-  await page.goto('/?museum=v2&e2e=1&exhibit=parallax-bloom')
+  await page.goto('/?e2e=1&exhibit=parallax-bloom')
   await waitForBridge(page)
   await setCamera(page, [-10, 1.65, -10.8], [-10, 2.25, -17])
   await page.evaluate(() =>

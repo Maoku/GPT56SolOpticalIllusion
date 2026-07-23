@@ -4,7 +4,7 @@ import { ExhibitPrompt } from './ExhibitPrompt'
 
 describe('V2 live classic prompt', () => {
   beforeEach(() => {
-    window.history.pushState({}, '', '?museum=v2')
+    window.history.pushState({}, '', '/')
     useMuseumStore.setState({
       stage: 'exploring',
       focusedExhibitId: 'muller-lyer',

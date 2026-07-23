@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('enters the museum, completes onboarding, and opens the map', async ({ page }) => {
-  await page.goto('/?scene=off')
+  await page.goto('/?scene=off&museum=v1')
   await expect(page.getByRole('heading', { name: 'PARALLAX' })).toBeVisible()
   await page.getByRole('button', { name: /入館する/ }).click()
   await expect(page.getByRole('dialog', { name: '歩いて、見つける' })).toBeVisible()
@@ -33,7 +33,7 @@ const exhibits = [
 
 for (const [id, title, control] of exhibits) {
   test(`${title}: interaction, answer and reset`, async ({ page }) => {
-    await page.goto(`/?scene=off&exhibit=${id}`)
+    await page.goto(`/?scene=off&museum=v1&exhibit=${id}`)
     await expect(page.getByRole('heading', { name: title })).toBeVisible()
     await expect(page.getByRole('slider', { name: control })).toBeVisible()
     await expect(page.getByRole('dialog', { name: '見え方のヒント' })).toHaveCount(0)
@@ -44,8 +44,8 @@ for (const [id, title, control] of exhibits) {
   })
 }
 
-test('V2 uses contextual onboarding and lists all twelve exhibits', async ({ page }) => {
-  await page.goto('/?scene=off&museum=v2')
+test('default V2 uses contextual onboarding and lists all twelve exhibits', async ({ page }) => {
+  await page.goto('/?scene=off')
   await expect(page.getByRole('heading', { name: 'PARALLAX 2.0' })).toBeVisible()
   await page.getByRole('button', { name: /入館する/ }).click()
   await expect(page.getByRole('complementary')).toContainText('歩くと、像が変わる。')
@@ -69,7 +69,7 @@ const v2LabExhibits = exhibits.filter(([id]) =>
 
 for (const [id, title, control] of v2LabExhibits) {
   test(`V2 lab ${title}: keeps the detailed experiment optional`, async ({ page }) => {
-    await page.goto(`/?scene=off&museum=v2&exhibit=${id}`)
+    await page.goto(`/?scene=off&exhibit=${id}`)
     await expect(page.getByRole('heading', { name: title })).toBeVisible()
     await expect(page.getByRole('slider', { name: control })).toBeVisible()
     await page.getByRole('button', { name: '答え合わせ' }).click()
@@ -78,7 +78,7 @@ for (const [id, title, control] of v2LabExhibits) {
 }
 
 test('V2 spatial HTML shell has no fake state or record controls', async ({ page }) => {
-  await page.goto('/?scene=off&museum=v2&exhibit=counterparallax-window')
+  await page.goto('/?scene=off&exhibit=counterparallax-window')
   await expect(page.getByRole('heading', { name: '逆視差の窓' })).toBeVisible()
   await expect(page.getByRole('button', { name: '状態を切り替える' })).toHaveCount(0)
   await expect(page.getByRole('button', { name: /結果を記録/ })).toHaveCount(0)

@@ -74,7 +74,7 @@ export function selectFocusedExhibit(
   return result
 }
 
-export function zoneForPosition(x: number, z: number, mode: 'v1' | 'v2' = 'v1') {
+export function zoneForPosition(x: number, z: number, mode: 'v1' | 'v2' = 'v2') {
   if (mode === 'v2') {
     if (z > 10) return 'CLASSICS LAB'
     if (z < -10) return 'SIGNATURE HALL'

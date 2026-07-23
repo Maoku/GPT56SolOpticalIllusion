@@ -51,7 +51,8 @@ export function MuseumMap() {
               const visit = () => {
                 const search = new URLSearchParams(window.location.search)
                 search.set('exhibit', exhibit.id)
-                if (mode === 'v2') search.set('museum', 'v2')
+                if (mode === 'v1') search.set('museum', 'v1')
+                else search.delete('museum')
                 window.history.replaceState({}, '', `?${search.toString()}`)
                 closeOverlay()
                 enterExhibit(exhibit.id)

@@ -35,10 +35,17 @@ vi.mock('../scene/MuseumScene', () => ({ MuseumScene: () => <div /> }))
 
 describe('App', () => {
   beforeEach(() => {
-    useMuseumStore.setState({ stage: 'title', overlay: 'none', tutorialSeen: true })
+    window.history.pushState({}, '', '/')
+    useMuseumStore.setState({
+      stage: 'title',
+      overlay: 'none',
+      tutorialSeen: true,
+      contextPromptStep: null,
+    })
   })
 
-  it('shows the tutorial only on the first visit', () => {
+  it('shows the V1 tutorial only on the first visit', () => {
+    window.history.pushState({}, '', '?museum=v1')
     useMuseumStore.setState({ tutorialSeen: false })
     render(<App webGLAvailable />)
     fireEvent.click(screen.getByRole('button', { name: /入館する/ }))
@@ -48,12 +55,12 @@ describe('App', () => {
     expect(useMuseumStore.getState().overlay).toBe('none')
   })
 
-  it('enters from the title without automatically showing a hint', () => {
+  it('enters default V2 from the title without automatically showing a hint', () => {
     render(<App webGLAvailable />)
     expect(screen.getByTestId('canvas')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'PARALLAX' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'PARALLAX 2.0' })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: /入館する/ }))
-    expect(screen.queryByRole('heading', { name: 'PARALLAX' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'PARALLAX 2.0' })).not.toBeInTheDocument()
     expect(useMuseumStore.getState().stage).toBe('exploring')
     expect(useMuseumStore.getState().overlay).toBe('none')
   })

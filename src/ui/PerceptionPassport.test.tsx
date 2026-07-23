@@ -6,7 +6,7 @@ import { PerceptionPassport } from './PerceptionPassport'
 
 describe('perception passport', () => {
   beforeEach(() => {
-    window.history.pushState({}, '', '?museum=v2')
+    window.history.pushState({}, '', '/')
     useMuseumStore.setState({
       stage: 'exploring',
       overlay: 'passport',

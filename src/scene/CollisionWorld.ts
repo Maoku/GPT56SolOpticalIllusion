@@ -30,7 +30,7 @@ export function resolvePlayerPosition(
   current: Point2,
   candidate: Point2,
   radius = 0.38,
-  mode: 'v1' | 'v2' = 'v1',
+  mode: 'v1' | 'v2' = 'v2',
 ): Point2 {
   const clamped: Point2 = [
     Math.min(MUSEUM_BOUNDS.maxX, Math.max(MUSEUM_BOUNDS.minX, candidate[0])),

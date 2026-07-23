@@ -33,10 +33,17 @@ describe('exhibit focus', () => {
     expect(isInsideInteractionRegion([-8.5, -10.8], exhibit, INTERACTION_EXIT_PADDING)).toBe(true)
   })
 
-  it('labels the three museum zones', () => {
-    expect(zoneForPosition(0, 12)).toBe('ロビー')
-    expect(zoneForPosition(-8, 0)).toBe('形と大きさ')
-    expect(zoneForPosition(8, 0)).toBe('光と運動')
-    expect(zoneForPosition(0, -10)).toBe('空間と残像')
+  it('labels the V2 museum zones by default', () => {
+    expect(zoneForPosition(0, 12)).toBe('CLASSICS LAB')
+    expect(zoneForPosition(0, -12)).toBe('SIGNATURE HALL')
+    expect(zoneForPosition(12, 0)).toBe('SCALE + LIGHT')
+    expect(zoneForPosition(0, 0)).toBe('ARRIVAL ATRIUM')
+  })
+
+  it('labels the V1 museum zones when requested', () => {
+    expect(zoneForPosition(0, 12, 'v1')).toBe('ロビー')
+    expect(zoneForPosition(-8, 0, 'v1')).toBe('形と大きさ')
+    expect(zoneForPosition(8, 0, 'v1')).toBe('光と運動')
+    expect(zoneForPosition(0, -10, 'v1')).toBe('空間と残像')
   })
 })

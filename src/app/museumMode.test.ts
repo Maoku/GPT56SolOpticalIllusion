@@ -1,11 +1,15 @@
 import { museumModeFromSearch } from './museumMode'
 
 describe('museum mode', () => {
-  it('keeps the current museum as the default', () => {
-    expect(museumModeFromSearch('')).toBe('v1')
+  it('uses V2 as the default', () => {
+    expect(museumModeFromSearch('')).toBe('v2')
   })
 
-  it('exposes V2 behind its development route', () => {
+  it('keeps an explicit V2 parameter compatible', () => {
     expect(museumModeFromSearch('?museum=v2')).toBe('v2')
+  })
+
+  it('exposes V1 through an explicit parameter', () => {
+    expect(museumModeFromSearch('?museum=v1')).toBe('v1')
   })
 })

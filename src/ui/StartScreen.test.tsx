@@ -4,7 +4,7 @@ import { StartScreen } from './StartScreen'
 
 describe('V2 start screen', () => {
   beforeEach(() => {
-    window.history.pushState({}, '', '?museum=v2')
+    window.history.pushState({}, '', '/')
     useMuseumStore.setState({
       progress: {},
       outcomes: {},

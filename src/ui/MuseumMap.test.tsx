@@ -5,24 +5,26 @@ import { MuseumMap } from './MuseumMap'
 import { CompletionMessage } from './MuseumStatus'
 
 describe('museum progress UI', () => {
-  beforeEach(() => useMuseumStore.setState({ progress: {}, overlay: 'map' }))
+  beforeEach(() => {
+    window.history.pushState({}, '', '/')
+    useMuseumStore.setState({ progress: {}, overlay: 'map' })
+  })
 
   it('uses text and symbols as well as color for progress', () => {
     useMuseumStore.setState({ progress: { 'muller-lyer': 'revealed', ponzo: 'interacted' } })
     render(<MuseumMap />)
     expect(screen.getByText('答え合わせ済み')).toBeInTheDocument()
     expect(screen.getByText('操作済み')).toBeInTheDocument()
-    expect(screen.getAllByText('未体験')).toHaveLength(8)
+    expect(screen.getAllByText('未体験')).toHaveLength(10)
   })
 
-  it('announces completion after all ten exhibits were experienced', () => {
+  it('announces completion after all twelve exhibits were experienced', () => {
     useMuseumStore.setState({ progress: Object.fromEntries(exhibitCatalog.map((item) => [item.id, 'interacted'])) })
     render(<CompletionMessage />)
-    expect(screen.getByRole('status')).toHaveTextContent('10 / 10')
+    expect(screen.getByRole('status')).toHaveTextContent('12 / 12')
   })
 
-  it('opens a V2 spatial exhibit directly from the map', () => {
-    window.history.pushState({}, '', '?museum=v2')
+  it('opens a default V2 spatial exhibit without adding a museum parameter', () => {
     render(<MuseumMap />)
     const row = screen.getByText('視差の花').closest('li')
     expect(row).not.toBeNull()
@@ -33,5 +35,6 @@ describe('museum progress UI', () => {
       overlay: 'none',
     })
     expect(window.location.search).toContain('exhibit=parallax-bloom')
+    expect(new URLSearchParams(window.location.search).has('museum')).toBe(false)
   })
 })
