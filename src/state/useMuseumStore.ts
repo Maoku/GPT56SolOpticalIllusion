@@ -8,6 +8,7 @@ import {
   type ExhibitOutcome,
   type OutcomeDraft,
 } from './outcomes'
+import { nextClassicsStep } from '../scene/interaction/classicsExperience'
 
 export type AppStage = 'title' | 'exploring' | 'exhibit' | 'spatial-exhibit'
 export type Overlay = 'none' | 'settings' | 'hint' | 'map' | 'passport' | 'tutorial'
@@ -41,6 +42,7 @@ type MuseumState = {
   contextPromptStep: number | null
   spatialStep: number
   spatialHintVisible: boolean
+  liveExhibitSteps: Partial<Record<ExhibitType, number>>
   alignmentError: number | null
   cameraRequest: CameraRequest | null
   enterMuseum: () => void
@@ -53,6 +55,7 @@ type MuseumState = {
   setSpatialStep: (step: number) => void
   showSpatialHint: () => void
   hideSpatialHint: () => void
+  operateLiveExhibit: (id: ExhibitType) => void
   setAlignmentError: (error: number | null) => void
   requestViewSpot: (id: ExhibitType) => void
   markInteracted: (id: string) => void
@@ -148,6 +151,7 @@ export const useMuseumStore = create<MuseumState>()(
       contextPromptStep: null,
       spatialStep: 0,
       spatialHintVisible: false,
+      liveExhibitSteps: {},
       alignmentError: null,
       cameraRequest: null,
       enterMuseum: () =>
@@ -199,6 +203,16 @@ export const useMuseumStore = create<MuseumState>()(
       setSpatialStep: (spatialStep) => set({ spatialStep }),
       showSpatialHint: () => set({ spatialHintVisible: true }),
       hideSpatialHint: () => set({ spatialHintVisible: false }),
+      operateLiveExhibit: (id) =>
+        set((state) => {
+          const next = nextClassicsStep(id, state.liveExhibitSteps[id] ?? 0)
+          if (next === null) return state
+          return {
+            liveExhibitSteps: { ...state.liveExhibitSteps, [id]: next },
+            progress: nextProgress(state.progress, id, 'interacted'),
+            lastVisitedExhibitId: id,
+          }
+        }),
       setAlignmentError: (alignmentError) => set({ alignmentError }),
       requestViewSpot: (id) => {
         const viewSpot = exhibitById.get(id)?.viewSpots?.[0]

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Euler, Vector3 } from 'three'
 import { getMuseumMode } from '../../app/museumMode'
-import { getExhibitCatalog } from '../../exhibits/exhibitCatalog'
+import { exhibitById, getExhibitCatalog } from '../../exhibits/exhibitCatalog'
 import type { ExhibitType } from '../../exhibits/exhibitCatalog'
 import { useUnifiedInput, type InputAction } from '../../hooks/useUnifiedInput'
 import { useMuseumStore } from '../../state/useMuseumStore'
@@ -48,7 +48,12 @@ export function PlayerController() {
         if (next > 0) state.markRevealed(state.activeExhibitId)
       }
     } else if (action === 'interact' && state.stage === 'exploring' && state.focusedExhibitId) {
-      state.enterExhibit(state.focusedExhibitId)
+      const focused = exhibitById.get(state.focusedExhibitId)
+      if (getMuseumMode() === 'v2' && focused?.venue === 'classics') {
+        state.operateLiveExhibit(state.focusedExhibitId)
+      } else {
+        state.enterExhibit(state.focusedExhibitId)
+      }
     } else if (action === 'hint' && state.stage === 'spatial-exhibit') {
       state.showSpatialHint()
     } else if (action === 'hint' && state.stage === 'exploring' && state.focusedExhibitId) {
