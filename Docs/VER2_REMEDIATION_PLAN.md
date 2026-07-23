@@ -6,6 +6,10 @@
 
 - `Docs/research/rival-museum/2026-07-23/REPORT.md`
 - `Docs/research/rival-museum/2026-07-23/TRANSFORMATION_PLAN.md`
+- `Docs/research/real-museums/2026-07-24/REPORT.md`
+- `Docs/research/real-museums/2026-07-24/JOURNEY_MAP.md`
+- `Docs/research/real-museums/2026-07-24/FLOOR_SKETCHES.md`
+- `Docs/research/real-museums/2026-07-24/SOURCE_NOTES.md`
 - `Docs/PERCEPTUAL_VALIDATION.md`
 - `Docs/MANUAL_TEST_CHECKLIST.md`
 
@@ -149,6 +153,12 @@ P0 の成立確認が終わるまで、新展示、共有機能、パスポー�
 ## 5. 実施計画
 
 ### Phase 0: 現状固定と実在美術館調査
+
+机上調査成果（2026-07-24）:
+
+- National Gallery、Exploratorium、teamLab Borderless、Camera Obscura & World of Illusions の4館を、公式資料に基づき比較した。
+- 来館ジャーニー、平面スケッチ、解説配置ルール、7つの展示原則、現行館内との差分を `Docs/research/real-museums/2026-07-24/` に記録した。
+- 現地の実時間、実距離、混雑時滞留、作品別の同時鑑賞人数は未計測であり、後続の現地調査または初見ユーザーテストで補完する。
 
 #### 目的
 
