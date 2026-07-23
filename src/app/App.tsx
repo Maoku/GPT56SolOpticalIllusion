@@ -15,6 +15,7 @@ import { MuseumMap } from '../ui/MuseumMap'
 import { TutorialOverlay } from '../ui/TutorialOverlay'
 import { SpatialExhibitHud } from '../ui/SpatialExhibitHud'
 import { PerceptionPassport } from '../ui/PerceptionPassport'
+import { ContextPrompts } from '../ui/ContextPrompts'
 
 type AppProps = { webGLAvailable?: boolean; sceneEnabled?: boolean }
 
@@ -46,6 +47,7 @@ export function App({ sceneEnabled = true, webGLAvailable = sceneEnabled ? isWeb
         {stage === 'exploring' && overlay === 'none' && <ExplorationHud />}
         {stage === 'exhibit' && <ExhibitExperience />}
         {stage === 'spatial-exhibit' && overlay === 'none' && <SpatialExhibitHud />}
+        {stage === 'exploring' && <ContextPrompts />}
         {stage !== 'title' && (
           <button
             className="museum-menu-button"

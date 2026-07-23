@@ -10,6 +10,8 @@ const progressLabel: Record<ExhibitProgress, string> = {
 export function MuseumMap() {
   const progress = useMuseumStore((state) => state.progress)
   const closeOverlay = useMuseumStore((state) => state.closeOverlay)
+  const enterExhibit = useMuseumStore((state) => state.enterExhibit)
+  const requestViewSpot = useMuseumStore((state) => state.requestViewSpot)
   const dialog = useDialogFocusTrap<HTMLElement>(closeOverlay)
   const mode = getMuseumMode()
   const catalog = getExhibitCatalog(mode)
@@ -39,7 +41,23 @@ export function MuseumMap() {
           <ol className="exhibit-list">
             {catalog.map((exhibit) => {
               const state = progress[exhibit.id] ?? 'unvisited'
-              return <li key={exhibit.id} data-progress={state}><span className="progress-symbol" aria-hidden="true">{state === 'revealed' ? '◆' : state === 'interacted' ? '◒' : '○'}</span><span><small>{String(exhibit.number).padStart(2, '0')} · {exhibit.zone.toUpperCase()}</small><strong>{exhibit.title}</strong></span><em>{progressLabel[state]}</em></li>
+              const visit = () => {
+                const search = new URLSearchParams(window.location.search)
+                search.set('exhibit', exhibit.id)
+                if (mode === 'v2') search.set('museum', 'v2')
+                window.history.replaceState({}, '', `?${search.toString()}`)
+                closeOverlay()
+                enterExhibit(exhibit.id)
+                if (exhibit.presentation !== 'lab') requestViewSpot(exhibit.id)
+              }
+              return (
+                <li key={exhibit.id} data-progress={state}>
+                  <span className="progress-symbol" aria-hidden="true">{state === 'revealed' ? '◆' : state === 'interacted' ? '◒' : '○'}</span>
+                  <span><small>{String(exhibit.number).padStart(2, '0')} · {exhibit.venue.toUpperCase()}</small><strong>{exhibit.title}</strong></span>
+                  <em>{progressLabel[state]}</em>
+                  <button className="museum-map__visit" onClick={visit}>開く</button>
+                </li>
+              )
             })}
           </ol>
         </div>

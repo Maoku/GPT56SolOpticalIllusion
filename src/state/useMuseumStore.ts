@@ -38,6 +38,7 @@ type MuseumState = {
   tutorialSeen: boolean
   outcomes: Partial<Record<ExhibitType, ExhibitOutcome>>
   lastVisitedExhibitId: ExhibitType | null
+  contextPromptStep: number | null
   spatialStep: number
   alignmentError: number | null
   cameraRequest: CameraRequest | null
@@ -57,6 +58,8 @@ type MuseumState = {
   updateSettings: (settings: Partial<MuseumSettings>) => void
   finishTutorial: () => void
   replayTutorial: () => void
+  advanceContextPrompt: () => void
+  dismissContextPrompts: () => void
 }
 
 export const defaultSettings: MuseumSettings = {
@@ -139,11 +142,19 @@ export const useMuseumStore = create<MuseumState>()(
       tutorialSeen: false,
       outcomes: {},
       lastVisitedExhibitId: null,
+      contextPromptStep: null,
       spatialStep: 0,
       alignmentError: null,
       cameraRequest: null,
       enterMuseum: () =>
-        set((state) => ({ stage: 'exploring', overlay: state.tutorialSeen ? 'none' : 'tutorial' })),
+        set((state) => {
+          const v2 = isV2Museum()
+          return {
+            stage: 'exploring',
+            overlay: state.tutorialSeen || v2 ? 'none' : 'tutorial',
+            contextPromptStep: !state.tutorialSeen && v2 ? 0 : null,
+          }
+        }),
       returnToTitle: () =>
         set({
           stage: 'title',
@@ -152,6 +163,7 @@ export const useMuseumStore = create<MuseumState>()(
           focusedExhibitId: null,
           spatialStep: 0,
           alignmentError: null,
+          contextPromptStep: null,
         }),
       openOverlay: (overlay) =>
         set((state) => ({ overlay, previousOverlay: state.overlay })),
@@ -209,9 +221,24 @@ export const useMuseumStore = create<MuseumState>()(
         }),
       updateSettings: (partial) =>
         set((state) => ({ settings: { ...state.settings, ...partial } })),
-      finishTutorial: () => set({ tutorialSeen: true }),
+      finishTutorial: () => set({ tutorialSeen: true, contextPromptStep: null }),
       replayTutorial: () =>
-        set((state) => ({ tutorialSeen: false, overlay: state.stage === 'exploring' ? 'tutorial' : state.overlay })),
+        set((state) => {
+          const contextual = isV2Museum() && state.stage === 'exploring'
+          return {
+            tutorialSeen: false,
+            overlay: contextual ? 'none' : state.stage === 'exploring' ? 'tutorial' : state.overlay,
+            contextPromptStep: contextual ? 0 : null,
+          }
+        }),
+      advanceContextPrompt: () =>
+        set((state) => {
+          const current = state.contextPromptStep ?? 0
+          if (current >= 2) return { contextPromptStep: null, tutorialSeen: true }
+          return { contextPromptStep: current + 1 }
+        }),
+      dismissContextPrompts: () =>
+        set({ contextPromptStep: null, tutorialSeen: true }),
     }),
     {
       name: MUSEUM_STORAGE_KEY,
