@@ -13,6 +13,7 @@ import {
   isInsideInteractionRegion,
   selectFocusedExhibit,
 } from '../focus'
+import { nextSpatialStep } from '../interaction/spatialExperience'
 
 const directionForAction = {
   'move-forward': 'forward',
@@ -39,7 +40,14 @@ export function PlayerController() {
     }
     if (!pressed) return
     const state = useMuseumStore.getState()
-    if (action === 'interact' && state.stage === 'exploring' && state.focusedExhibitId) {
+    if (action === 'interact' && state.stage === 'spatial-exhibit' && state.activeExhibitId) {
+      const next = nextSpatialStep(state.activeExhibitId, state.spatialStep)
+      if (next !== null) {
+        state.setSpatialStep(next)
+        state.markInteracted(state.activeExhibitId)
+        if (next > 0) state.markRevealed(state.activeExhibitId)
+      }
+    } else if (action === 'interact' && state.stage === 'exploring' && state.focusedExhibitId) {
       state.enterExhibit(state.focusedExhibitId)
     } else if (action === 'hint' && state.stage === 'spatial-exhibit') {
       state.showSpatialHint()

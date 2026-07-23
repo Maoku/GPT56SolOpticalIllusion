@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import { exhibitById } from '../exhibits/exhibitCatalog'
+import { nextSpatialStep } from '../scene/interaction/spatialExperience'
 import { useMuseumStore } from '../state/useMuseumStore'
 import { MobileControls } from './MobileControls'
 
@@ -7,6 +8,10 @@ export function SpatialExhibitHud() {
   const activeId = useMuseumStore((state) => state.activeExhibitId)
   const error = useMuseumStore((state) => state.alignmentError)
   const hintVisible = useMuseumStore((state) => state.spatialHintVisible)
+  const step = useMuseumStore((state) => state.spatialStep)
+  const setStep = useMuseumStore((state) => state.setSpatialStep)
+  const markInteracted = useMuseumStore((state) => state.markInteracted)
+  const markRevealed = useMuseumStore((state) => state.markRevealed)
   const leave = useMuseumStore((state) => state.leaveExhibit)
   const openOverlay = useMuseumStore((state) => state.openOverlay)
 
@@ -15,6 +20,14 @@ export function SpatialExhibitHud() {
   if (!exhibit) return null
   const alignmentExhibit = exhibit.outcomeKind === 'alignment'
   const aligned = alignmentExhibit && error !== null && error <= 12
+  const operate = () => {
+    const next = nextSpatialStep(activeId, step)
+    if (next === null) return
+    setStep(next)
+    markInteracted(activeId)
+    if (next > 0) markRevealed(activeId)
+  }
+  const operationLabel = activeId === 'checker-shadow' ? '照明を切り替える' : undefined
 
   return (
     <>
@@ -46,7 +59,7 @@ export function SpatialExhibitHud() {
           <button onClick={leave}><kbd>ESC</kbd> 終了</button>
         </div>
       </section>
-      <MobileControls />
+      <MobileControls interactionLabel={operationLabel} onInteract={operationLabel ? operate : undefined} />
     </>
   )
 }

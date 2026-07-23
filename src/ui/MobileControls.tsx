@@ -5,7 +5,12 @@ const directions = [
   ['forward', '↑', '前へ'], ['left', '←', '左へ'], ['backward', '↓', '後ろへ'], ['right', '→', '右へ'],
 ] as const
 
-export function MobileControls() {
+type MobileControlsProps = {
+  interactionLabel?: string
+  onInteract?: () => void
+}
+
+export function MobileControls({ interactionLabel, onInteract }: MobileControlsProps = {}) {
   const setDirection = usePlayerInputStore((state) => state.setDirection)
   const handle = (direction: (typeof directions)[number][0], pressed: boolean) => (event: PointerEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -21,6 +26,9 @@ export function MobileControls() {
           onPointerCancel={handle(direction, false)} onContextMenu={(event) => event.preventDefault()}
         >{glyph}</button>
       ))}
+      {interactionLabel && onInteract && (
+        <button className="mobile-controls__interact" aria-label={interactionLabel} onClick={onInteract}>E</button>
+      )}
       <span className="mobile-look-hint">右側をドラッグして見る</span>
     </div>
   )

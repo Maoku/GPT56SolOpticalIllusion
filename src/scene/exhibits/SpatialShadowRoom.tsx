@@ -1,15 +1,39 @@
+import { Html } from '@react-three/drei'
+import { useMemo } from 'react'
+import { Object3D } from 'three'
 import { exhibitById } from '../../exhibits/exhibitCatalog'
 import { useMuseumStore } from '../../state/useMuseumStore'
+import {
+  CHECKER_TARGET_COLOR,
+  checkerSceneStates,
+  checkerTargets,
+} from '../interaction/checkerShadow'
 import { ExhibitLabel, FloorMarker, Structure } from '../museum/shared'
 
 const exhibit = exhibitById.get('checker-shadow')!
 
+function TargetLabel({ label, position }: { label: 'A' | 'B'; position: readonly [number, number, number] }) {
+  return (
+    <Html position={[position[0], 0.12, position[2]]} center transform distanceFactor={4.5}>
+      <span className="checker-target-label">{label}</span>
+    </Html>
+  )
+}
+
 export function SpatialShadowRoom() {
   const step = useMuseumStore((state) => state.activeExhibitId === exhibit.id ? state.spatialStep : 0)
-  const neutral = step >= 2
+  const sceneState = checkerSceneStates[Math.min(step, checkerSceneStates.length - 1)]!
+  const lightTarget = useMemo(() => {
+    const target = new Object3D()
+    target.name = 'checker-shadow-light-target'
+    return target
+  }, [])
   return (
     <group>
-      <Structure position={[18.05, 1.7, 8]} scale={[0.35, 3.4, 7.2]} color="#d9d8d1" />
+      <Structure position={[18.05, 1.7, 8]} scale={[0.35, 3.4, 7.2]} color="#2b3035" />
+      <Structure position={[16.55, 3.2, 7.75]} scale={[3.55, 0.18, 4.65]} color="#171c22" />
+      <Structure position={[16.55, 1.55, 5.48]} scale={[3.55, 3.1, 0.18]} color="#171c22" />
+      <Structure position={[16.55, 1.55, 10.02]} scale={[3.55, 3.1, 0.18]} color="#171c22" />
       {Array.from({ length: 24 }, (_, index) => {
         const row = Math.floor(index / 4)
         const column = index % 4
@@ -20,35 +44,63 @@ export function SpatialShadowRoom() {
             key={index}
             position={[15.2 + column * 0.72, 0.035, 5.9 + row * 0.72]}
             rotation={[-Math.PI / 2, 0, 0]}
+            receiveShadow
           >
             <planeGeometry args={[0.7, 0.7]} />
             <meshStandardMaterial
-              color={target ? '#747985' : base}
-              emissive={neutral && target ? '#747985' : '#000000'}
-              emissiveIntensity={neutral && target ? 0.4 : 0}
+              color={target ? CHECKER_TARGET_COLOR : base}
+              emissive={sceneState.id === 'neutral' && target ? CHECKER_TARGET_COLOR : '#000000'}
+              emissiveIntensity={sceneState.id === 'neutral' && target ? 0.32 : 0}
             />
           </mesh>
         )
       })}
-      <mesh position={[16.6, 0.8, 7.25]} castShadow>
-        <cylinderGeometry args={[0.45, 0.55, 1.6, 28]} />
-        <meshStandardMaterial color="#b8c1c7" roughness={0.5} />
-      </mesh>
-      {!neutral && (
+      {sceneState.castsContextShadow && (
+        <>
+          <mesh
+            name="checker-procedural-shadow"
+            position={[16.92, 0.049, 7.85]}
+            rotation={[-Math.PI / 2, 0, -0.67]}
+            scale={[1.45, 0.54, 1]}
+            renderOrder={2}
+          >
+            <circleGeometry args={[0.78, 48]} />
+            <meshBasicMaterial color="#111820" transparent opacity={0.66} depthWrite={false} />
+          </mesh>
+          <mesh position={[16.6, 0.8, 7.25]} castShadow>
+            <cylinderGeometry args={[0.45, 0.55, 1.6, 28]} />
+            <meshStandardMaterial color="#b8c1c7" roughness={0.5} />
+          </mesh>
+        </>
+      )}
+      <primitive object={lightTarget} position={[16.65, 0, 7.8]} />
+      {sceneState.id !== 'neutral' && (
         <spotLight
           position={[14.7, 3.2, 4.8]}
-          target-position={[16.6, 0, 7.25]}
-          color={step === 1 ? '#ff69ba' : '#fff0cf'}
-          intensity={24}
+          target={lightTarget}
+          color={sceneState.id === 'context' ? '#ff91c9' : '#fff0cf'}
+          intensity={38}
           distance={9}
-          angle={0.48}
-          penumbra={0.15}
+          angle={0.58}
+          penumbra={0.22}
           castShadow
+          shadow-mapSize={[1024, 1024]}
         />
       )}
-      {neutral && <pointLight position={[15.7, 2.5, 7.2]} intensity={10} distance={6} color="#ffffff" />}
+      {sceneState.connectsTargets && (
+        <mesh position={[16.28, 0.058, 7.7]} rotation={[-Math.PI / 2, 0, -Math.PI / 4]} renderOrder={3}>
+          <planeGeometry args={[1.38, 0.26]} />
+          <meshBasicMaterial color={CHECKER_TARGET_COLOR} />
+        </mesh>
+      )}
+      {sceneState.id === 'neutral' && <pointLight position={[15.7, 2.5, 7.2]} intensity={18} distance={6} color="#ffffff" />}
+      <TargetLabel label="A" position={checkerTargets.A.position} />
+      <TargetLabel label="B" position={checkerTargets.B.position} />
       <FloorMarker position={[12.8, 0.03, 8]} color={exhibit.accent} />
       <ExhibitLabel exhibit={exhibit} position={[17.6, 3.85, 8]} />
+      <Html position={[12.8, 0.15, 8]} center transform distanceFactor={5}>
+        <span className="spatial-action-label">E · LIGHT</span>
+      </Html>
     </group>
   )
 }
