@@ -40,6 +40,7 @@ type MuseumState = {
   lastVisitedExhibitId: ExhibitType | null
   contextPromptStep: number | null
   spatialStep: number
+  spatialHintVisible: boolean
   alignmentError: number | null
   cameraRequest: CameraRequest | null
   enterMuseum: () => void
@@ -50,6 +51,8 @@ type MuseumState = {
   enterExhibit: (id: ExhibitType) => void
   leaveExhibit: () => void
   setSpatialStep: (step: number) => void
+  showSpatialHint: () => void
+  hideSpatialHint: () => void
   setAlignmentError: (error: number | null) => void
   requestViewSpot: (id: ExhibitType) => void
   markInteracted: (id: string) => void
@@ -144,6 +147,7 @@ export const useMuseumStore = create<MuseumState>()(
       lastVisitedExhibitId: null,
       contextPromptStep: null,
       spatialStep: 0,
+      spatialHintVisible: false,
       alignmentError: null,
       cameraRequest: null,
       enterMuseum: () =>
@@ -162,6 +166,7 @@ export const useMuseumStore = create<MuseumState>()(
           activeExhibitId: null,
           focusedExhibitId: null,
           spatialStep: 0,
+          spatialHintVisible: false,
           alignmentError: null,
           contextPromptStep: null,
         }),
@@ -177,6 +182,7 @@ export const useMuseumStore = create<MuseumState>()(
           activeExhibitId,
           overlay: 'none',
           spatialStep: 0,
+          spatialHintVisible: false,
           alignmentError: null,
           lastVisitedExhibitId: activeExhibitId,
         })
@@ -187,9 +193,12 @@ export const useMuseumStore = create<MuseumState>()(
           activeExhibitId: null,
           overlay: 'none',
           spatialStep: 0,
+          spatialHintVisible: false,
           alignmentError: null,
         }),
       setSpatialStep: (spatialStep) => set({ spatialStep }),
+      showSpatialHint: () => set({ spatialHintVisible: true }),
+      hideSpatialHint: () => set({ spatialHintVisible: false }),
       setAlignmentError: (alignmentError) => set({ alignmentError }),
       requestViewSpot: (id) => {
         const viewSpot = exhibitById.get(id)?.viewSpots?.[0]

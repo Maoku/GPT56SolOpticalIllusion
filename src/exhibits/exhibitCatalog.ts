@@ -27,6 +27,14 @@ export type ViewSpot = {
   tolerance: number
 }
 
+export type InteractionAnchor = {
+  id: string
+  position: [number, number, number]
+  radius: number
+  target?: [number, number, number]
+  activation: 'automatic' | 'confirm'
+}
+
 export type ExhibitDefinition = {
   id: ExhibitType
   number: number
@@ -47,6 +55,7 @@ export type ExhibitDefinition = {
   shareHook: string
   oneSentence: string
   viewSpots?: ViewSpot[]
+  interactionAnchors?: InteractionAnchor[]
   recommendedAfter: ExhibitType[]
   legacy: boolean
   interaction: {
@@ -111,6 +120,7 @@ export const exhibitCatalog: ExhibitDefinition[] = [
     presentation: 'room', venue: 'scale-light', outcomeKind: 'comparison', perceptionAxis: 'light',
     shareHook: '違う色に見えた二枚は、同じ色だった。', oneSentence: '違う色に見えた二枚は、照明を消すと同じ色だった。',
     viewSpots: [{ id: 'shadow-console', label: '照明卓', position: [12.8, 1.65, 8], target: [18, 1, 8], tolerance: 1.1 }],
+    interactionAnchors: [{ id: 'shadow-console', position: [12.8, 1.65, 8], radius: 1.35, target: [18, 1, 8], activation: 'automatic' }],
     recommendedAfter: ['necker-cube'], legacy: true,
     interaction: { mode: 'light', instructions: '影、色文脈、白色照明の三状態を切り替えます。', supportsReducedMotion: true },
   },
@@ -145,6 +155,10 @@ export const exhibitCatalog: ExhibitDefinition[] = [
     presentation: 'room', venue: 'scale-light', outcomeKind: 'alignment', perceptionAxis: 'perspective',
     shareHook: '同じ身長が、巨人と小人になった。', oneSentence: '同じ身長の二人が、部屋の端を替わるだけで巨人と小人になる。',
     viewSpots: [{ id: 'ames-aperture', label: '固定鑑賞点', position: [12.7, 1.65, -9], target: [18, 1.4, -9], tolerance: 0.75 }],
+    interactionAnchors: [
+      { id: 'ames-aperture', position: [12.7, 1.65, -9], radius: 1.2, target: [18, 1.4, -9], activation: 'automatic' },
+      { id: 'ames-reveal', position: [15.1, 1.65, -5.8], radius: 1.55, target: [17, 1.4, -9], activation: 'automatic' },
+    ],
     recommendedAfter: ['counterparallax-window'], legacy: true,
     interaction: { mode: 'viewpoint', instructions: '固定視点と横からの構造開示を往復します。', supportsReducedMotion: true },
   },
@@ -157,6 +171,7 @@ export const exhibitCatalog: ExhibitDefinition[] = [
     presentation: 'installation', venue: 'atrium', outcomeKind: 'alignment', perceptionAxis: 'perspective',
     shareHook: 'ばらばらの三層が、一歩だけ一輪になった。', oneSentence: 'ばらばらの三層が、一歩だけ一輪の花になる。',
     viewSpots: [{ id: 'bloom-origin', label: '花の成立点', position: [-6, 1.65, -10.8], target: [-6, 2.25, -17], tolerance: 0.85 }],
+    interactionAnchors: [{ id: 'bloom-origin', position: [-6, 1.65, -10.8], radius: 1.35, target: [-6, 2.25, -17], activation: 'automatic' }],
     recommendedAfter: ['chromatic-echo-corridor'], legacy: true,
     interaction: { mode: 'walk', instructions: '床マーカーの周囲を歩き、三層が一輪になる位置を探します。', supportsReducedMotion: true },
   },
@@ -169,6 +184,11 @@ export const exhibitCatalog: ExhibitDefinition[] = [
     presentation: 'room', venue: 'signature', outcomeKind: 'sequence', perceptionAxis: 'light',
     shareHook: '色のない壁に、反対色が現れた。', oneSentence: '色の部屋を出た瞬間、色のない壁に反対色が現れる。',
     viewSpots: [{ id: 'echo-entry', label: '順応室入口', position: [0, 1.65, -11.5], target: [0, 1.65, -17], tolerance: 1.2 }],
+    interactionAnchors: [
+      { id: 'echo-entry', position: [0, 1.65, -11.5], radius: 1.55, target: [0, 1.65, -17], activation: 'automatic' },
+      { id: 'echo-adapt', position: [0, 1.65, -14.2], radius: 1.75, target: [0, 1.65, -17], activation: 'automatic' },
+      { id: 'echo-result', position: [0, 1.65, -17.2], radius: 1.75, target: [0, 1.65, -19], activation: 'automatic' },
+    ],
     recommendedAfter: ['ebbinghaus'], legacy: true,
     interaction: { mode: 'gaze', instructions: '色の順応室、無彩色の移行帯、結果室を歩きます。', supportsReducedMotion: true },
   },
@@ -181,6 +201,10 @@ export const exhibitCatalog: ExhibitDefinition[] = [
     presentation: 'installation', venue: 'signature', outcomeKind: 'alignment', perceptionAxis: 'perspective',
     shareHook: '壊れた壁が、一点だけ30mの回廊になった。', oneSentence: '分断された門と壁が、一つの視点だけで長い直線回廊になる。',
     viewSpots: [{ id: 'folded-origin', label: '回廊の成立点', position: [6, 1.65, -11], target: [6, 1.5, -17], tolerance: 0.7 }],
+    interactionAnchors: [
+      { id: 'folded-origin', position: [6, 1.65, -11], radius: 1.25, target: [6, 1.5, -17], activation: 'automatic' },
+      { id: 'folded-reveal', position: [8.4, 1.65, -14.2], radius: 1.55, target: [6, 1.5, -17], activation: 'automatic' },
+    ],
     recommendedAfter: ['muller-lyer'], legacy: false,
     interaction: { mode: 'walk', instructions: '床マーカーの周囲を歩き、回廊がつながる一点を探します。', supportsReducedMotion: true },
   },
@@ -193,6 +217,11 @@ export const exhibitCatalog: ExhibitDefinition[] = [
     presentation: 'installation', venue: 'signature', outcomeKind: 'sequence', perceptionAxis: 'motion',
     shareHook: '左へ歩いたら、窓の奥も左へ逃げた。', oneSentence: '左へ歩くと、窓の奥の部屋が通常と逆方向へずれて見える。',
     viewSpots: [{ id: 'counter-window', label: '観察ライン', position: [12, 1.65, -11.4], target: [12, 1.5, -17], tolerance: 1.4 }],
+    interactionAnchors: [
+      { id: 'counter-window-left', position: [10.7, 1.65, -11.4], radius: 1.35, target: [12, 1.5, -17], activation: 'automatic' },
+      { id: 'counter-window-center', position: [12, 1.65, -11.4], radius: 1.35, target: [12, 1.5, -17], activation: 'automatic' },
+      { id: 'counter-window-right', position: [13.3, 1.65, -11.4], radius: 1.35, target: [12, 1.5, -17], activation: 'automatic' },
+    ],
     recommendedAfter: ['checker-shadow'], legacy: false,
     interaction: { mode: 'walk', instructions: '窓の前を左右に歩き、奥の部屋の逆向きのずれを観察します。', supportsReducedMotion: true },
   },

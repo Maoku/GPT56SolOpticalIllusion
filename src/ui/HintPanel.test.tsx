@@ -3,7 +3,7 @@ import { useMuseumStore } from '../state/useMuseumStore'
 import { HintPanel } from './HintPanel'
 
 describe('HintPanel accessibility', () => {
-  beforeEach(() => useMuseumStore.setState({ activeExhibitId: 'ponzo', overlay: 'hint' }))
+  beforeEach(() => useMuseumStore.setState({ stage: 'exhibit', activeExhibitId: 'ponzo', overlay: 'hint' }))
 
   it('moves focus inside, traps Tab, and closes with Escape', () => {
     render(<HintPanel />)

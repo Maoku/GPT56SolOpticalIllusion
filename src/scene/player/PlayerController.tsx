@@ -8,7 +8,11 @@ import { useUnifiedInput, type InputAction } from '../../hooks/useUnifiedInput'
 import { useMuseumStore } from '../../state/useMuseumStore'
 import { usePlayerInputStore } from '../../state/usePlayerInputStore'
 import { resolvePlayerPosition } from '../CollisionWorld'
-import { selectFocusedExhibit } from '../focus'
+import {
+  INTERACTION_EXIT_PADDING,
+  isInsideInteractionRegion,
+  selectFocusedExhibit,
+} from '../focus'
 
 const directionForAction = {
   'move-forward': 'forward',
@@ -37,6 +41,8 @@ export function PlayerController() {
     const state = useMuseumStore.getState()
     if (action === 'interact' && state.stage === 'exploring' && state.focusedExhibitId) {
       state.enterExhibit(state.focusedExhibitId)
+    } else if (action === 'hint' && state.stage === 'spatial-exhibit') {
+      state.showSpatialHint()
     } else if (action === 'hint' && state.stage === 'exploring' && state.focusedExhibitId) {
       state.openOverlay('hint')
     } else if (action === 'escape') {
@@ -129,13 +135,29 @@ export function PlayerController() {
     }
 
     const forward: [number, number] = [-Math.sin(yaw.current), -Math.cos(yaw.current)]
+    const catalog = getExhibitCatalog(getMuseumMode())
+    const playerPosition: [number, number] = [camera.position.x, camera.position.z]
+    if (museum.stage === 'spatial-exhibit' && museum.activeExhibitId) {
+      const active = catalog.find((exhibit) => exhibit.id === museum.activeExhibitId)
+      if (active?.interactionAnchors?.length &&
+          !isInsideInteractionRegion(playerPosition, active, INTERACTION_EXIT_PADDING)) {
+        focusedId.current = null
+        museum.focusExhibit(null)
+        museum.leaveExhibit()
+      }
+      return
+    }
+
     const focused = museum.stage === 'exploring'
-      ? selectFocusedExhibit([camera.position.x, camera.position.z], forward, getExhibitCatalog(getMuseumMode()))
+      ? selectFocusedExhibit(playerPosition, forward, catalog)
       : null
     const nextId = focused?.id ?? null
     if (nextId !== focusedId.current) {
       focusedId.current = nextId
       museum.focusExhibit(nextId)
+    }
+    if (focused?.interactionAnchors?.some((anchor) => anchor.activation === 'automatic')) {
+      museum.enterExhibit(focused.id)
     }
   })
 

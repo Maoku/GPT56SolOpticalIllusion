@@ -8,6 +8,7 @@ describe('spatial exhibit HUD', () => {
       stage: 'spatial-exhibit',
       activeExhibitId: 'parallax-bloom',
       spatialStep: 0,
+      spatialHintVisible: false,
       alignmentError: 0,
       cameraRequest: null,
       progress: {},
@@ -15,31 +16,24 @@ describe('spatial exhibit HUD', () => {
     })
   })
 
-  it('offers a deterministic move to the viewing spot', () => {
+  it('keeps the viewing action in the scene instead of a HUD button', () => {
     render(<SpatialExhibitHud />)
-    fireEvent.click(screen.getByRole('button', { name: '鑑賞点へ移動' }))
-    expect(useMuseumStore.getState().cameraRequest).toMatchObject({
-      position: [-6, 1.65, -10.8],
-      target: [-6, 2.25, -17],
-    })
+    expect(screen.getByText('床マーカーの周囲を歩き、三層が一輪になる位置を探します。')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '鑑賞点へ移動' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '状態を切り替える' })).not.toBeInTheDocument()
   })
 
-  it('records interaction and reveal while comparing states', () => {
+  it('shows a one-line hint without opening a modal', () => {
+    useMuseumStore.setState({ spatialHintVisible: true })
     render(<SpatialExhibitHud />)
-    fireEvent.click(screen.getByRole('button', { name: '状態を切り替える' }))
-    expect(useMuseumStore.getState()).toMatchObject({
-      spatialStep: 1,
-      progress: { 'parallax-bloom': 'revealed' },
-    })
+    expect(screen.getByText('mint色の床マーカーから花弁の中心を見ます。')).toBeInTheDocument()
+    expect(useMuseumStore.getState().overlay).toBe('none')
   })
 
-  it('stores a reusable alignment outcome', () => {
+  it('offers detail only after the inline hint is visible', () => {
+    useMuseumStore.setState({ spatialHintVisible: true })
     render(<SpatialExhibitHud />)
-    fireEvent.click(screen.getByRole('button', { name: '結果を記録' }))
-    expect(useMuseumStore.getState().outcomes['parallax-bloom']).toMatchObject({
-      kind: 'alignment',
-      axis: 'perspective',
-      metric: { value: 0, unit: 'px' },
-    })
+    fireEvent.click(screen.getByRole('button', { name: '詳しい解説' }))
+    expect(useMuseumStore.getState().overlay).toBe('hint')
   })
 })
