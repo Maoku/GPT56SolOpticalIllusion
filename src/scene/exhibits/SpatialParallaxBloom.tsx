@@ -1,5 +1,4 @@
 import { exhibitById } from '../../exhibits/exhibitCatalog'
-import { useMuseumStore } from '../../state/useMuseumStore'
 import { ExhibitLabel, FloorMarker } from '../museum/shared'
 
 const exhibit = exhibitById.get('parallax-bloom')!
@@ -49,20 +48,25 @@ function PetalLayer({
 }
 
 export function SpatialParallaxBloom() {
-  const step = useMuseumStore((state) => state.spatialStep)
-  const active = useMuseumStore((state) => state.activeExhibitId === exhibit.id)
-  const spread = active && step > 0 ? 1.7 : 1
   return (
     <group>
+      <mesh position={[-6, 2.25, -17.58]}>
+        <circleGeometry args={[2.25, 48]} />
+        <meshStandardMaterial color="#090d17" roughness={0.88} />
+      </mesh>
       {layerColors.map((color, index) => (
         <PetalLayer
           key={color}
           color={color}
-          depth={layerDepths[index]! + (index - 1) * 0.32 * (spread - 1)}
-          height={layerHeights[index]! + (index - 1) * 0.26 * (spread - 1)}
+          depth={layerDepths[index]!}
+          height={layerHeights[index]!}
           scale={1 + index * 0.22}
         />
       ))}
+      <mesh position={[-6, 0.028, -13.8]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[0.06, 5.8]} />
+        <meshBasicMaterial color="#ff78c8" toneMapped={false} />
+      </mesh>
       <FloorMarker position={[-6, 0.025, -10.8]} color={exhibit.accent} />
       <ExhibitLabel exhibit={exhibit} position={[-6, 4.45, -17.2]} />
       <pointLight position={[-6, 2.4, -14.5]} color="#ff70c2" intensity={5} distance={8} />

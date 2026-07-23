@@ -352,6 +352,8 @@ kbd { margin-left: .35rem; padding: .12rem .38rem; border: 1px solid currentColo
 .spatial-action-label { color: #08100e; border: 1px solid currentColor; background: var(--color-accent); letter-spacing: .1em; white-space: nowrap; }
 .ames-reveal-label { display: block; padding: .3rem .55rem; color: #07110e; border-radius: 999px; background: #7ef4d2; font-size: .58rem; font-weight: 850; letter-spacing: .12em; white-space: nowrap; pointer-events: none; }
 .counter-view-label { display: block; padding: .24rem .42rem; color: #07110e; border-radius: .35rem; background: #72d9ff; font-size: .52rem; font-weight: 850; letter-spacing: .1em; white-space: nowrap; pointer-events: none; }
+.chromatic-phase-label, .chromatic-static-label { display: block; padding: .2rem .38rem; color: #07110e; border-radius: .3rem; background: #f1eee7; font-size: .48rem; font-weight: 850; letter-spacing: .1em; white-space: nowrap; pointer-events: none; }
+.chromatic-static-label { color: #f1f6f4; border: 1px solid rgba(255,255,255,.4); background: #111927; }
 
 .floor-map--v2 { grid-template: 1fr 1fr 1fr / 1fr 1fr; }
 .floor-map--v2 .floor-zone--classics { grid-column: span 2; background: #102529; }
