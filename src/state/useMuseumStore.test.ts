@@ -68,4 +68,27 @@ describe('museum store', () => {
       },
     })
   })
+
+  it('automatically records a result when a spatial reveal is reached', () => {
+    useMuseumStore.getState().markRevealed('counterparallax-window')
+    expect(useMuseumStore.getState()).toMatchObject({
+      progress: { 'counterparallax-window': 'revealed' },
+      lastVisitedExhibitId: 'counterparallax-window',
+      outcomes: {
+        'counterparallax-window': {
+          kind: 'sequence',
+          axis: 'motion',
+        },
+      },
+    })
+  })
+
+  it('automatically records a live classic operation without opening a detail view', () => {
+    useMuseumStore.getState().operateLiveExhibit('ponzo')
+    expect(useMuseumStore.getState()).toMatchObject({
+      stage: 'title',
+      progress: { ponzo: 'interacted' },
+      outcomes: { ponzo: { kind: 'comparison' } },
+    })
+  })
 })

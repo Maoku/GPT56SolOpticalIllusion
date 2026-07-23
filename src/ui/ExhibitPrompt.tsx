@@ -7,6 +7,7 @@ export function ExhibitPrompt() {
   const enterExhibit = useMuseumStore((state) => state.enterExhibit)
   const operateLiveExhibit = useMuseumStore((state) => state.operateLiveExhibit)
   const openOverlay = useMuseumStore((state) => state.openOverlay)
+  const progress = useMuseumStore((state) => focusedId ? state.progress[focusedId] : undefined)
   const exhibit = focusedId ? exhibitById.get(focusedId) : undefined
   if (!exhibit) return null
   const total = getExhibitCatalog(getMuseumMode()).length
@@ -15,7 +16,11 @@ export function ExhibitPrompt() {
 
   return (
     <section className="exhibit-prompt" aria-live="polite">
-      <div><span>{String(exhibit.number).padStart(2, '0')} / {total}</span><h2>{exhibit.title}</h2><p>{exhibit.prompt}</p></div>
+      <div>
+        <span>{String(exhibit.number).padStart(2, '0')} / {total}</span>
+        <h2>{exhibit.title}</h2>
+        <p>{progress === 'unvisited' || !progress ? exhibit.prompt : '観察を自動記録しました。続けて変化を比べられます。'}</p>
+      </div>
       <div className="exhibit-prompt__actions">
         {!spatial && (
           <button

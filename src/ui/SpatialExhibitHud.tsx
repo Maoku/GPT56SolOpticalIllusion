@@ -12,6 +12,7 @@ export function SpatialExhibitHud() {
   const setStep = useMuseumStore((state) => state.setSpatialStep)
   const markInteracted = useMuseumStore((state) => state.markInteracted)
   const markRevealed = useMuseumStore((state) => state.markRevealed)
+  const progress = useMuseumStore((state) => activeId ? state.progress[activeId] : undefined)
   const leave = useMuseumStore((state) => state.leaveExhibit)
   const openOverlay = useMuseumStore((state) => state.openOverlay)
 
@@ -56,6 +57,13 @@ export function SpatialExhibitHud() {
           <div className="spatial-exhibit-hud__hint" aria-live="polite">
             <span>{exhibit.hint.summary}</span>
             <button onClick={() => openOverlay('hint')}>詳しい解説</button>
+          </div>
+        )}
+        {progress === 'revealed' && (
+          <div className="spatial-exhibit-hud__result" role="status">
+            <span>観察をパスポートへ自動記録しました。</span>
+            {alignmentExhibit && error !== null && <output>投影誤差 {Math.round(error)} px</output>}
+            <button onClick={() => openOverlay('hint')}>種明かしを見る</button>
           </div>
         )}
         <div className="spatial-exhibit-hud__keys">

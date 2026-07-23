@@ -207,9 +207,13 @@ export const useMuseumStore = create<MuseumState>()(
         set((state) => {
           const next = nextClassicsStep(id, state.liveExhibitSteps[id] ?? 0)
           if (next === null) return state
+          const exhibit = exhibitById.get(id)
           return {
             liveExhibitSteps: { ...state.liveExhibitSteps, [id]: next },
             progress: nextProgress(state.progress, id, 'interacted'),
+            outcomes: exhibit && !state.outcomes[id]
+              ? { ...state.outcomes, [id]: createExhibitOutcome(exhibit) }
+              : state.outcomes,
             lastVisitedExhibitId: id,
           }
         }),
@@ -228,7 +232,19 @@ export const useMuseumStore = create<MuseumState>()(
       markInteracted: (id) =>
         set((state) => ({ progress: nextProgress(state.progress, id, 'interacted') })),
       markRevealed: (id) =>
-        set((state) => ({ progress: nextProgress(state.progress, id, 'revealed') })),
+        set((state) => {
+          const next = nextProgress(state.progress, id, 'revealed')
+          const exhibit = exhibitById.get(id as ExhibitType)
+          const existingOutcome = exhibit ? state.outcomes[exhibit.id] : undefined
+          if (next === state.progress && (!exhibit || existingOutcome)) return state
+          return {
+            progress: next,
+            outcomes: exhibit && !existingOutcome
+              ? { ...state.outcomes, [exhibit.id]: createExhibitOutcome(exhibit) }
+              : state.outcomes,
+            lastVisitedExhibitId: exhibit?.id ?? state.lastVisitedExhibitId,
+          }
+        }),
       recordOutcome: (id, draft = {}) =>
         set((state) => {
           const exhibit = exhibitById.get(id)

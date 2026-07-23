@@ -12,6 +12,7 @@ export function MuseumMap() {
   const closeOverlay = useMuseumStore((state) => state.closeOverlay)
   const enterExhibit = useMuseumStore((state) => state.enterExhibit)
   const requestViewSpot = useMuseumStore((state) => state.requestViewSpot)
+  const openOverlay = useMuseumStore((state) => state.openOverlay)
   const dialog = useDialogFocusTrap<HTMLElement>(closeOverlay)
   const mode = getMuseumMode()
   const catalog = getExhibitCatalog(mode)
@@ -19,7 +20,13 @@ export function MuseumMap() {
   return (
     <div className="modal-backdrop">
       <section className="museum-map" role="dialog" aria-modal="true" aria-labelledby="map-title" ref={dialog}>
-        <header className="panel-heading"><div><p className="eyebrow">YOUR VISIT — {experienced} / {catalog.length}</p><h2 id="map-title">館内マップと展示一覧</h2></div><button className="icon-button" aria-label="マップを閉じる" onClick={closeOverlay}>×</button></header>
+        <header className="panel-heading">
+          <div><p className="eyebrow">YOUR VISIT — {experienced} / {catalog.length}</p><h2 id="map-title">館内マップと展示一覧</h2></div>
+          <div className="museum-map__heading-actions">
+            {mode === 'v2' && <button className="button button--quiet" onClick={() => openOverlay('passport')}>パスポート</button>}
+            <button className="icon-button" aria-label="マップを閉じる" onClick={closeOverlay}>×</button>
+          </div>
+        </header>
         <div className="museum-map__body">
           <div className={`floor-map ${mode === 'v2' ? 'floor-map--v2' : ''}`} aria-label={`${mode === 'v2' ? 4 : 3}つの展示ゾーンの概略図`}>
             {mode === 'v2' ? (

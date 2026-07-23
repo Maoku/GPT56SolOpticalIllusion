@@ -187,13 +187,3 @@ export function PerceptionPassport() {
     </div>
   )
 }
-
-export function PassportShortcut() {
-  const open = useMuseumStore((state) => state.openOverlay)
-  return (
-    <button className="passport-shortcut" onClick={() => open('passport')}>
-      <span aria-hidden="true">✦</span>
-      <span><small>YOUR RESULTS</small><strong>パスポート</strong></span>
-    </button>
-  )
-}

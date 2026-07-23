@@ -18,8 +18,18 @@ export function MuseumStatus() {
 
 export function CompletionMessage() {
   const progress = useMuseumStore((state) => state.progress)
+  const openOverlay = useMuseumStore((state) => state.openOverlay)
   const catalog = getExhibitCatalog(getMuseumMode())
   const complete = catalog.every((item) => (progress[item.id] ?? 'unvisited') !== 'unvisited')
   if (!complete) return null
-  return <div className="completion-message" role="status"><span aria-hidden="true">✦</span><div><strong>視界がひらけました</strong><small>{catalog.length} / {catalog.length} の展示を体験しました。答え合わせがまだの作品もマップから確認できます。</small></div></div>
+  return (
+    <div className="completion-message" role="status">
+      <span aria-hidden="true">✦</span>
+      <div>
+        <strong>視界がひらけました</strong>
+        <small>{catalog.length} / {catalog.length} の展示を体験しました。</small>
+      </div>
+      <button onClick={() => openOverlay('passport')}>パスポートを見る</button>
+    </div>
+  )
 }

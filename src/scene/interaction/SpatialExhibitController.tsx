@@ -64,6 +64,10 @@ export function SpatialExhibitController() {
         ) / spot.tolerance) * 24
     const rounded = Math.round(error * 10) / 10
     if (rounded !== state.alignmentError) state.setAlignmentError(rounded)
+    if (exhibit.id === 'parallax-bloom' && rounded <= 12) {
+      state.markInteracted(exhibit.id)
+      state.markRevealed(exhibit.id)
+    }
   })
 
   return null

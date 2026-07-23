@@ -64,7 +64,7 @@ export function StartScreen() {
             <div><dt>MOVE</dt><dd>歩くことが、展示への入力</dd></div>
             <div><dt>ALIGN</dt><dd>mintの輪で像を成立させる</dd></div>
             <div><dt>SWITCH</dt><dd>照明・視点・構造を比較する</dd></div>
-            <div><dt>KEEP</dt><dd>結果をパスポートへ記録する</dd></div>
+            <div><dt>KEEP</dt><dd>結果は体験後に自動で記録</dd></div>
           </>
         ) : (
           <>
