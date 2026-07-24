@@ -46,3 +46,7 @@ npm run test:e2e:spatial
 ## 配信
 
 `npm run build` が生成する `dist/` を静的ホスティングへ配置します。`public/_redirects` と `public/_headers` は SPA フォールバック、セキュリティヘッダー、ハッシュ付きアセットの長期キャッシュを設定します。
+
+# ライセンス
+
+MIT
