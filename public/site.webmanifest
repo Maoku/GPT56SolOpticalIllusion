@@ -1,9 +1,10 @@
 {
   "name": "PARALLAX — Optical Illusion Museum",
   "short_name": "PARALLAX",
-  "start_url": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#080c16",
   "theme_color": "#080c16",
-  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
 }

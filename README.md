@@ -47,6 +47,16 @@ npm run test:e2e:spatial
 
 `npm run build` が生成する `dist/` を静的ホスティングへ配置します。`public/_redirects` と `public/_headers` は SPA フォールバック、セキュリティヘッダー、ハッシュ付きアセットの長期キャッシュを設定します。
 
+### GitHub Pages
+
+`main` ブランチへ push すると、GitHub Actions がビルドして GitHub Pages へ自動配信します。初回のみ、リポジトリの **Settings → Pages → Build and deployment → Source** で **GitHub Actions** を選択してください。
+
+公開先は次の URL です。
+
+https://maoku.github.io/GPT56SolOpticalIllusion/
+
+ワークフローは GitHub Pages から取得したベースパスを Vite に渡すため、リポジトリ配下で JavaScript、アイコン、Web App Manifest が正しく解決されます。Actions タブから手動実行することもできます。
+
 # ライセンス
 
 MIT
