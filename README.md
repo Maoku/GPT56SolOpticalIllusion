@@ -4,6 +4,8 @@ GPT-5.6 Sol xhigh　製のブラウザで歩き回れる 3D 錯視ミュージ�
 
 ## Ver.2
 
+体験ページ： https://maoku.github.io/GPT56SolOpticalIllusion/
+
 仮想の競合美術館 : Fable Optical Illusion Museum 
     体験ページ：https://maoku.github.io/FableOpticalIllusion/ 
     リポジトリ：https://github.com/Maoku/FableOpticalIllusion
@@ -15,6 +17,8 @@ GPT-5.6 Sol xhigh　製のブラウザで歩き回れる 3D 錯視ミュージ�
 ※いくつかの表示不具合や、意図がわからない展示も残っている状態
 
 ## Ver.1
+
+体験ページ： https://maoku.github.io/GPT56SolOpticalIllusion/?museum=v1
 
 Docs/PLAN.md に基づいて作成したいわゆるポン出し状態
 
