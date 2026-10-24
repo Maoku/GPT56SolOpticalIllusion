@@ -8,21 +8,15 @@ function anchorDistance(player: Vec2, position: [number, number, number]) {
   return Math.hypot(position[0] - player[0], position[2] - player[1])
 }
 
-export function isInsideInteractionRegion(
-  player: Vec2,
-  exhibit: ExhibitDefinition,
-  padding = 0,
-) {
-  return Boolean(exhibit.interactionAnchors?.some(
-    (anchor) => anchorDistance(player, anchor.position) <= anchor.radius + padding,
-  ))
+export function isInsideInteractionRegion(player: Vec2, exhibit: ExhibitDefinition, padding = 0) {
+  return Boolean(
+    exhibit.interactionAnchors?.some(
+      (anchor) => anchorDistance(player, anchor.position) <= anchor.radius + padding,
+    ),
+  )
 }
 
-function selectAnchorExhibit(
-  player: Vec2,
-  forward: Vec2,
-  exhibits: ExhibitDefinition[],
-) {
+function selectAnchorExhibit(player: Vec2, forward: Vec2, exhibits: ExhibitDefinition[]) {
   const candidates = exhibits.flatMap((exhibit) =>
     (exhibit.interactionAnchors ?? [])
       .map((anchor) => {
@@ -30,18 +24,15 @@ function selectAnchorExhibit(
         const dz = anchor.position[2] - player[1]
         const distance = Math.hypot(dx, dz)
         if (distance > anchor.radius) return null
-        const dot = distance < 0.001
-          ? 1
-          : (dx / distance) * forward[0] + (dz / distance) * forward[1]
+        const dot =
+          distance < 0.001 ? 1 : (dx / distance) * forward[0] + (dz / distance) * forward[1]
         return { exhibit, normalizedDistance: distance / anchor.radius, dot }
       })
       .filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null),
   )
 
   if (candidates.length === 0) return null
-  candidates.sort((a, b) =>
-    a.normalizedDistance - b.normalizedDistance || b.dot - a.dot,
-  )
+  candidates.sort((a, b) => a.normalizedDistance - b.normalizedDistance || b.dot - a.dot)
   return candidates[0]!.exhibit
 }
 

@@ -19,7 +19,10 @@ import { ContextPrompts } from '../ui/ContextPrompts'
 
 type AppProps = { webGLAvailable?: boolean; sceneEnabled?: boolean }
 
-export function App({ sceneEnabled = true, webGLAvailable = sceneEnabled ? isWebGL2Available() : true }: AppProps) {
+export function App({
+  sceneEnabled = true,
+  webGLAvailable = sceneEnabled ? isWebGL2Available() : true,
+}: AppProps) {
   const stage = useMuseumStore((state) => state.stage)
   const overlay = useMuseumStore((state) => state.overlay)
   const quality = useMuseumStore((state) => state.settings.quality)
@@ -41,7 +44,9 @@ export function App({ sceneEnabled = true, webGLAvailable = sceneEnabled ? isWeb
               <MuseumScene />
             </Canvas>
           </Suspense>
-        ) : <div className="scene-placeholder" aria-hidden="true" />}
+        ) : (
+          <div className="scene-placeholder" aria-hidden="true" />
+        )}
         {stage === 'title' && <StartScreen />}
         {stage === 'exploring' && overlay === 'none' && <ExplorationHud />}
         {stage === 'exhibit' && <ExhibitExperience />}

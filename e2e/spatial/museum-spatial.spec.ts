@@ -143,11 +143,13 @@ test('signature walking changes bloom alignment and chromatic depth phase', asyn
   expect((await snapshot(page)).sceneParameters.phase).toBe(0)
   await setCamera(page, [-2.5, 1.65, -16.4], [-2.5, 1.65, -17])
   await expect.poll(async () => (await snapshot(page)).sceneParameters.phase).toBe(2)
-  await expect.poll(async () => (await snapshot(page)).sceneParameters.lighting).toMatchObject({
-    adaptIntensity: 0,
-    resultColor: '#ffffff',
-    echoSurfaceColor: '#e9e6df',
-  })
+  await expect
+    .poll(async () => (await snapshot(page)).sceneParameters.lighting)
+    .toMatchObject({
+      adaptIntensity: 0,
+      resultColor: '#ffffff',
+      echoSurfaceColor: '#e9e6df',
+    })
 })
 
 test('counterparallax reverses layer motion and provides reduced-motion static views', async ({

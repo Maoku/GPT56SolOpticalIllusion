@@ -53,11 +53,7 @@ const faces: AnamorphicFace[] = [
   },
 ]
 
-function pointAlongViewRay(
-  viewPoint: Point3,
-  imagePoint: Point3,
-  amount: number,
-): Point3 {
+function pointAlongViewRay(viewPoint: Point3, imagePoint: Point3, amount: number): Point3 {
   return [
     viewPoint[0] + (imagePoint[0] - viewPoint[0]) * amount,
     viewPoint[1] + (imagePoint[1] - viewPoint[1]) * amount,
@@ -80,11 +76,7 @@ function FourWayAnamorph() {
               imageCenter[2] + face.right[2] * horizontal,
             ]
             const depthStep = (rowIndex * 5 + columnIndex + face.seed) % 7
-            const position = pointAlongViewRay(
-              face.viewPoint,
-              imagePoint,
-              0.82 + depthStep * 0.045,
-            )
+            const position = pointAlongViewRay(face.viewPoint, imagePoint, 0.82 + depthStep * 0.045)
             return (
               <mesh
                 key={`${face.id}-${rowIndex}-${columnIndex}`}

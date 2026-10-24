@@ -12,13 +12,27 @@ export function SettingsPanel() {
 
   return (
     <div className="modal-backdrop">
-      <div className="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title" ref={dialog}>
+      <div
+        className="settings-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settings-title"
+        ref={dialog}
+      >
         <div className="panel-heading">
-          <div><p className="eyebrow">PREFERENCES</p><h2 id="settings-title">鑑賞設定</h2></div>
-          <button className="icon-button" aria-label="設定を閉じる" onClick={closeOverlay}>×</button>
+          <div>
+            <p className="eyebrow">PREFERENCES</p>
+            <h2 id="settings-title">鑑賞設定</h2>
+          </div>
+          <button className="icon-button" aria-label="設定を閉じる" onClick={closeOverlay}>
+            ×
+          </button>
         </div>
         <label className="setting-row">
-          <span><strong>視点速度</strong><small>ゆっくり — すばやく</small></span>
+          <span>
+            <strong>視点速度</strong>
+            <small>ゆっくり — すばやく</small>
+          </span>
           <input
             aria-label="視点速度"
             type="range"
@@ -30,7 +44,10 @@ export function SettingsPanel() {
           />
         </label>
         <label className="setting-row">
-          <span><strong>音量</strong><small>{Math.round(settings.volume * 100)}%</small></span>
+          <span>
+            <strong>音量</strong>
+            <small>{Math.round(settings.volume * 100)}%</small>
+          </span>
           <input
             aria-label="音量"
             type="range"
@@ -42,7 +59,10 @@ export function SettingsPanel() {
           />
         </label>
         <label className="setting-row setting-row--inline">
-          <span><strong>モーション軽減</strong><small>連続運動や大きな遷移を抑えます</small></span>
+          <span>
+            <strong>モーション軽減</strong>
+            <small>連続運動や大きな遷移を抑えます</small>
+          </span>
           <input
             aria-label="モーション軽減"
             type="checkbox"
@@ -51,20 +71,34 @@ export function SettingsPanel() {
           />
         </label>
         <label className="setting-row setting-row--inline">
-          <span><strong>描画品質</strong><small>低品質では影と解像度を抑えます</small></span>
+          <span>
+            <strong>描画品質</strong>
+            <small>低品質では影と解像度を抑えます</small>
+          </span>
           <select
             aria-label="描画品質"
             value={settings.quality}
             onChange={(event) => updateSettings({ quality: event.target.value as 'low' | 'high' })}
           >
-            <option value="high">高品質</option><option value="low">低品質</option>
+            <option value="high">高品質</option>
+            <option value="low">低品質</option>
           </select>
         </label>
         <div className="panel-actions">
-          <button className="button button--quiet" onClick={() => updateSettings(defaultSettings)}>初期値に戻す</button>
-          <button className="button button--quiet" onClick={replayTutorial}>操作説明を再表示</button>
-          {stage !== 'title' && <button className="button button--quiet" onClick={returnToTitle}>タイトルへ</button>}
-          <button className="button button--primary" onClick={closeOverlay}>完了</button>
+          <button className="button button--quiet" onClick={() => updateSettings(defaultSettings)}>
+            初期値に戻す
+          </button>
+          <button className="button button--quiet" onClick={replayTutorial}>
+            操作説明を再表示
+          </button>
+          {stage !== 'title' && (
+            <button className="button button--quiet" onClick={returnToTitle}>
+              タイトルへ
+            </button>
+          )}
+          <button className="button button--primary" onClick={closeOverlay}>
+            完了
+          </button>
         </div>
       </div>
     </div>

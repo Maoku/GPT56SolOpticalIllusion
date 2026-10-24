@@ -3,15 +3,8 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { exhibitById } from '../../exhibits/exhibitCatalog'
 import { useMuseumStore } from '../../state/useMuseumStore'
 import { amesViewState } from './amesRoom'
-import {
-  chromaticPhaseForPosition,
-  foldedViewState,
-} from './signatureExperience'
-import {
-  projectedAlignmentError,
-  spatialAlignmentAnchors,
-  viewSpotDistance,
-} from './alignment'
+import { chromaticPhaseForPosition, foldedViewState } from './signatureExperience'
+import { projectedAlignmentError, spatialAlignmentAnchors, viewSpotDistance } from './alignment'
 
 export function SpatialExhibitController() {
   const camera = useThree((state) => state.camera)
@@ -58,10 +51,9 @@ export function SpatialExhibitController() {
     const anchors = spatialAlignmentAnchors[exhibit.id]
     const error = anchors
       ? projectedAlignmentError(camera, anchors, size)
-      : (viewSpotDistance(
-          [camera.position.x, camera.position.y, camera.position.z],
-          spot,
-        ) / spot.tolerance) * 24
+      : (viewSpotDistance([camera.position.x, camera.position.y, camera.position.z], spot) /
+          spot.tolerance) *
+        24
     const rounded = Math.round(error * 10) / 10
     if (rounded !== state.alignmentError) state.setAlignmentError(rounded)
     if (exhibit.id === 'parallax-bloom' && rounded <= 12) {

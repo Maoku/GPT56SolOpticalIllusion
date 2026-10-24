@@ -8,7 +8,9 @@ const exhibit = exhibitById.get('folded-corridor')!
 const CENTER_X = 4.5
 
 export function FoldedCorridor() {
-  const reveal = useMuseumStore((state) => state.activeExhibitId === exhibit.id && state.spatialStep > 0)
+  const reveal = useMuseumStore(
+    (state) => state.activeExhibitId === exhibit.id && state.spatialStep > 0,
+  )
   const fragments = [
     { z: -14.1, width: 5.4, height: 3.7, color: '#f0dfcf' },
     { z: -15.05, width: 4.35, height: 3.15, color: '#bedbd9' },
@@ -19,13 +21,22 @@ export function FoldedCorridor() {
     <group>
       {fragments.map((fragment, index) => {
         return (
-          <group
-            key={fragment.z}
-            position={[CENTER_X, 0, fragment.z]}
-          >
-            <Structure position={[-fragment.width / 2, fragment.height / 2, 0]} scale={[0.12, fragment.height, 0.2 + index * 0.08]} color={fragment.color} />
-            <Structure position={[fragment.width / 2, fragment.height / 2, 0]} scale={[0.12, fragment.height, 0.2 + index * 0.08]} color={fragment.color} />
-            <Structure position={[0, fragment.height, 0]} scale={[fragment.width, 0.12, 0.2 + index * 0.08]} color={fragment.color} />
+          <group key={fragment.z} position={[CENTER_X, 0, fragment.z]}>
+            <Structure
+              position={[-fragment.width / 2, fragment.height / 2, 0]}
+              scale={[0.12, fragment.height, 0.2 + index * 0.08]}
+              color={fragment.color}
+            />
+            <Structure
+              position={[fragment.width / 2, fragment.height / 2, 0]}
+              scale={[0.12, fragment.height, 0.2 + index * 0.08]}
+              color={fragment.color}
+            />
+            <Structure
+              position={[0, fragment.height, 0]}
+              scale={[fragment.width, 0.12, 0.2 + index * 0.08]}
+              color={fragment.color}
+            />
           </group>
         )
       })}
@@ -35,7 +46,9 @@ export function FoldedCorridor() {
           position={[CENTER_X, 0.035, (fragment.z + fragments[index + 1]!.z) / 2]}
           rotation={[-Math.PI / 2, 0, 0]}
         >
-          <planeGeometry args={[1.55 - index * 0.2, Math.abs(fragment.z - fragments[index + 1]!.z) * 0.72]} />
+          <planeGeometry
+            args={[1.55 - index * 0.2, Math.abs(fragment.z - fragments[index + 1]!.z) * 0.72]}
+          />
           <meshStandardMaterial color={fragment.color} roughness={0.9} />
         </mesh>
       ))}
@@ -44,7 +57,10 @@ export function FoldedCorridor() {
         <meshBasicMaterial color="#fffdf3" toneMapped={false} />
       </mesh>
       <FloorMarker position={[CENTER_X, 0.03, -10.4]} color={exhibit.accent} />
-      <FloorMarker position={[FOLDED_REVEAL_POINT[0], 0.035, FOLDED_REVEAL_POINT[2]]} color="#7ef4d2" />
+      <FloorMarker
+        position={[FOLDED_REVEAL_POINT[0], 0.035, FOLDED_REVEAL_POINT[2]]}
+        color="#7ef4d2"
+      />
       <ExhibitLabel exhibit={exhibit} position={[CENTER_X, 4.15, -17]} />
       <pointLight position={[CENTER_X, 1.7, -16.2]} color="#fff3d6" intensity={8} distance={5} />
       {reveal && (

@@ -1,10 +1,18 @@
 import { lazy, Suspense } from 'react'
 import { Structure } from './shared'
 
-const ArrivalAtrium = lazy(() => import('./ArrivalAtrium').then((module) => ({ default: module.ArrivalAtrium })))
-const SignatureHall = lazy(() => import('./SignatureHall').then((module) => ({ default: module.SignatureHall })))
-const ScaleLightRooms = lazy(() => import('./ScaleLightRooms').then((module) => ({ default: module.ScaleLightRooms })))
-const ClassicsLab = lazy(() => import('./ClassicsLab').then((module) => ({ default: module.ClassicsLab })))
+const ArrivalAtrium = lazy(() =>
+  import('./ArrivalAtrium').then((module) => ({ default: module.ArrivalAtrium })),
+)
+const SignatureHall = lazy(() =>
+  import('./SignatureHall').then((module) => ({ default: module.SignatureHall })),
+)
+const ScaleLightRooms = lazy(() =>
+  import('./ScaleLightRooms').then((module) => ({ default: module.ScaleLightRooms })),
+)
+const ClassicsLab = lazy(() =>
+  import('./ClassicsLab').then((module) => ({ default: module.ClassicsLab })),
+)
 
 export function MuseumShell() {
   return (

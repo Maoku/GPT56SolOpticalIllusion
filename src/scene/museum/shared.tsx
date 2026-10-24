@@ -90,11 +90,28 @@ export function Portal({
 }) {
   return (
     <group position={position}>
-      <Structure position={[-2.15, 1.8, 0]} scale={[0.14, 3.6, 0.3]} color="#172132" emissive={color} />
-      <Structure position={[2.15, 1.8, 0]} scale={[0.14, 3.6, 0.3]} color="#172132" emissive={color} />
-      <Structure position={[0, 3.55, 0]} scale={[4.45, 0.14, 0.3]} color="#172132" emissive={color} />
+      <Structure
+        position={[-2.15, 1.8, 0]}
+        scale={[0.14, 3.6, 0.3]}
+        color="#172132"
+        emissive={color}
+      />
+      <Structure
+        position={[2.15, 1.8, 0]}
+        scale={[0.14, 3.6, 0.3]}
+        color="#172132"
+        emissive={color}
+      />
+      <Structure
+        position={[0, 3.55, 0]}
+        scale={[4.45, 0.14, 0.3]}
+        color="#172132"
+        emissive={color}
+      />
       <Html position={[0, 3.15, 0.12]} center transform distanceFactor={8} zIndexRange={[5, 5]}>
-        <span className="v2-portal-label" style={{ color }}>{label}</span>
+        <span className="v2-portal-label" style={{ color }}>
+          {label}
+        </span>
       </Html>
     </group>
   )

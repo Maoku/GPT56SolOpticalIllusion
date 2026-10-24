@@ -5,7 +5,9 @@ import { App } from './App'
 import { useMuseumStore } from '../state/useMuseumStore'
 
 vi.mock('@react-three/fiber', () => ({
-  Canvas: ({ children }: { children: React.ReactNode }) => <div data-testid="canvas">{children}</div>,
+  Canvas: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="canvas">{children}</div>
+  ),
   useFrame: vi.fn(),
   useThree: (selector: (state: { camera: { position: { x: number; z: number } } }) => unknown) =>
     selector({ camera: { position: { x: 0, z: 12 } } }),
@@ -21,11 +23,7 @@ vi.mock('@react-three/drei', () => ({
     style?: React.CSSProperties
     zIndexRange?: number[]
   }) => (
-    <div
-      data-testid="three-html"
-      data-z-index-range={zIndexRange?.join(',')}
-      style={style}
-    >
+    <div data-testid="three-html" data-z-index-range={zIndexRange?.join(',')} style={style}>
       {children}
     </div>
   ),

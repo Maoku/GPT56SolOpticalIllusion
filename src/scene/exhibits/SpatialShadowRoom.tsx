@@ -13,7 +13,13 @@ import { ExhibitLabel, FloorMarker, Structure } from '../museum/shared'
 
 const exhibit = exhibitById.get('checker-shadow')!
 
-function TargetLabel({ label, position }: { label: 'A' | 'B'; position: readonly [number, number, number] }) {
+function TargetLabel({
+  label,
+  position,
+}: {
+  label: 'A' | 'B'
+  position: readonly [number, number, number]
+}) {
   return (
     <Html position={[position[0], 0.28, position[2]]} center transform sprite distanceFactor={4.5}>
       <span className="checker-target-label">{label}</span>
@@ -22,7 +28,9 @@ function TargetLabel({ label, position }: { label: 'A' | 'B'; position: readonly
 }
 
 export function SpatialShadowRoom() {
-  const step = useMuseumStore((state) => state.activeExhibitId === exhibit.id ? state.spatialStep : 0)
+  const step = useMuseumStore((state) =>
+    state.activeExhibitId === exhibit.id ? state.spatialStep : 0,
+  )
   const sceneState = checkerSceneStates[Math.min(step, checkerSceneStates.length - 1)]!
   const lightTarget = useMemo(() => {
     const target = new Object3D()
@@ -89,12 +97,18 @@ export function SpatialShadowRoom() {
         />
       )}
       {sceneState.connectsTargets && (
-        <mesh position={[16.28, 0.062, 0]} rotation={[-Math.PI / 2, 0, -Math.PI / 4]} renderOrder={3}>
+        <mesh
+          position={[16.28, 0.062, 0]}
+          rotation={[-Math.PI / 2, 0, -Math.PI / 4]}
+          renderOrder={3}
+        >
           <planeGeometry args={[1.38, 0.26]} />
           <meshBasicMaterial color={CHECKER_TARGET_COLOR} />
         </mesh>
       )}
-      {sceneState.id === 'neutral' && <pointLight position={[15.7, 2.5, -0.5]} intensity={18} distance={6} color="#ffffff" />}
+      {sceneState.id === 'neutral' && (
+        <pointLight position={[15.7, 2.5, -0.5]} intensity={18} distance={6} color="#ffffff" />
+      )}
       <TargetLabel label="A" position={checkerTargets.A.position} />
       <TargetLabel label="B" position={checkerTargets.B.position} />
       <FloorMarker position={[12.8, 0.03, 0]} color={exhibit.accent} />

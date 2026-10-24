@@ -1,15 +1,8 @@
 import { useMemo, useState, type CSSProperties } from 'react'
-import {
-  exhibitById,
-  type PerceptionAxis,
-} from '../exhibits/exhibitCatalog'
+import { exhibitById, type PerceptionAxis } from '../exhibits/exhibitCatalog'
 import { recommendNextExhibit } from '../exhibits/recommendation'
 import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap'
-import {
-  buildOutcomeCardSvg,
-  buildPassportSvg,
-  downloadSvg,
-} from '../lib/passportExport'
+import { buildOutcomeCardSvg, buildPassportSvg, downloadSvg } from '../lib/passportExport'
 import { useMuseumStore } from '../state/useMuseumStore'
 import type { ExhibitOutcome } from '../state/outcomes'
 
@@ -19,7 +12,12 @@ const axes: {
   description: string
   color: string
 }[] = [
-  { id: 'perspective', label: 'PERSPECTIVE', description: '遠近・視差・固定視点', color: '#7ef4d2' },
+  {
+    id: 'perspective',
+    label: 'PERSPECTIVE',
+    description: '遠近・視差・固定視点',
+    color: '#7ef4d2',
+  },
   { id: 'context', label: 'CONTEXT', description: '周囲の大きさ・線・影', color: '#ff68bd' },
   { id: 'light', label: 'LIGHT', description: '明るさ・色順応・照明', color: '#ffe08a' },
   { id: 'motion', label: 'MOTION', description: '注視・運動・反転', color: '#69cfff' },
@@ -43,7 +41,8 @@ export function PerceptionPassport() {
   const dialog = useDialogFocusTrap<HTMLElement>(close)
   const [shareStatus, setShareStatus] = useState('')
   const outcomes = useMemo(
-    () => Object.values(outcomesById).filter((outcome): outcome is ExhibitOutcome => Boolean(outcome)),
+    () =>
+      Object.values(outcomesById).filter((outcome): outcome is ExhibitOutcome => Boolean(outcome)),
     [outcomesById],
   )
   const next = recommendNextExhibit(progress, lastVisited)
@@ -99,9 +98,13 @@ export function PerceptionPassport() {
           <div>
             <p className="eyebrow">PARALLAX 2.0 · SESSION OBSERVATION</p>
             <h2 id="passport-title">PERCEPTION PASSPORT</h2>
-            <p>今回の実験で、どの手がかりに影響されたかを残す娯楽・学習用の記録です。視力検査や診断ではありません。</p>
+            <p>
+              今回の実験で、どの手がかりに影響されたかを残す娯楽・学習用の記録です。視力検査や診断ではありません。
+            </p>
           </div>
-          <button className="icon-button" aria-label="パスポートを閉じる" onClick={close}>×</button>
+          <button className="icon-button" aria-label="パスポートを閉じる" onClick={close}>
+            ×
+          </button>
         </header>
 
         <div className="passport-axis-grid">
@@ -114,13 +117,20 @@ export function PerceptionPassport() {
                 className="passport-axis"
                 style={{ '--axis-color': axis.color } as CSSProperties}
               >
-                <header><span>{axis.label}</span><small>{axis.description}</small></header>
+                <header>
+                  <span>{axis.label}</span>
+                  <small>{axis.description}</small>
+                </header>
                 <div className="passport-axis__mark" data-recorded={Boolean(outcome)}>
                   <i>{outcome ? 'REC' : '—'}</i>
                 </div>
                 {outcome ? (
                   <div>
-                    <strong>{outcome.metric ? `${outcome.metric.value}${outcome.metric.unit ?? ''}` : exhibit?.title}</strong>
+                    <strong>
+                      {outcome.metric
+                        ? `${outcome.metric.value}${outcome.metric.unit ?? ''}`
+                        : exhibit?.title}
+                    </strong>
                     <p>{outcome.metric?.label ?? outcome.headline}</p>
                   </div>
                 ) : (
@@ -135,14 +145,22 @@ export function PerceptionPassport() {
           <div>
             <span>FIRST PASSPORT</span>
             <strong>{representedAxes} / 4 AXES</strong>
-            <small>{representedAxes === 4 ? '4つの知覚軸がそろいました。' : '4軸を一つずつ体験すると最初のパスポートが完成します。'}</small>
+            <small>
+              {representedAxes === 4
+                ? '4つの知覚軸がそろいました。'
+                : '4軸を一つずつ体験すると最初のパスポートが完成します。'}
+            </small>
           </div>
           {next && (
             <article className="passport-next">
               <span>RECOMMENDED NEXT</span>
-              <strong>{String(next.number).padStart(2, '0')} · {next.title}</strong>
+              <strong>
+                {String(next.number).padStart(2, '0')} · {next.title}
+              </strong>
               <small>{next.oneSentence}</small>
-              <button className="button button--primary" onClick={visitNext}>この展示へ</button>
+              <button className="button button--primary" onClick={visitNext}>
+                この展示へ
+              </button>
             </article>
           )}
         </div>
@@ -159,10 +177,12 @@ export function PerceptionPassport() {
                     <button
                       key={outcome.exhibitId}
                       className="passport-record"
-                      onClick={() => downloadSvg(
-                        buildOutcomeCardSvg(outcome),
-                        `parallax-${outcome.exhibitId}-result.svg`,
-                      )}
+                      onClick={() =>
+                        downloadSvg(
+                          buildOutcomeCardSvg(outcome),
+                          `parallax-${outcome.exhibitId}-result.svg`,
+                        )
+                      }
                     >
                       <span style={{ background: exhibit?.accent }} />
                       <strong>{String(exhibit?.number ?? 0).padStart(2, '0')}</strong>
@@ -178,9 +198,15 @@ export function PerceptionPassport() {
         <footer className="passport-actions">
           <span role="status">{shareStatus}</span>
           <div>
-            <button className="button button--quiet" onClick={savePassport}>SAVE</button>
-            <button className="button button--quiet" onClick={() => void sharePassport()}>SHARE</button>
-            <button className="button button--primary" onClick={close}>CONTINUE</button>
+            <button className="button button--quiet" onClick={savePassport}>
+              SAVE
+            </button>
+            <button className="button button--quiet" onClick={() => void sharePassport()}>
+              SHARE
+            </button>
+            <button className="button button--primary" onClick={close}>
+              CONTINUE
+            </button>
           </div>
         </footer>
       </section>
