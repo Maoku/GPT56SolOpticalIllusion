@@ -28,7 +28,7 @@ Docs/PLAN.md に基づいて作成したいわゆるポン出し状態
 
 ## 開発
 
-Node.js 22 以上を使用します。
+Node.js 24.22.1 以降の24系を使用します（`nvm use` で `.nvmrc` の指定へ切り替え）。
 
 ```bash
 npm install
