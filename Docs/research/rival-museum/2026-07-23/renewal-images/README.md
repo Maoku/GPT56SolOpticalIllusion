@@ -8,20 +8,20 @@
 
 ## 画像一覧
 
-| # | 画像 | 位置づけ |
-| --- | --- | --- |
-| 00 | [`00-contact-sheet.png`](./00-contact-sheet.png) | 全11点の一覧 |
-| 01 | [`01-arrival-atrium.png`](./01-arrival-atrium.png) | 入館直後に「位置で世界が変わる館」を伝えるアトリウム |
-| 02 | [`02-parallax-bloom.png`](./02-parallax-bloom.png) | 三層が一つの鑑賞位置で一輪へ重なる #09 |
-| 03 | [`03-chromatic-echo-corridor.png`](./03-chromatic-echo-corridor.png) | 順応室、移行帯、結果室を歩く #10 |
-| 04 | [`04-ames-room.png`](./04-ames-room.png) | 固定視点と構造開示を両立する #08 |
-| 05 | [`05-shadow-switch-room.png`](./05-shadow-switch-room.png) | 影、色文脈、白色照明を切り替える #05 |
-| 06 | [`06-classics-lab.png`](./06-classics-lab.png) | 六つの古典錯視を一覧比較する実験ギャラリー |
-| 07 | [`07-perception-passport.png`](./07-perception-passport.png) | 4軸の結果、保存、共有、次展示を統合するUI |
-| 08 | [`08-candidate-folded-corridor.png`](./08-candidate-folded-corridor.png) | Phase 0 新オリジナル候補 |
-| 09 | [`09-candidate-counterparallax-window.png`](./09-candidate-counterparallax-window.png) | Phase 0 新オリジナル候補 |
-| 10 | [`10-candidate-borrowed-shadow.png`](./10-candidate-borrowed-shadow.png) | Phase 0 新オリジナル候補 |
-| 11 | [`11-candidate-twin-horizons.png`](./11-candidate-twin-horizons.png) | Phase 0 新オリジナル候補 |
+| #   | 画像                                                                                   | 位置づけ                                             |
+| --- | -------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| 00  | [`00-contact-sheet.png`](./00-contact-sheet.png)                                       | 全11点の一覧                                         |
+| 01  | [`01-arrival-atrium.png`](./01-arrival-atrium.png)                                     | 入館直後に「位置で世界が変わる館」を伝えるアトリウム |
+| 02  | [`02-parallax-bloom.png`](./02-parallax-bloom.png)                                     | 三層が一つの鑑賞位置で一輪へ重なる #09               |
+| 03  | [`03-chromatic-echo-corridor.png`](./03-chromatic-echo-corridor.png)                   | 順応室、移行帯、結果室を歩く #10                     |
+| 04  | [`04-ames-room.png`](./04-ames-room.png)                                               | 固定視点と構造開示を両立する #08                     |
+| 05  | [`05-shadow-switch-room.png`](./05-shadow-switch-room.png)                             | 影、色文脈、白色照明を切り替える #05                 |
+| 06  | [`06-classics-lab.png`](./06-classics-lab.png)                                         | 六つの古典錯視を一覧比較する実験ギャラリー           |
+| 07  | [`07-perception-passport.png`](./07-perception-passport.png)                           | 4軸の結果、保存、共有、次展示を統合するUI            |
+| 08  | [`08-candidate-folded-corridor.png`](./08-candidate-folded-corridor.png)               | Phase 0 新オリジナル候補                             |
+| 09  | [`09-candidate-counterparallax-window.png`](./09-candidate-counterparallax-window.png) | Phase 0 新オリジナル候補                             |
+| 10  | [`10-candidate-borrowed-shadow.png`](./10-candidate-borrowed-shadow.png)               | Phase 0 新オリジナル候補                             |
+| 11  | [`11-candidate-twin-horizons.png`](./11-candidate-twin-horizons.png)                   | Phase 0 新オリジナル候補                             |
 
 08〜11は採用済みデザインではない。`TRANSFORMATION_PLAN.md` のPhase 0に沿い、知覚テストと一文再生テストへ掛けるための比較用コンセプトである。
 

@@ -1,8 +1,4 @@
-import {
-  classicsLiveEffects,
-  isLiveClassic,
-  nextClassicsStep,
-} from './classicsExperience'
+import { classicsLiveEffects, isLiveClassic, nextClassicsStep } from './classicsExperience'
 
 describe('Classics Lab live exhibit contracts', () => {
   it('defines a distinct live effect for all six classics', () => {

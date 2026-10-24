@@ -18,7 +18,9 @@ describe('spatial exhibit HUD', () => {
 
   it('keeps the viewing action in the scene instead of a HUD button', () => {
     render(<SpatialExhibitHud />)
-    expect(screen.getByText('床マーカーの周囲を歩き、三層が一輪になる位置を探します。')).toBeInTheDocument()
+    expect(
+      screen.getByText('床マーカーの周囲を歩き、三層が一輪になる位置を探します。'),
+    ).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: '鑑賞点へ移動' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: '状態を切り替える' })).not.toBeInTheDocument()
   })

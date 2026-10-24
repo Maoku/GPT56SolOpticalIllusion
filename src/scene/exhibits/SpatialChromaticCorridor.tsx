@@ -13,7 +13,12 @@ export function SpatialChromaticCorridor() {
   const reducedMotion = useMuseumStore((state) => state.settings.reducedMotion)
   const lighting = chromaticLightingForPhase(active, step)
   const phases = [
-    { id: 'ADAPT', z: -13.05, color: '#0da9b9', emissive: active && step === 0 ? '#0da9b9' : '#17383d' },
+    {
+      id: 'ADAPT',
+      z: -13.05,
+      color: '#0da9b9',
+      emissive: active && step === 0 ? '#0da9b9' : '#17383d',
+    },
     { id: 'TRANSITION', z: -14.82, color: '#686d73', emissive: '#17191c' },
     { id: 'ECHO', z: -16.48, color: lighting.echoSurfaceColor, emissive: '#d8d5ce' },
   ]
@@ -26,8 +31,18 @@ export function SpatialChromaticCorridor() {
       {phases.map((phase, index) => {
         return (
           <group key={phase.id}>
-            <Structure position={[-1.39, 1.55, phase.z]} scale={[0.08, 2.82, 1.5]} color={phase.color} emissive={phase.emissive} />
-            <Structure position={[1.39, 1.55, phase.z]} scale={[0.08, 2.82, 1.5]} color={phase.color} emissive={phase.emissive} />
+            <Structure
+              position={[-1.39, 1.55, phase.z]}
+              scale={[0.08, 2.82, 1.5]}
+              color={phase.color}
+              emissive={phase.emissive}
+            />
+            <Structure
+              position={[1.39, 1.55, phase.z]}
+              scale={[0.08, 2.82, 1.5]}
+              color={phase.color}
+              emissive={phase.emissive}
+            />
             <mesh position={[0, 0.034, phase.z]} rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[2.72, 1.5]} />
               <meshStandardMaterial

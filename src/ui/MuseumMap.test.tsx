@@ -19,7 +19,9 @@ describe('museum progress UI', () => {
   })
 
   it('announces completion after all twelve exhibits were experienced', () => {
-    useMuseumStore.setState({ progress: Object.fromEntries(exhibitCatalog.map((item) => [item.id, 'interacted'])) })
+    useMuseumStore.setState({
+      progress: Object.fromEntries(exhibitCatalog.map((item) => [item.id, 'interacted'])),
+    })
     render(<CompletionMessage />)
     expect(screen.getByRole('status')).toHaveTextContent('12 / 12')
   })

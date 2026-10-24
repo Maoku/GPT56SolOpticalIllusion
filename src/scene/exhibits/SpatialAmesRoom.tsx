@@ -1,10 +1,6 @@
 import { Html } from '@react-three/drei'
 import { useMemo } from 'react'
-import {
-  BufferGeometry,
-  DoubleSide,
-  Float32BufferAttribute,
-} from 'three'
+import { BufferGeometry, DoubleSide, Float32BufferAttribute } from 'three'
 import { exhibitById } from '../../exhibits/exhibitCatalog'
 import { useMuseumStore } from '../../state/useMuseumStore'
 import {
@@ -64,7 +60,9 @@ function Figure({ position }: { position: Point3 }) {
 }
 
 export function SpatialAmesRoom() {
-  const reveal = useMuseumStore((state) => state.activeExhibitId === exhibit.id && state.spatialStep > 0)
+  const reveal = useMuseumStore(
+    (state) => state.activeExhibitId === exhibit.id && state.spatialStep > 0,
+  )
   return (
     <group>
       <WarpedPanel points={amesRoomSurfaces.floor} color={reveal ? '#d1b48f' : '#e4ddd0'} />
@@ -73,7 +71,9 @@ export function SpatialAmesRoom() {
       <WarpedPanel points={amesRoomSurfaces.southWall} color={reveal ? '#9db3bd' : '#d5d8d5'} />
       <WarpedPanel points={amesRoomSurfaces.northWall} color="#83b8c2" transparent />
 
-      {amesFigures.map((figure) => <Figure key={figure.id} position={figure.position} />)}
+      {amesFigures.map((figure) => (
+        <Figure key={figure.id} position={figure.position} />
+      ))}
 
       <group name="ames-aperture-mask">
         <mesh position={[13.5, 0.08, -9]} rotation={[0, -Math.PI / 2, 0]}>
@@ -94,7 +94,10 @@ export function SpatialAmesRoom() {
         </mesh>
       </group>
 
-      <FloorMarker position={[AMES_VIEW_POINT[0], 0.03, AMES_VIEW_POINT[2]]} color={exhibit.accent} />
+      <FloorMarker
+        position={[AMES_VIEW_POINT[0], 0.03, AMES_VIEW_POINT[2]]}
+        color={exhibit.accent}
+      />
       <FloorMarker position={[AMES_REVEAL_POINT[0], 0.035, AMES_REVEAL_POINT[2]]} color="#7ef4d2" />
       <ExhibitLabel exhibit={exhibit} position={[17.7, 3.85, -9]} />
       <pointLight position={[15.2, 2.6, -9]} color="#ffd9d9" intensity={16} distance={7} />

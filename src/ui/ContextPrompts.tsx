@@ -32,14 +32,20 @@ export function ContextPrompts() {
   return (
     <aside className="context-prompt" aria-live="polite">
       <div className="context-prompt__progress" aria-label={`導入 ${step + 1} / ${prompts.length}`}>
-        {prompts.map((_, index) => <i key={index} className={index <= step ? 'is-active' : ''} />)}
+        {prompts.map((_, index) => (
+          <i key={index} className={index <= step ? 'is-active' : ''} />
+        ))}
       </div>
       <p className="eyebrow">{prompt.eyebrow}</p>
       <h2>{prompt.title}</h2>
       <p>{prompt.body}</p>
       <div>
-        <button className="button button--quiet" onClick={dismiss}>閉じる</button>
-        <button className="button button--primary" onClick={advance}>{prompt.action}</button>
+        <button className="button button--quiet" onClick={dismiss}>
+          閉じる
+        </button>
+        <button className="button button--primary" onClick={advance}>
+          {prompt.action}
+        </button>
       </div>
     </aside>
   )

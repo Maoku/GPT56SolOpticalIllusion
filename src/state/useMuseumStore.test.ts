@@ -1,8 +1,4 @@
-import {
-  MUSEUM_STORAGE_KEY,
-  migrateMuseumState,
-  useMuseumStore,
-} from './useMuseumStore'
+import { MUSEUM_STORAGE_KEY, migrateMuseumState, useMuseumStore } from './useMuseumStore'
 
 describe('museum store', () => {
   beforeEach(() => {
@@ -38,11 +34,13 @@ describe('museum store', () => {
   })
 
   it('migrates valid V1 progress and rejects unknown exhibits', () => {
-    expect(migrateMuseumState({
-      progress: { ponzo: 'revealed', 'not-real': 'interacted' },
-      settings: { reducedMotion: true },
-      tutorialSeen: true,
-    })).toMatchObject({
+    expect(
+      migrateMuseumState({
+        progress: { ponzo: 'revealed', 'not-real': 'interacted' },
+        settings: { reducedMotion: true },
+        tutorialSeen: true,
+      }),
+    ).toMatchObject({
       progress: { ponzo: 'revealed' },
       settings: { reducedMotion: true, quality: 'high' },
       tutorialSeen: true,

@@ -24,8 +24,7 @@ function distanceXZ(a: Point3, b: Point3) {
 }
 
 export function foldedViewState(position: Point3) {
-  return distanceXZ(position, FOLDED_REVEAL_POINT) <
-    distanceXZ(position, FOLDED_VIEW_POINT)
+  return distanceXZ(position, FOLDED_REVEAL_POINT) < distanceXZ(position, FOLDED_VIEW_POINT)
     ? 'reveal'
     : 'aligned'
 }

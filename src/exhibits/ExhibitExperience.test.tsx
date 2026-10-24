@@ -4,7 +4,12 @@ import { ExhibitExperience } from './ExhibitExperience'
 
 describe('ExhibitExperience', () => {
   beforeEach(() => {
-    useMuseumStore.setState({ stage: 'exhibit', activeExhibitId: 'muller-lyer', overlay: 'none', progress: {} })
+    useMuseumStore.setState({
+      stage: 'exhibit',
+      activeExhibitId: 'muller-lyer',
+      overlay: 'none',
+      progress: {},
+    })
   })
 
   it('keeps the hint hidden until explicitly requested', async () => {
@@ -17,7 +22,9 @@ describe('ExhibitExperience', () => {
 
   it('records interaction and answer-check progress', async () => {
     render(<ExhibitExperience />)
-    fireEvent.change(await screen.findByRole('slider', { name: '下の線の実長' }), { target: { value: 150 } })
+    fireEvent.change(await screen.findByRole('slider', { name: '下の線の実長' }), {
+      target: { value: 150 },
+    })
     expect(useMuseumStore.getState().progress['muller-lyer']).toBe('interacted')
     fireEvent.click(screen.getByRole('button', { name: '答え合わせ' }))
     expect(useMuseumStore.getState().progress['muller-lyer']).toBe('revealed')

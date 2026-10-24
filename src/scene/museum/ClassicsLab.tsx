@@ -2,10 +2,7 @@ import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import type { Group } from 'three'
-import {
-  exhibitCatalog,
-  type ExhibitDefinition,
-} from '../../exhibits/exhibitCatalog'
+import { exhibitCatalog, type ExhibitDefinition } from '../../exhibits/exhibitCatalog'
 import { useMuseumStore } from '../../state/useMuseumStore'
 import { ExhibitLabel, Portal } from './shared'
 
@@ -59,8 +56,18 @@ function MullerLyerLive({ step }: { step: number }) {
     const half = length / 2
     const angle = outward ? 0.72 : -0.72
     return [-1, 1].flatMap((side) => [
-      <Segment key={`${y}-${side}-a`} position={[side * (half + 0.14), y + 0.14, 0.2]} length={0.42} rotation={side * angle} />,
-      <Segment key={`${y}-${side}-b`} position={[side * (half + 0.14), y - 0.14, 0.2]} length={0.42} rotation={-side * angle} />,
+      <Segment
+        key={`${y}-${side}-a`}
+        position={[side * (half + 0.14), y + 0.14, 0.2]}
+        length={0.42}
+        rotation={side * angle}
+      />,
+      <Segment
+        key={`${y}-${side}-b`}
+        position={[side * (half + 0.14), y - 0.14, 0.2]}
+        length={0.42}
+        rotation={-side * angle}
+      />,
     ])
   }
   return (
@@ -80,7 +87,13 @@ function PonzoLive({ step }: { step: number }) {
       <Segment position={[-0.72, 0, 0.18]} length={2.2} rotation={1.27} color="#606972" />
       <Segment position={[0.72, 0, 0.18]} length={2.2} rotation={-1.27} color="#606972" />
       {Array.from({ length: 6 }, (_, index) => (
-        <Segment key={index} position={[0, -0.72 + index * 0.28, 0.175]} length={2.8 - index * 0.37} color="#aeb3b3" thickness={0.025} />
+        <Segment
+          key={index}
+          position={[0, -0.72 + index * 0.28, 0.175]}
+          length={2.8 - index * 0.37}
+          color="#aeb3b3"
+          thickness={0.025}
+        />
       ))}
       <Segment position={[0, upperY, 0.21]} length={1.15} color="#f0a44c" thickness={0.09} />
       <Segment position={[0, -0.48, 0.21]} length={1.15} color="#f0a44c" thickness={0.09} />
@@ -88,7 +101,15 @@ function PonzoLive({ step }: { step: number }) {
   )
 }
 
-function Circle({ position, radius, color }: { position: [number, number, number]; radius: number; color: string }) {
+function Circle({
+  position,
+  radius,
+  color,
+}: {
+  position: [number, number, number]
+  radius: number
+  color: string
+}) {
   return (
     <mesh position={position}>
       <circleGeometry args={[radius, 28]} />
@@ -107,7 +128,7 @@ function EbbinghausLive({ step }: { step: number }) {
         return (
           <group key={x}>
             {Array.from({ length: 8 }, (_, index) => {
-              const angle = index / 8 * Math.PI * 2
+              const angle = (index / 8) * Math.PI * 2
               return (
                 <Circle
                   key={index}
@@ -142,14 +163,25 @@ function CafeWallLive({ step }: { step: number }) {
         }),
       )}
       {Array.from({ length: 7 }, (_, row) => (
-        <Segment key={row} position={[0, 0.575 - row * 0.19, 0.205]} length={3.1} color="#777b7c" thickness={0.022} />
+        <Segment
+          key={row}
+          position={[0, 0.575 - row * 0.19, 0.205]}
+          length={3.1}
+          color="#777b7c"
+          thickness={0.022}
+        />
       ))}
     </group>
   )
 }
 
 function NeckerCubeLive({ step }: { step: number }) {
-  const front = [[-0.92, -0.55], [0.25, -0.55], [0.25, 0.58], [-0.92, 0.58]] as [number, number][]
+  const front = [
+    [-0.92, -0.55],
+    [0.25, -0.55],
+    [0.25, 0.58],
+    [-0.92, 0.58],
+  ] as [number, number][]
   const back = front.map(([x, y]) => [x + 0.68, y + 0.34] as [number, number])
   const cueColor = step === 0 ? '#bc73ff' : '#58d6ff'
   return (
@@ -187,7 +219,7 @@ function MotionBlindnessLive({ step }: { step: number }) {
     <group>
       <group ref={rotor}>
         {Array.from({ length: 18 }, (_, index) => {
-          const angle = index / 18 * Math.PI * 2
+          const angle = (index / 18) * Math.PI * 2
           return (
             <group key={index} rotation={[0, 0, angle]}>
               <Circle position={[0.92, 0, 0.18]} radius={0.055} color="#7199b3" />
@@ -197,23 +229,41 @@ function MotionBlindnessLive({ step }: { step: number }) {
         })}
       </group>
       {[-0.72, 0, 0.72].map((x, index) => (
-        <Circle key={x} position={[x, index === 1 ? 0.56 : -0.45, 0.22]} radius={0.09} color="#f0e84f" />
+        <Circle
+          key={x}
+          position={[x, index === 1 ? 0.56 : -0.45, 0.22]}
+          radius={0.09}
+          color="#f0e84f"
+        />
       ))}
       <Segment position={[0, 0, 0.24]} length={0.25} color="#ffffff" thickness={0.035} />
-      <Segment position={[0, 0, 0.24]} length={0.25} rotation={Math.PI / 2} color="#ffffff" thickness={0.035} />
+      <Segment
+        position={[0, 0, 0.24]}
+        length={0.25}
+        rotation={Math.PI / 2}
+        color="#ffffff"
+        thickness={0.035}
+      />
     </group>
   )
 }
 
 function LiveEffect({ exhibit, step }: { exhibit: ExhibitDefinition; step: number }) {
   switch (exhibit.id) {
-    case 'muller-lyer': return <MullerLyerLive step={step} />
-    case 'ponzo': return <PonzoLive step={step} />
-    case 'ebbinghaus': return <EbbinghausLive step={step} />
-    case 'cafe-wall': return <CafeWallLive step={step} />
-    case 'necker-cube': return <NeckerCubeLive step={step} />
-    case 'motion-induced-blindness': return <MotionBlindnessLive step={step} />
-    default: return null
+    case 'muller-lyer':
+      return <MullerLyerLive step={step} />
+    case 'ponzo':
+      return <PonzoLive step={step} />
+    case 'ebbinghaus':
+      return <EbbinghausLive step={step} />
+    case 'cafe-wall':
+      return <CafeWallLive step={step} />
+    case 'necker-cube':
+      return <NeckerCubeLive step={step} />
+    case 'motion-induced-blindness':
+      return <MotionBlindnessLive step={step} />
+    default:
+      return null
   }
 }
 

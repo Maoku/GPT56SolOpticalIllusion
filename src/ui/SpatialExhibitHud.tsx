@@ -12,7 +12,7 @@ export function SpatialExhibitHud() {
   const setStep = useMuseumStore((state) => state.setSpatialStep)
   const markInteracted = useMuseumStore((state) => state.markInteracted)
   const markRevealed = useMuseumStore((state) => state.markRevealed)
-  const progress = useMuseumStore((state) => activeId ? state.progress[activeId] : undefined)
+  const progress = useMuseumStore((state) => (activeId ? state.progress[activeId] : undefined))
   const leave = useMuseumStore((state) => state.leaveExhibit)
   const openOverlay = useMuseumStore((state) => state.openOverlay)
 
@@ -28,11 +28,12 @@ export function SpatialExhibitHud() {
     markInteracted(activeId)
     if (next > 0) markRevealed(activeId)
   }
-  const operationLabel = activeId === 'checker-shadow'
-    ? '照明を切り替える'
-    : activeId === 'counterparallax-window'
-      ? '通常視差と逆視差を切り替える'
-      : undefined
+  const operationLabel =
+    activeId === 'checker-shadow'
+      ? '照明を切り替える'
+      : activeId === 'counterparallax-window'
+        ? '通常視差と逆視差を切り替える'
+        : undefined
 
   return (
     <>
@@ -67,11 +68,18 @@ export function SpatialExhibitHud() {
           </div>
         )}
         <div className="spatial-exhibit-hud__keys">
-          <span><kbd>H</kbd> ヒント</span>
-          <button onClick={leave}><kbd>ESC</kbd> 終了</button>
+          <span>
+            <kbd>H</kbd> ヒント
+          </span>
+          <button onClick={leave}>
+            <kbd>ESC</kbd> 終了
+          </button>
         </div>
       </section>
-      <MobileControls interactionLabel={operationLabel} onInteract={operationLabel ? operate : undefined} />
+      <MobileControls
+        interactionLabel={operationLabel}
+        onInteract={operationLabel ? operate : undefined}
+      />
     </>
   )
 }

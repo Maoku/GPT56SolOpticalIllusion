@@ -24,24 +24,22 @@ function outcomeText(outcome: ExhibitOutcome | undefined) {
   return outcome.headline
 }
 
-export function buildPassportSvg(
-  outcomes: Partial<Record<ExhibitType, ExhibitOutcome>>,
-) {
-  const latestByAxis = Object.values(outcomes).reduce<Partial<Record<PerceptionAxis, ExhibitOutcome>>>(
-    (latest, outcome) => {
-      if (!outcome) return latest
-      const current = latest[outcome.axis]
-      if (!current || outcome.recordedAt > current.recordedAt) latest[outcome.axis] = outcome
-      return latest
-    },
-    {},
-  )
+export function buildPassportSvg(outcomes: Partial<Record<ExhibitType, ExhibitOutcome>>) {
+  const latestByAxis = Object.values(outcomes).reduce<
+    Partial<Record<PerceptionAxis, ExhibitOutcome>>
+  >((latest, outcome) => {
+    if (!outcome) return latest
+    const current = latest[outcome.axis]
+    if (!current || outcome.recordedAt > current.recordedAt) latest[outcome.axis] = outcome
+    return latest
+  }, {})
   const axes = Object.keys(axisLabels) as PerceptionAxis[]
-  const modules = axes.map((axis, index) => {
-    const x = 70 + index * 270
-    const outcome = latestByAxis[axis]
-    const accent = ['#7ef4d2', '#ff68bd', '#ffe08a', '#69cfff'][index]
-    return `
+  const modules = axes
+    .map((axis, index) => {
+      const x = 70 + index * 270
+      const outcome = latestByAxis[axis]
+      const accent = ['#7ef4d2', '#ff68bd', '#ffe08a', '#69cfff'][index]
+      return `
       <g transform="translate(${x} 205)">
         <rect width="242" height="255" rx="18" fill="#0f1827" stroke="${accent}" stroke-opacity=".5"/>
         <text x="20" y="42" fill="${accent}" font-size="16" letter-spacing="2">${axisLabels[axis]}</text>
@@ -54,7 +52,8 @@ export function buildPassportSvg(
           </div>
         </foreignObject>
       </g>`
-  }).join('')
+    })
+    .join('')
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
     <rect width="1200" height="630" fill="#070c15"/>

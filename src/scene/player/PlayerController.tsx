@@ -8,11 +8,7 @@ import { useUnifiedInput, type InputAction } from '../../hooks/useUnifiedInput'
 import { useMuseumStore } from '../../state/useMuseumStore'
 import { usePlayerInputStore } from '../../state/usePlayerInputStore'
 import { resolvePlayerPosition } from '../CollisionWorld'
-import {
-  INTERACTION_EXIT_PADDING,
-  isInsideInteractionRegion,
-  selectFocusedExhibit,
-} from '../focus'
+import { INTERACTION_EXIT_PADDING, isInsideInteractionRegion, selectFocusedExhibit } from '../focus'
 import { nextSpatialStep } from '../interaction/spatialExperience'
 import { cameraAnglesForTarget } from './cameraPose'
 
@@ -70,14 +66,22 @@ export function PlayerController() {
     const canvas = gl.domElement
     const rotate = (deltaX: number, deltaY: number) => {
       const state = useMuseumStore.getState()
-      if ((state.stage !== 'exploring' && state.stage !== 'spatial-exhibit') || state.overlay !== 'none') return
+      if (
+        (state.stage !== 'exploring' && state.stage !== 'spatial-exhibit') ||
+        state.overlay !== 'none'
+      )
+        return
       const sensitivity = state.settings.lookSensitivity * 0.0022
       yaw.current -= deltaX * sensitivity
       pitch.current = Math.max(-1.25, Math.min(1.25, pitch.current - deltaY * sensitivity))
     }
     const onPointerDown = () => {
       const state = useMuseumStore.getState()
-      if ((state.stage === 'exploring' || state.stage === 'spatial-exhibit') && state.overlay === 'none' && !matchMedia('(pointer: coarse)').matches) {
+      if (
+        (state.stage === 'exploring' || state.stage === 'spatial-exhibit') &&
+        state.overlay === 'none' &&
+        !matchMedia('(pointer: coarse)').matches
+      ) {
         void canvas.requestPointerLock()
       }
     }
@@ -86,7 +90,8 @@ export function PlayerController() {
     }
     const onTouchStart = (event: TouchEvent) => {
       const touch = event.touches[0]
-      if (touch && touch.clientX > window.innerWidth * 0.42) lastTouch.current = [touch.clientX, touch.clientY]
+      if (touch && touch.clientX > window.innerWidth * 0.42)
+        lastTouch.current = [touch.clientX, touch.clientY]
     }
     const onTouchMove = (event: TouchEvent) => {
       const touch = event.touches[0]
@@ -94,7 +99,9 @@ export function PlayerController() {
       rotate(touch.clientX - lastTouch.current[0], touch.clientY - lastTouch.current[1])
       lastTouch.current = [touch.clientX, touch.clientY]
     }
-    const onTouchEnd = () => { lastTouch.current = null }
+    const onTouchEnd = () => {
+      lastTouch.current = null
+    }
     canvas.addEventListener('pointerdown', onPointerDown)
     canvas.addEventListener('touchstart', onTouchStart, { passive: true })
     canvas.addEventListener('touchmove', onTouchMove, { passive: true })
@@ -111,7 +118,10 @@ export function PlayerController() {
 
   useEffect(() => {
     const unsubscribe = useMuseumStore.subscribe((state) => {
-      if ((state.stage !== 'exploring' && state.stage !== 'spatial-exhibit') || state.overlay !== 'none') {
+      if (
+        (state.stage !== 'exploring' && state.stage !== 'spatial-exhibit') ||
+        state.overlay !== 'none'
+      ) {
         usePlayerInputStore.getState().clear()
         if (document.pointerLockElement) document.exitPointerLock?.()
       }
@@ -131,18 +141,35 @@ export function PlayerController() {
     }
     euler.current.set(pitch.current, yaw.current, 0)
     camera.quaternion.setFromEuler(euler.current)
-    if ((museum.stage !== 'exploring' && museum.stage !== 'spatial-exhibit') || museum.overlay !== 'none') return
+    if (
+      (museum.stage !== 'exploring' && museum.stage !== 'spatial-exhibit') ||
+      museum.overlay !== 'none'
+    )
+      return
 
     const input = usePlayerInputStore.getState()
     const x = Number(input.right) - Number(input.left)
     const z = Number(input.backward) - Number(input.forward)
     if (x !== 0 || z !== 0) {
-      move.current.set(x, 0, z).normalize().applyAxisAngle(new Vector3(0, 1, 0), yaw.current)
+      move.current
+        .set(x, 0, z)
+        .normalize()
+        .applyAxisAngle(new Vector3(0, 1, 0), yaw.current)
       const speed = 4.2 * Math.min(delta, 0.05)
       const current: [number, number] = [camera.position.x, camera.position.z]
       const mode = getMuseumMode()
-      const xResolved = resolvePlayerPosition(current, [current[0] + move.current.x * speed, current[1]], 0.38, mode)
-      const zResolved = resolvePlayerPosition(xResolved, [xResolved[0], xResolved[1] + move.current.z * speed], 0.38, mode)
+      const xResolved = resolvePlayerPosition(
+        current,
+        [current[0] + move.current.x * speed, current[1]],
+        0.38,
+        mode,
+      )
+      const zResolved = resolvePlayerPosition(
+        xResolved,
+        [xResolved[0], xResolved[1] + move.current.z * speed],
+        0.38,
+        mode,
+      )
       camera.position.set(zResolved[0], 1.65, zResolved[1])
     }
 
@@ -151,8 +178,10 @@ export function PlayerController() {
     const playerPosition: [number, number] = [camera.position.x, camera.position.z]
     if (museum.stage === 'spatial-exhibit' && museum.activeExhibitId) {
       const active = catalog.find((exhibit) => exhibit.id === museum.activeExhibitId)
-      if (active?.interactionAnchors?.length &&
-          !isInsideInteractionRegion(playerPosition, active, INTERACTION_EXIT_PADDING)) {
+      if (
+        active?.interactionAnchors?.length &&
+        !isInsideInteractionRegion(playerPosition, active, INTERACTION_EXIT_PADDING)
+      ) {
         focusedId.current = null
         museum.focusExhibit(null)
         museum.leaveExhibit()
@@ -160,9 +189,8 @@ export function PlayerController() {
       return
     }
 
-    const focused = museum.stage === 'exploring'
-      ? selectFocusedExhibit(playerPosition, forward, catalog)
-      : null
+    const focused =
+      museum.stage === 'exploring' ? selectFocusedExhibit(playerPosition, forward, catalog) : null
     const nextId = focused?.id ?? null
     if (nextId !== focusedId.current) {
       focusedId.current = nextId

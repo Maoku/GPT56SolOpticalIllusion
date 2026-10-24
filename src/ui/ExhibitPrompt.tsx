@@ -7,7 +7,7 @@ export function ExhibitPrompt() {
   const enterExhibit = useMuseumStore((state) => state.enterExhibit)
   const operateLiveExhibit = useMuseumStore((state) => state.operateLiveExhibit)
   const openOverlay = useMuseumStore((state) => state.openOverlay)
-  const progress = useMuseumStore((state) => focusedId ? state.progress[focusedId] : undefined)
+  const progress = useMuseumStore((state) => (focusedId ? state.progress[focusedId] : undefined))
   const exhibit = focusedId ? exhibitById.get(focusedId) : undefined
   if (!exhibit) return null
   const total = getExhibitCatalog(getMuseumMode()).length
@@ -17,21 +17,35 @@ export function ExhibitPrompt() {
   return (
     <section className="exhibit-prompt" aria-live="polite">
       <div>
-        <span>{String(exhibit.number).padStart(2, '0')} / {total}</span>
+        <span>
+          {String(exhibit.number).padStart(2, '0')} / {total}
+        </span>
         <h2>{exhibit.title}</h2>
-        <p>{progress === 'unvisited' || !progress ? exhibit.prompt : '観察を自動記録しました。続けて変化を比べられます。'}</p>
+        <p>
+          {progress === 'unvisited' || !progress
+            ? exhibit.prompt
+            : '観察を自動記録しました。続けて変化を比べられます。'}
+        </p>
       </div>
       <div className="exhibit-prompt__actions">
         {!spatial && (
           <button
             className="button button--primary"
-            onClick={() => liveClassic ? operateLiveExhibit(exhibit.id) : enterExhibit(exhibit.id)}
+            onClick={() =>
+              liveClassic ? operateLiveExhibit(exhibit.id) : enterExhibit(exhibit.id)
+            }
           >
             {liveClassic ? '展示台を操作' : '展示を開く'} <kbd>E</kbd>
           </button>
         )}
-        {liveClassic && <button className="button button--quiet" onClick={() => enterExhibit(exhibit.id)}>詳細実験</button>}
-        <button className="button button--quiet" onClick={() => openOverlay('hint')}>見え方のヒント <kbd>H</kbd></button>
+        {liveClassic && (
+          <button className="button button--quiet" onClick={() => enterExhibit(exhibit.id)}>
+            詳細実験
+          </button>
+        )}
+        <button className="button button--quiet" onClick={() => openOverlay('hint')}>
+          見え方のヒント <kbd>H</kbd>
+        </button>
       </div>
     </section>
   )

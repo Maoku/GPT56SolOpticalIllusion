@@ -10,10 +10,7 @@ export type InputAction =
   | 'reset'
   | 'escape'
 
-export type InputSnapshot = Record<
-  'forward' | 'backward' | 'left' | 'right',
-  boolean
->
+export type InputSnapshot = Record<'forward' | 'backward' | 'left' | 'right', boolean>
 
 const keyToAction: Record<string, InputAction | undefined> = {
   KeyW: 'move-forward',
@@ -43,7 +40,8 @@ export function useUnifiedInput(onAction: (action: InputAction, pressed: boolean
     const handleKey = (event: KeyboardEvent, pressed: boolean) => {
       const action = actionForKeyboardCode(event.code)
       if (!action) return
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) return
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement)
+        return
       event.preventDefault()
       callback.current(action, pressed)
     }

@@ -14,14 +14,8 @@ export const spatialAlignmentAnchors: Partial<Record<ExhibitType, [number, numbe
   ],
 }
 
-export function viewSpotDistance(
-  position: [number, number, number],
-  viewSpot: ViewSpot,
-) {
-  return Math.hypot(
-    position[0] - viewSpot.position[0],
-    position[2] - viewSpot.position[2],
-  )
+export function viewSpotDistance(position: [number, number, number], viewSpot: ViewSpot) {
+  return Math.hypot(position[0] - viewSpot.position[0], position[2] - viewSpot.position[2])
 }
 
 export function projectedAlignmentError(
@@ -32,10 +26,7 @@ export function projectedAlignmentError(
   if (anchors.length < 2) return 0
   const projected = anchors.map((anchor) => {
     const point = new Vector3(...anchor).project(camera)
-    return new Vector2(
-      (point.x + 1) * viewport.width * 0.5,
-      (1 - point.y) * viewport.height * 0.5,
-    )
+    return new Vector2((point.x + 1) * viewport.width * 0.5, (1 - point.y) * viewport.height * 0.5)
   })
   const centroid = projected
     .reduce((sum, point) => sum.add(point), new Vector2())

@@ -101,7 +101,9 @@ type PersistedMuseumState = Pick<
 >
 
 export function migrateMuseumState(persisted: unknown): PersistedMuseumState {
-  const source = (persisted && typeof persisted === 'object' ? persisted : {}) as Partial<PersistedMuseumState>
+  const source = (
+    persisted && typeof persisted === 'object' ? persisted : {}
+  ) as Partial<PersistedMuseumState>
   const progress = Object.fromEntries(
     Object.entries(source.progress ?? {}).filter(
       ([id, value]) =>
@@ -174,8 +176,7 @@ export const useMuseumStore = create<MuseumState>()(
           alignmentError: null,
           contextPromptStep: null,
         }),
-      openOverlay: (overlay) =>
-        set((state) => ({ overlay, previousOverlay: state.overlay })),
+      openOverlay: (overlay) => set((state) => ({ overlay, previousOverlay: state.overlay })),
       closeOverlay: () => set({ overlay: 'none', previousOverlay: 'none' }),
       focusExhibit: (focusedExhibitId) => set({ focusedExhibitId }),
       enterExhibit: (activeExhibitId) => {
@@ -211,9 +212,10 @@ export const useMuseumStore = create<MuseumState>()(
           return {
             liveExhibitSteps: { ...state.liveExhibitSteps, [id]: next },
             progress: nextProgress(state.progress, id, 'interacted'),
-            outcomes: exhibit && !state.outcomes[id]
-              ? { ...state.outcomes, [id]: createExhibitOutcome(exhibit) }
-              : state.outcomes,
+            outcomes:
+              exhibit && !state.outcomes[id]
+                ? { ...state.outcomes, [id]: createExhibitOutcome(exhibit) }
+                : state.outcomes,
             lastVisitedExhibitId: id,
           }
         }),
@@ -239,9 +241,10 @@ export const useMuseumStore = create<MuseumState>()(
           if (next === state.progress && (!exhibit || existingOutcome)) return state
           return {
             progress: next,
-            outcomes: exhibit && !existingOutcome
-              ? { ...state.outcomes, [exhibit.id]: createExhibitOutcome(exhibit) }
-              : state.outcomes,
+            outcomes:
+              exhibit && !existingOutcome
+                ? { ...state.outcomes, [exhibit.id]: createExhibitOutcome(exhibit) }
+                : state.outcomes,
             lastVisitedExhibitId: exhibit?.id ?? state.lastVisitedExhibitId,
           }
         }),
@@ -276,8 +279,7 @@ export const useMuseumStore = create<MuseumState>()(
           if (current >= 2) return { contextPromptStep: null, tutorialSeen: true }
           return { contextPromptStep: current + 1 }
         }),
-      dismissContextPrompts: () =>
-        set({ contextPromptStep: null, tutorialSeen: true }),
+      dismissContextPrompts: () => set({ contextPromptStep: null, tutorialSeen: true }),
     }),
     {
       name: MUSEUM_STORAGE_KEY,
